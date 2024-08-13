@@ -7,7 +7,10 @@
     font-family: 'Superclaredon';
     src: url('fonts/Superclaredon-Regular.ttf') format('truetype');
 }
-
+@font-face {
+    font-family: 'Sukhumvit Set';
+    src: url('fonts/SukhumvitSet-Bold.ttf') format('truetype');
+}
 body {
     margin: 0;
     font-family: Arial, sans-serif;
