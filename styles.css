@@ -31,7 +31,7 @@ header {
 }
 
 #logo {
-    width: 250px;
+    width: 850px;
 }
 
 main {
@@ -43,11 +43,11 @@ main {
     background-color: rgba(85, 85, 85, 0.8); /* Filtro de color sobre la imagen */
     padding: 40px;
     margin-bottom: 20px;
-    font-family: 'World Conflict', sans-serif;
+    font-family: 'Sukhumvit Set', sans-serif;
 }
 
 #planta-en-marcha h1 {
-    font-size: 8em;
+    font-size: 4em;
     margin-bottom: 20px;
     color: #c9f000;
     text-transform: uppercase;
