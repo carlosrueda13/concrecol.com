@@ -19,7 +19,7 @@ body {
 }
 
 header, main {
-    background-image: url('background-image.jpg');
+    background-image: url('images/background-image.jpg');
     background-size: cover;
     background-position: center;
     color: #FFF;
@@ -31,7 +31,7 @@ header {
 }
 
 #logo {
-    width: 150px;
+    width: 250px;
 }
 
 main {
@@ -47,7 +47,7 @@ main {
 }
 
 #planta-en-marcha h1 {
-    font-size: 2em;
+    font-size: 8em;
     margin-bottom: 20px;
     color: #c9f000;
     text-transform: uppercase;
@@ -70,7 +70,7 @@ main {
 
 #sitio-en-construccion {
     font-size: 1.5em;
-    margin-top: 20px;
+    margin-top: 40px;
     color: #c9f000;
     font-family: 'Superclaredon', serif;
 }
