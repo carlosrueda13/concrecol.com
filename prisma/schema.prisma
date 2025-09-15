@@ -1,0 +1,97 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model SqlCategory {
+  id         String    @id @default(cuid())
+  name       String
+  slug       String    @unique
+  is_active  Boolean   @default(true)
+  products   Product[]
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+}
+
+enum UnitMeasure {
+  M3
+  KG
+  TON
+  BOLSA
+  GALON
+}
+
+model Product {
+  id                  String       @id @default(cuid())
+  name                String
+  slug                String       @unique
+  price_per_unit      Int
+  unit_measure        UnitMeasure
+  stock_quantity      Int         @default(0)
+  requires_scheduling Boolean      @default(false)
+  images              String[]
+  is_active          Boolean      @default(true)
+  sqlCategoryId      String
+  sqlCategory        SqlCategory  @relation(fields: [sqlCategoryId], references: [id])
+  orderItems         OrderItem[]
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+}
+
+model Order {
+  id                     String      @id @default(cuid())
+  order_number           String      @unique
+  customer_email         String
+  customer_phone        String
+  customer_name         String
+  customer_document     String
+  delivery_option       String
+  delivery_address      String?
+  delivery_fee          Int         @default(0)
+  requires_scheduling   Boolean     @default(false)
+  created_by_admin     Boolean     @default(false)
+  payment_status       String
+  order_status         String
+  notes                String?
+  payment_link_token   String?     @unique
+  stripe_payment_intent_id String?
+  total_amount         Int
+  items                OrderItem[]
+  createdAt            DateTime    @default(now())
+  updatedAt            DateTime    @updatedAt
+}
+
+model OrderItem {
+  id          String   @id @default(cuid())
+  order_id    String
+  product_id  String
+  quantity    Float
+  unit_price  Int
+  product     Product  @relation(fields: [product_id], references: [id])
+  order       Order    @relation(fields: [order_id], references: [id])
+}
+
+model AdminUser {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  role      String   @default("admin")
+  createdAt DateTime @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  adminId   String
+  action    String
+  entity    String
+  entityId  String?
+  details   Json?
+  createdAt DateTime @default(now())
+}

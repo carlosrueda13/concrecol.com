@@ -1,0 +1,151 @@
+import { notFound } from 'next/navigation'
+import { prisma } from '@/lib/prisma'
+import { Badge } from '@/components/ui/badge'
+import { Separator } from '@/components/ui/separator'
+import { format } from 'date-fns'
+import { es } from 'date-fns/locale'
+import { formatCurrency } from '@/lib/utils'
+import { OrderStatusForm } from './order-status-form'
+
+export default async function OrderPage({
+  params,
+}: {
+  params: { id: string }
+}) { {
+  const order = await prisma.order.findUnique({
+    where: {
+      id: params.id
+    },
+    include: {
+      items: {
+        include: {
+          product: true
+        }
+      }
+    }
+  })
+
+  if (!order) {
+    notFound()
+  }
+
+  // Calculate subtotal
+  const subtotal = order.items.reduce((sum, item) => sum + (item.unit_price * item.quantity), 0)
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h3 className="text-lg font-medium">
+          Pedido #{order.order_number}
+        </h3>
+        <p className="text-sm text-muted-foreground">
+          {format(order.createdAt, "PPpp", { locale: es })}
+        </p>
+      </div>
+      <Separator />
+      <div className="grid gap-6 md:grid-cols-2">
+        <div>
+          <div className="space-y-1">
+            <h4 className="font-medium">Cliente</h4>
+            <p className="text-sm text-muted-foreground">
+              {order.customer_name}
+            </p>
+            <p className="text-sm text-muted-foreground">
+              {order.customer_email}
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Tel: {order.customer_phone}
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Doc: {order.customer_document}
+            </p>
+          </div>
+          {order.delivery_address && (
+            <div className="mt-6 space-y-1">
+              <h4 className="font-medium">Dirección de envío</h4>
+              <p className="text-sm text-muted-foreground">
+                {order.delivery_address}
+              </p>
+            </div>
+          )}
+        </div>
+        <div>
+          <div className="space-y-1">
+            <h4 className="font-medium">Estado del pedido</h4>
+            <div className="flex items-center gap-2">
+              <Badge
+                variant={
+                  order.order_status === 'completed'
+                    ? 'success'
+                    : order.order_status === 'processing'
+                    ? 'warning'
+                    : order.order_status === 'cancelled'
+                    ? 'destructive'
+                    : 'default'
+                }
+              >
+                {order.order_status === 'completed'
+                  ? 'Completado'
+                  : order.order_status === 'processing'
+                  ? 'En Proceso'
+                  : order.order_status === 'cancelled'
+                  ? 'Cancelado'
+                  : 'Pendiente'}
+              </Badge>
+            </div>
+          </div>
+          <div className="mt-6 space-y-1">
+            <h4 className="font-medium">Estado del pago</h4>
+            <div className="flex items-center gap-2">
+              <Badge
+                variant={order.payment_status === 'paid' ? 'success' : 'destructive'}
+              >
+                {order.payment_status === 'paid' ? 'Pagado' : 'Pendiente'}
+              </Badge>
+            </div>
+          </div>
+          {order.requires_scheduling && (
+            <div className="mt-6 space-y-1">
+              <h4 className="font-medium">Requiere programación</h4>
+              <Badge variant="warning">Sí</Badge>
+            </div>
+          )}
+        </div>
+      </div>
+      <Separator />
+      <div>
+        <h4 className="mb-4 font-medium">Productos</h4>
+        <div className="divide-y">
+          {order.items.map((item) => (
+            <div key={item.id} className="flex items-center justify-between py-4">
+              <div>
+                <p className="font-medium">{item.product.name}</p>
+                <p className="text-sm text-muted-foreground">
+                  Cantidad: {item.quantity} {item.product.unit_measure}
+                </p>
+              </div>
+              <p className="font-medium">{formatCurrency(item.unit_price * item.quantity)}</p>
+            </div>
+          ))}
+        </div>
+        <div className="mt-6 space-y-2">
+          <div className="flex justify-between">
+            <p className="text-sm font-medium">Subtotal</p>
+            <p className="text-sm">{formatCurrency(subtotal)}</p>
+          </div>
+          {order.delivery_fee > 0 && (
+            <div className="flex justify-between">
+              <p className="text-sm font-medium">Envío</p>
+              <p className="text-sm">{formatCurrency(order.delivery_fee)}</p>
+            </div>
+          )}
+          <div className="flex justify-between">
+            <p className="font-medium">Total</p>
+            <p className="font-medium">{formatCurrency(order.total_amount)}</p>
+          </div>
+        </div>
+      </div>
+      <Separator />
+      <OrderStatusForm orderId={order.id} initialStatus={order.order_status} />
+    </div>
+  )
