@@ -1,0 +1,213 @@
+'use client'
+
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import type { ColumnDef } from '@tanstack/react-table'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { formatPrice, formatDateTime } from '@/lib/utils'
+import type { Order } from '@prisma/client'
+
+export const columns: ColumnDef<Order>[] = [
+  {
+    accessorKey: 'order_number',
+    header: 'Número',
+    cell: ({ row }: any) => (
+      <div className="font-medium">#{row.getValue('order_number')}</div>
+    ),
+  },
+  {
+    accessorKey: 'customer_name',
+    header: 'Cliente',
+    cell: ({ row }: any) => {
+      const order = row.original
+      return (
+        <div>
+          <div className="font-medium">{order.customer_name}</div>
+          <div className="text-sm text-muted-foreground">
+            {order.customer_email}
+          </div>
+        </div>
+      )
+    },
+  },
+  {
+    accessorKey: 'total_amount',
+    header: 'Total',
+    cell: ({ row }: any) => formatPrice(row.getValue('total_amount')),
+  },
+  {
+    accessorKey: 'payment_status',
+    header: 'Pago',
+    cell: ({ row }: any) => {
+      const status = row.getValue('payment_status')
+      return (
+        <Badge
+          variant={
+            status === 'paid'
+              ? 'default'
+              : status === 'pending'
+              ? 'secondary'
+              : 'destructive'
+          }
+        >
+          {getPaymentStatusLabel(status)}
+        </Badge>
+      )
+    },
+  },
+  {
+    accessorKey: 'order_status',
+    header: 'Estado',
+    cell: ({ row }: any) => {
+      const status = row.getValue('order_status')
+      return (
+        <Badge variant="outline">
+          {getOrderStatusLabel(status)}
+        </Badge>
+      )
+    },
+  },
+  {
+    accessorKey: 'createdAt',
+    header: 'Fecha',
+    cell: ({ row }: any) =>
+      formatDateTime(row.getValue('createdAt')),
+  },
+  {
+    id: 'actions',
+    cell: ({ row }: any) => {
+      const order = row.original
+      const router = useRouter()
+      const [loading, setLoading] = useState(false)
+
+      const handleStatusChange = async (newStatus: string) => {
+        setLoading(true)
+        try {
+          const response = await fetch(`/api/orders/${order.id}/status`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ status: newStatus }),
+          })
+
+          if (!response.ok) throw new Error('Error updating status')
+          
+          router.refresh()
+        } catch (error) {
+          console.error('Error:', error)
+        } finally {
+          setLoading(false)
+        }
+      }
+
+      const handleGeneratePaymentLink = async () => {
+        setLoading(true)
+        try {
+          const response = await fetch(`/api/orders/${order.id}/payment-link`, {
+            method: 'POST',
+          })
+
+          if (!response.ok) throw new Error('Error generating payment link')
+
+          const { paymentLink } = await response.json()
+          await navigator.clipboard.writeText(paymentLink)
+          
+          alert('Link de pago copiado al portapapeles')
+        } catch (error) {
+          console.error('Error:', error)
+          alert('Error al generar el link de pago')
+        } finally {
+          setLoading(false)
+        }
+      }
+
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="sm" disabled={loading}>
+              {loading ? 'Cargando...' : 'Acciones'}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+            <DropdownMenuItem
+              onClick={() => router.push(`/admin/ordenes/${order.id}`)}
+            >
+              Ver Detalles
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuLabel>Cambiar Estado</DropdownMenuLabel>
+            <DropdownMenuItem
+              disabled={order.order_status === 'scheduled'}
+              onClick={() => handleStatusChange('scheduled')}
+            >
+              Programado
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              disabled={order.order_status === 'processing'}
+              onClick={() => handleStatusChange('processing')}
+            >
+              En Proceso
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              disabled={order.order_status === 'ready'}
+              onClick={() => handleStatusChange('ready')}
+            >
+              Listo
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              disabled={order.order_status === 'completed'}
+              onClick={() => handleStatusChange('completed')}
+            >
+              Completado
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              disabled={order.order_status === 'canceled'}
+              onClick={() => handleStatusChange('canceled')}
+            >
+              Cancelado
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            {order.payment_status === 'pending' && (
+              <DropdownMenuItem onClick={handleGeneratePaymentLink}>
+                Generar Link de Pago
+              </DropdownMenuItem>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )
+    },
+  },
+]
+
+function getPaymentStatusLabel(status: string): string {
+  const labels: Record<string, string> = {
+    pending: 'Pendiente',
+    paid: 'Pagado',
+    failed: 'Fallido',
+    refunded: 'Reembolsado',
+  }
+  return labels[status] || status
+}
+
+function getOrderStatusLabel(status: string): string {
+  const labels: Record<string, string> = {
+    created: 'Creado',
+    scheduled: 'Programado',
+    processing: 'En Proceso',
+    ready: 'Listo',
+    completed: 'Completado',
+    canceled: 'Cancelado',
+  }
+  return labels[status] || status
+}

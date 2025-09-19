@@ -9,12 +9,21 @@ export type AuditAction =
   | 'order_create'
   | 'order_update'
   | 'order_delete'
+  | 'order_status_change'
+  | 'order_paid'
+  | 'payment_failed'
   | 'category_create'
   | 'category_update'
   | 'category_delete'
+  // Acciones para pruebas
+  | 'test_action'
+  | 'minimal_action'
+  | 'action1'
+  | 'action2'
+  | 'action3'
 
 export interface AuditLogData {
-  adminId: string
+  adminId?: string // Optional for system-generated logs
   action: AuditAction
   entity: string
   entityId?: string
@@ -31,7 +40,7 @@ export async function createAuditLog({
   try {
     await prisma.auditLog.create({
       data: {
-        adminId,
+        adminId: adminId || 'system',
         action,
         entity,
         entityId,

@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@/components/ui/button'
@@ -17,6 +18,7 @@ interface CategoryFormProps {
 
 export function CategoryForm({ initialData, categoryId }: CategoryFormProps) {
   const { toast } = useToast()
+  const router = useRouter()
   const {
     register,
     handleSubmit,
@@ -40,6 +42,7 @@ export function CategoryForm({ initialData, categoryId }: CategoryFormProps) {
             title: 'Categoría actualizada',
             description: 'La categoría se ha actualizado correctamente.',
           })
+          router.push('/admin/categorias')
         } else {
           throw new Error(result.error)
         }
@@ -50,6 +53,7 @@ export function CategoryForm({ initialData, categoryId }: CategoryFormProps) {
             title: 'Categoría creada',
             description: 'La categoría se ha creado correctamente.',
           })
+          router.push('/admin/categorias')
         } else {
           throw new Error(result.error)
         }

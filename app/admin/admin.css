@@ -1,0 +1,7 @@
+/* Admin-specific styles */
+
+/* Hide main site nav and footer when in admin section */
+body.admin-page header:not(.admin-header),
+body.admin-page footer {
+  display: none !important;
+}

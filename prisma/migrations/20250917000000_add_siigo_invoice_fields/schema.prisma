@@ -1,0 +1,133 @@
+# This is your Prisma schema file,
+# learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model SqlCategory {
+  id         String    @id @default(cuid())
+  name       String
+  slug       String    @unique
+  is_active  Boolean   @default(true)
+  products   Product[]
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+}
+
+enum UnitMeasure {
+  M3
+  KG
+  TON
+  BOLSA
+  GALON
+}
+
+model Product {
+  id                  String       @id @default(cuid())
+  name                String
+  slug                String       @unique
+  price_per_unit      Int
+  unit_measure        UnitMeasure
+  stock_quantity      Int         @default(0)
+  requires_scheduling Boolean      @default(false)
+  images              String[]
+  is_active          Boolean      @default(true)
+  sqlCategoryId      String
+  sqlCategory        SqlCategory  @relation(fields: [sqlCategoryId], references: [id])
+  orderItems         OrderItem[]
+  cartItems          CartItem[]   // Added relation
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+}
+
+model Order {
+  id                     String      @id @default(cuid())
+  order_number           String      @unique
+  customer_email         String
+  customer_phone        String
+  customer_name         String
+  customer_document     String
+  delivery_option       String
+  delivery_address      String?
+  delivery_date         DateTime?
+  delivery_time_slot    String?
+  delivery_fee          Int         @default(0)
+  requires_scheduling   Boolean     @default(false)
+  created_by_admin     Boolean     @default(false)
+  payment_status       String
+  order_status         String
+  notes                String?
+  payment_link_token   String?     @unique
+  stripe_payment_intent_id String?
+  total_amount         Int
+  // SIIGO Electronic Invoicing fields
+  siigo_invoice_id     String?     // SIIGO invoice ID
+  siigo_invoice_status String?     // Status of the electronic invoice
+  siigo_pdf_url        String?     // URL to the electronic invoice PDF
+  siigo_xml_url        String?     // URL to the electronic invoice XML
+  siigo_qr_url         String?     // URL to the electronic invoice QR code
+  items                OrderItem[]
+  createdAt            DateTime    @default(now())
+  updatedAt            DateTime    @updatedAt
+}
+
+model OrderItem {
+  id          String   @id @default(cuid())
+  order_id    String
+  product_id  String
+  quantity    Float
+  unit_price  Int
+  product     Product  @relation(fields: [product_id], references: [id])
+  order       Order    @relation(fields: [order_id], references: [id])
+}
+
+model AdminUser {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  role      String   @default("admin")
+  createdAt DateTime @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  adminId   String
+  action    String
+  entity    String
+  entityId  String?
+  details   Json?
+  createdAt DateTime @default(now())
+}
+
+model Cart {
+  id                String     @id @default(cuid())
+  cartId            String     @unique  // This will store the cookie cart ID
+  items             CartItem[]
+  customer_email    String?    // Optional - filled during checkout
+  customer_phone    String?    // Optional - filled during checkout
+  customer_name     String?    // Optional - filled during checkout
+  customer_document String?    // Optional - filled during checkout
+  delivery_option   String?    // Optional - filled during checkout
+  delivery_address  String?    // Optional - filled during checkout
+  delivery_date     DateTime?  // Optional - filled during checkout
+  delivery_time_slot String?   // Optional - filled during checkout
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+}
+
+model CartItem {
+  id          String   @id @default(cuid())
+  cart_id     String
+  product_id  String
+  quantity    Float
+  cart        Cart     @relation(fields: [cart_id], references: [id], onDelete: Cascade)
+  product     Product  @relation(fields: [product_id], references: [id])
+
+  @@unique([cart_id, product_id])  // Prevent duplicate products in cart
+}

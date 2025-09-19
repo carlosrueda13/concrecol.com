@@ -10,7 +10,10 @@ import {
   ShoppingCart, 
   Users, 
   Settings,
-  LogOut
+  LogOut,
+  ListIcon,
+  BarChart,
+  FileText
 } from 'lucide-react'
 import { signOut } from 'next-auth/react'
 
@@ -22,22 +25,40 @@ const routes = [
     pattern: /^\/admin$/
   },
   {
+    label: 'Pedidos',
+    icon: ShoppingCart,
+    href: '/admin/ordenes',
+    pattern: /^\/admin\/ordenes/
+  },
+  {
     label: 'Productos',
     icon: Package,
     href: '/admin/productos',
     pattern: /^\/admin\/productos/
   },
   {
-    label: 'Pedidos',
-    icon: ShoppingCart,
-    href: '/admin/pedidos',
-    pattern: /^\/admin\/pedidos/
+    label: 'Categorías',
+    icon: ListIcon,
+    href: '/admin/categorias',
+    pattern: /^\/admin\/categorias/
   },
   {
     label: 'Clientes',
     icon: Users,
     href: '/admin/clientes',
     pattern: /^\/admin\/clientes/
+  },
+  {
+    label: 'Reportes',
+    icon: FileText,
+    href: '/admin/reportes',
+    pattern: /^\/admin\/reportes/
+  },
+  {
+    label: 'Logs',
+    icon: ListIcon,
+    href: '/admin/logs',
+    pattern: /^\/admin\/logs/
   },
   {
     label: 'Configuración',

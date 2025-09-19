@@ -1,7 +1,10 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { ImagePreview } from '@/components/ui/image-preview'
+import { ImageUpload } from '@/components/ui/image-upload'
 import { UnitMeasure } from '@prisma/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -17,6 +20,7 @@ import { Switch } from '@/components/ui/switch'
 import { useToast } from '@/components/ui/use-toast'
 import { productSchema, type ProductFormData } from '@/lib/validations/product'
 import { createProduct, updateProduct } from '@/app/actions/product'
+import { useLoading } from '@/contexts/loading-context'
 
 interface ProductFormProps {
   categories: {
@@ -29,6 +33,8 @@ interface ProductFormProps {
 
 export function ProductForm({ categories, initialData, productId }: ProductFormProps) {
   const { toast } = useToast()
+  const router = useRouter()
+  const { startLoading, stopLoading, setLoadingMessage } = useLoading()
   const {
     register,
     handleSubmit,
@@ -48,6 +54,9 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
 
   const onSubmit = async (data: ProductFormData) => {
     try {
+      setLoadingMessage(productId ? 'Actualizando producto...' : 'Creando producto...')
+      startLoading()
+      
       if (productId) {
         const result = await updateProduct(productId, data)
         if (result.success) {
@@ -55,6 +64,7 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
             title: 'Producto actualizado',
             description: 'El producto se ha actualizado correctamente.',
           })
+          router.push('/admin/productos')
         } else {
           throw new Error(result.error)
         }
@@ -65,6 +75,7 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
             title: 'Producto creado',
             description: 'El producto se ha creado correctamente.',
           })
+          router.push('/admin/productos')
         } else {
           throw new Error(result.error)
         }
@@ -75,6 +86,8 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
         title: 'Error',
         description: error instanceof Error ? error.message : 'Error al guardar el producto',
       })
+    } finally {
+      stopLoading()
     }
   }
 
@@ -89,58 +102,87 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
           )}
         </div>
         
-        <div className="space-y-2">
-          <Label htmlFor="imageUrl">URL de la imagen</Label>
-          <div className="flex space-x-2">
-            <Input
-              id="imageUrl"
-              placeholder="https://ejemplo.com/imagen.jpg"
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  e.preventDefault()
-                  const input = e.target as HTMLInputElement
+        <div className="space-y-2 md:col-span-2">
+          <Label htmlFor="images">Imágenes del producto</Label>
+          <div className="flex flex-col space-y-2">
+            <ImageUpload
+              value={watch('images') || []}
+              onChange={(urls) => setValue('images', urls)}
+              maxImages={5}
+              disabled={isSubmitting}
+            />
+            
+            {/* Mostrar las URLs de las imágenes actuales */}
+            {watch('images')?.length > 0 && (
+              <div className="mt-4 border rounded-md p-4 bg-gray-50">
+                <h3 className="text-sm font-medium mb-2">URLs de imágenes actuales:</h3>
+                <div className="space-y-2">
+                  {watch('images')?.map((imageUrl, index) => (
+                    <div key={index} className="flex items-center justify-between text-sm bg-white p-2 rounded border">
+                      <div className="flex items-center space-x-3 w-full">
+                        <span className="font-medium text-gray-500">#{index + 1}</span>
+                        <div className="flex-1 truncate">
+                          <input 
+                            className="w-full bg-transparent border-none p-0 focus:outline-none focus:ring-0 text-gray-700"
+                            value={imageUrl}
+                            readOnly
+                            onClick={(e) => (e.target as HTMLInputElement).select()}
+                          />
+                        </div>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          className="h-7 px-2"
+                          onClick={() => {
+                            navigator.clipboard.writeText(imageUrl);
+                            toast({
+                              title: "URL copiada",
+                              description: "La URL de la imagen ha sido copiada al portapapeles",
+                            });
+                          }}
+                        >
+                          Copiar
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            {/* Mantener la opción de agregar por URL para compatibilidad */}
+            <div className="flex space-x-2 mt-4">
+              <Input
+                id="imageUrl"
+                placeholder="https://ejemplo.com/imagen.jpg"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault()
+                    const input = e.target as HTMLInputElement
+                    const currentImages = watch('images') || []
+                    if (input.value && currentImages.length < 5) {
+                      setValue('images', [...currentImages, input.value])
+                      input.value = ''
+                    }
+                  }
+                }}
+              />
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  const input = document.getElementById('imageUrl') as HTMLInputElement
                   const currentImages = watch('images') || []
                   if (input.value && currentImages.length < 5) {
                     setValue('images', [...currentImages, input.value])
                     input.value = ''
                   }
-                }
-              }}
-            />
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => {
-                const input = document.getElementById('imageUrl') as HTMLInputElement
-                const currentImages = watch('images') || []
-                if (input.value && currentImages.length < 5) {
-                  setValue('images', [...currentImages, input.value])
-                  input.value = ''
-                }
-              }}
-            >
-              Agregar
-            </Button>
-          </div>
-          <div className="grid gap-2 mt-2">
-            {watch('images')?.map((url, index) => (
-              <div key={index} className="flex items-center justify-between p-2 border rounded">
-                <a href={url} target="_blank" rel="noopener noreferrer" className="text-sm truncate text-blue-500 hover:underline">
-                  {url}
-                </a>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => {
-                    const currentImages = watch('images') || []
-                    setValue('images', currentImages.filter((_, i) => i !== index))
-                  }}
-                >
-                  ×
-                </Button>
-              </div>
-            ))}
+                }}
+              >
+                Agregar URL
+              </Button>
+            </div>
           </div>
           {errors.images && (
             <p className="text-sm text-red-500">{errors.images.message}</p>

@@ -1,8 +1,11 @@
 import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
 import { headers } from 'next/headers'
-import { authOptions } from '../api/auth/[...nextauth]/route'
-import { AdminNav } from '@/components/admin/admin-nav'
+import Image from 'next/image'
+import { authOptions } from '../api/auth/options'
+import { AdminHeader } from '@/components/admin/admin-header'
+import { AdminBodyClass } from '@/components/admin/admin-body-class'
+import './admin.css'
 
 export default async function AdminLayout({
   children,
@@ -19,20 +22,22 @@ export default async function AdminLayout({
 
   return (
     <div className="min-h-screen">
-      <div className="fixed inset-y-0 z-50 flex w-72 flex-col bg-white">
-        <div className="p-6">
-          <span className="text-xl font-bold">Concrecol Admin</span>
-        </div>
-        <div className="flex-1 overflow-y-auto p-4">
-          <AdminNav />
-        </div>
-      </div>
-      <div className="pl-72">
-        <header className="sticky top-0 z-40 border-b bg-white">
+      {/* This component will add the admin-page class to the body */}
+      <AdminBodyClass />
+      
+      <div>
+        <header className="sticky top-0 z-40 border-b bg-white admin-header">
           <div className="container flex h-16 items-center justify-between py-4">
-            <h1 className="text-lg font-semibold">
-              {pathname === '/admin' ? 'Dashboard' : pathname.split('/').pop()?.replace(/-/g, ' ').split(' ').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') || 'Admin'}
-            </h1>
+            <div className="flex items-center">
+              <Image 
+                src="/images/Property 1=Default-1.png" 
+                alt="Concrecol Logo" 
+                width={150} 
+                height={40} 
+                className="h-10 w-auto"
+              />
+            </div>
+            <AdminHeader />
           </div>
         </header>
         <main className="container py-6">

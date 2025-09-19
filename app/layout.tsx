@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
 import './globals.css'
 import { Providers } from '@/app/providers'
-
-const inter = Inter({ subsets: ['latin'] })
+import { ConditionalNav } from '@/components/conditional-nav'
+import { Footer } from '@/components/footer'
+import { sukhumvitSet } from './fonts'
 
 export const metadata: Metadata = {
   title: 'Concrecol - Construimos confianza, entregamos concreto',
@@ -15,11 +15,16 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  // For the root layout, we'll check the pathname in the admin layout instead
   return (
     <html lang="es">
-      <body className={inter.className}>
+      <body className={`${sukhumvitSet.className} antialiased`}>
         <Providers>
-          {children}
+          <ConditionalNav />
+          <main className="min-h-screen">
+            {children}
+          </main>
+          <Footer />
         </Providers>
       </body>
     </html>

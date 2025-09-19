@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { getServerSession } from 'next-auth'
 import { PrismaClient } from '@prisma/client'
-import { authOptions } from '@/app/api/auth/[...nextauth]/route'
+import { authOptions } from '@/app/api/auth/options'
 import { productSchema, productUpdateSchema, type ProductFormData } from '@/lib/validations/product'
 import { createAuditLog } from '@/lib/audit'
 
@@ -81,9 +81,10 @@ export async function deleteProduct(id: string) {
   }
 
   try {
-    // Delete product
-    const product = await prisma.product.delete({
+    // Soft delete product
+    const product = await prisma.product.update({
       where: { id },
+      data: { is_active: false }
     })
 
     // Log action

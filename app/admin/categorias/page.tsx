@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
+import { DeleteCategoryButton } from '@/components/admin/delete-category-button'
 
 export default async function CategoriesPage() {
   const categories = await prisma.sqlCategory.findMany({
@@ -55,12 +56,17 @@ export default async function CategoriesPage() {
                     {category.is_active ? 'Activo' : 'Inactivo'}
                   </Badge>
                 </TableCell>
-                <TableCell>
+                <TableCell className="space-x-2">
                   <Link href={`/admin/categorias/${category.id}/editar`}>
                     <Button variant="outline" size="sm">
                       Editar
                     </Button>
                   </Link>
+                  <DeleteCategoryButton 
+                    categoryId={category.id} 
+                    categoryName={category.name} 
+                    productCount={category._count.products} 
+                  />
                 </TableCell>
               </TableRow>
             ))}

@@ -12,9 +12,9 @@ export async function PATCH(
       return new NextResponse('Status is required', { status: 400 })
     }
 
-    const allowedStatuses = ['pending', 'processing', 'completed', 'cancelled']
+    const allowedStatuses = ['created', 'confirmed', 'scheduled', 'completed', 'cancelled']
     if (!allowedStatuses.includes(status)) {
-      return new NextResponse('Invalid status', { status: 400 })
+      return new NextResponse(`Invalid status: ${status}. Allowed statuses are: ${allowedStatuses.join(', ')}`, { status: 400 })
     }
 
     const order = await prisma.order.update({
@@ -23,6 +23,27 @@ export async function PATCH(
       },
       data: {
         order_status: status
+      },
+      include: {
+        items: {
+          include: {
+            product: true
+          }
+        }
+      }
+    })
+
+    // Log the status change
+    await prisma.auditLog.create({
+      data: {
+        adminId: 'system', // You might want to get the actual admin ID from the session
+        action: 'update',
+        entity: 'order',
+        entityId: params.id,
+        details: {
+          oldStatus: order.order_status,
+          newStatus: status,
+        }
       }
     })
 
