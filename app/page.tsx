@@ -4,6 +4,7 @@ import { CheckCircle, BuildingIcon, Users, ArrowRight } from 'lucide-react'
 import { prisma } from '@/lib/prisma'
 import { CategoryWithImage } from '@/types'
 import { Reveal } from '@/components/animations/reveal'
+import { withBasePath } from '@/lib/basePath'
 
 // Función para obtener las categorías activas con una imagen por defecto
 async function getActiveCategories(): Promise<CategoryWithImage[]> {
@@ -50,7 +51,7 @@ export default async function HomePage() {
         >
           <video
             className="absolute inset-0 w-full h-full object-cover opacity-30"
-            src="/hero-video.mp4"
+            src={withBasePath('/hero-video.mp4')}
             autoPlay
             loop
             muted
@@ -59,7 +60,7 @@ export default async function HomePage() {
         </a>
         <div className="relative z-20 flex flex-col items-center justify-center w-full h-full pointer-events-none">
           <img
-            src="/logo-hero.png"
+            src={withBasePath('/logo-hero.png')}
             alt="Logo Concrecol"
             className="w-96 h-96 md:w-[32rem] md:h-[32rem] mb-2 drop-shadow-xl"
             style={{ objectFit: 'contain' }}
@@ -124,7 +125,7 @@ export default async function HomePage() {
               <Reveal direction="right">
                 <div className="relative">
                   <img
-                    src="/about-image.jpg"
+                    src={withBasePath('/about-image.jpg')}
                     alt="Equipo de Concrecol"
                     className="rounded-2xl shadow-xl"
                     width={800}
@@ -211,7 +212,7 @@ export default async function HomePage() {
               <Reveal key={project.name} direction="up" delay={0.1 * index}>
                 <div className="bg-white rounded-lg shadow-md overflow-hidden h-full">
                   <img 
-                    src={project.imageUrl} 
+                    src={withBasePath(project.imageUrl)} 
                     alt={project.name}
                     className="w-full h-64 object-cover"
                   />

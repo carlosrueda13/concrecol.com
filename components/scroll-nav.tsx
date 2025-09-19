@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { ShoppingCart, Menu, X } from 'lucide-react'
 import { useCart } from '@/contexts/cart-provider'
+import { withBasePath } from '@/lib/basePath'
 
 export function ScrollNav() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -59,7 +60,7 @@ export function ScrollNav() {
           {/* Logo */}
           <Link href="/" className="flex items-center">
             <img 
-              src="/images/Property 1=Default-1.png" 
+              src={withBasePath('/images/Property 1=Default-1.png')}
               alt="Concrecol Logo" 
               className="h-8"
             />
@@ -110,7 +111,7 @@ export function ScrollNav() {
             <div className="flex justify-between items-center p-4">
               <Link href="/" className="flex items-center" onClick={() => setIsMenuOpen(false)}>
                 <img 
-                  src="/images/Property 1=Default-1.png" 
+                  src={withBasePath('/images/Property 1=Default-1.png')}
                   alt="Concrecol Logo" 
                   className="h-8"
                 />

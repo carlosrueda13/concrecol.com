@@ -1,9 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'export',
+  basePath: process.env.NEXT_PUBLIC_BASE_PATH || '',
+  assetPrefix: process.env.NEXT_PUBLIC_BASE_PATH || '',
   experimental: {
     serverActions: true
   },
   images: {
+    unoptimized: true,
     domains: [
       'raw.githubusercontent.com',
       'github.com',
