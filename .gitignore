@@ -2,35 +2,113 @@
 /node_modules
 /.pnp
 .pnp.js
+node_modules/
 
 # testing
 /coverage
 /playwright-report
 /test-results
+playwright-report/
+test-results/
 
 # next.js
 /.next/
 /out/
+.next/
 
 # production
 /build
+build/
 
 # misc
 .DS_Store
 *.pem
+.DS_Store?
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
 
 # debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+*.log
 
-# local env files
+# local env files - TODOS LOS ARCHIVOS DE ENTORNO
 .env
-.env*.local
+.env*
+.env.local
+.env.development
+.env.staging  
+.env.production
+.env.test
+.env.*.local
 
 # vercel
 .vercel
+.vercel.json
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# IDE y editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Archivos temporales y de prueba
+temp.js
+test-*.js
+test-*.mjs
+test-*.ts
+setup-*.js
+setup-*.sh
+*.temp
+*.tmp
+
+# Archivos de base de datos locales
+*.db
+*.sqlite
+*.sqlite3
+
+# Credenciales y claves
+credentials.json
+service-account.json
+*.key
+*.pem
+*.p12
+
+# Archivos de configuración sensibles
+docker-compose.override.yml
+.env.example.filled
+
+# Archivos específicos del proyecto que contienen info sensible
+supabase-schema.sql
+database-backup.sql
+
+# Cache
+.cache/
+*.cache
+
+# Logs
+logs/
+*.log
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Backups
+backup/
+*.backup
+*.bak
+
+# Archivos de sistema macOS
+.AppleDouble
+.LSOverride
+Icon
+._*

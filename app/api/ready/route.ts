@@ -1,10 +1,12 @@
 import { NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import { safeQuery } from '@/lib/db-wrapper'
 
 export async function GET() {
   try {
     // Check if admin user exists (app is properly seeded)
-    const adminExists = await prisma.adminUser.findFirst()
+    const adminExists = await safeQuery(async (prisma) => {
+      return await prisma.adminUser.findFirst()
+    })
     
     if (!adminExists) {
       throw new Error('Admin user not found - app not ready')

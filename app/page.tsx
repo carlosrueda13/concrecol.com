@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { CheckCircle, BuildingIcon, Users, ArrowRight } from 'lucide-react'
-import { prisma } from '@/lib/prisma'
+import { safeQuery } from '@/lib/db-wrapper'
 import { CategoryWithImage } from '@/types'
 import { Reveal } from '@/components/animations/reveal'
 import { withBasePath } from '@/lib/basePath'
@@ -11,33 +11,73 @@ export const dynamic = 'force-dynamic'
 
 // Función para obtener las categorías activas con una imagen por defecto
 async function getActiveCategories(): Promise<CategoryWithImage[]> {
-  const categories = await prisma.sqlCategory.findMany({
-    where: {
-      is_active: true
-    },
-    orderBy: {
-      name: 'asc'
-    },
-    take: 6 // Limitamos a 6 categorías
-  });
-  
-  // Asignamos imágenes predeterminadas o personalizadas según el slug
-  return categories.map(category => {
-    // Intentamos encontrar una imagen personalizada basada en el slug
-    const imageUrl = `/categories/${category.slug}.jpg`;
+  try {
+    const categories = await safeQuery(async (prisma) => {
+      return await prisma.sqlCategory.findMany({
+        where: {
+          is_active: true
+        },
+        orderBy: {
+          name: 'asc'
+        },
+        take: 6 // Limitamos a 6 categorías
+      });
+    });
+
+    // Asignamos imágenes predeterminadas o personalizadas según el slug
+    return categories.map(category => {
+      // Intentamos encontrar una imagen personalizada basada en el slug
+      const imageUrl = `/categories/${category.slug}.jpg`;
+      
+      // Como fallback usamos una imagen genérica
+      const fallbackImage = '/categories/default-category.jpg';
+      
+      // Descripción genérica basada en el nombre
+      const description = `Explora nuestra selección de productos de ${category.name.toLowerCase()} de alta calidad.`;
+      
+      return {
+        ...category,
+        imageUrl,
+        description
+      };
+    });
+  } catch (error) {
+    console.error('❌ Error fetching categories:', error);
     
-    // Como fallback usamos una imagen genérica
-    const fallbackImage = '/categories/default-category.jpg';
-    
-    // Descripción genérica basada en el nombre
-    const description = `Explora nuestra selección de productos de ${category.name.toLowerCase()} de alta calidad.`;
-    
-    return {
-      ...category,
-      imageUrl,
-      description
-    };
-  });
+    // Retornar categorías por defecto en caso de error
+    return [
+      {
+        id: '1',
+        name: 'Concreto Premezclado',
+        slug: 'concreto-premezclado',
+        is_active: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        imageUrl: '/categories/concreto.jpg',
+        description: 'Concreto de alta calidad para todo tipo de construcciones'
+      },
+      {
+        id: '2',
+        name: 'Materiales de Construcción', 
+        slug: 'materiales-construccion',
+        is_active: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        imageUrl: '/categories/materiales.jpg',
+        description: 'Amplio catálogo de materiales para construcción'
+      },
+      {
+        id: '3',
+        name: 'Servicios Especializados',
+        slug: 'servicios-especializados',
+        is_active: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        imageUrl: '/categories/servicios.jpg',
+        description: 'Servicios profesionales de construcción'
+      }
+    ];
+  }
 }
 
 export default async function HomePage() {

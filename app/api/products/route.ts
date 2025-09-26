@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import { safeQuery } from '@/lib/db-wrapper'
 import { sanitizeString } from '@/lib/sanitization'
 
 // ✅ Forzar renderizado dinámico
@@ -10,19 +10,21 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const active = searchParams.get('active') === 'true'
 
-    const products = await prisma.product.findMany({
-      where: active ? { is_active: true } : undefined,
-      orderBy: [
-        { sqlCategory: { name: 'asc' } },
-        { name: 'asc' }
-      ],
-      include: {
-        sqlCategory: {
-          select: {
-            name: true
+    const products = await safeQuery(async (prisma) => {
+      return await prisma.product.findMany({
+        where: active ? { is_active: true } : undefined,
+        orderBy: [
+          { sqlCategory: { name: 'asc' } },
+          { name: 'asc' }
+        ],
+        include: {
+          sqlCategory: {
+            select: {
+              name: true
+            }
           }
         }
-      }
+      })
     })
 
     return NextResponse.json(products)

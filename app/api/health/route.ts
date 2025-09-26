@@ -1,12 +1,14 @@
 import { NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import { safeQuery } from '@/lib/db-wrapper'
 
 export async function GET() {
   const startTime = Date.now()
   
   try {
-    // Check database connection
-    await prisma.$queryRaw`SELECT 1`
+    // Check database connection with safe wrapper
+    await safeQuery(async (prisma) => {
+      return await prisma.$queryRaw`SELECT 1`
+    })
     
     const endTime = Date.now()
     const responseTime = endTime - startTime
