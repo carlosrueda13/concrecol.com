@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { sanitizeInput } from '@/lib/sanitization'
+import { sanitizeString } from '@/lib/sanitization'
 
 // ✅ Forzar renderizado dinámico
 export const dynamic = 'force-dynamic'
