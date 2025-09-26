@@ -1,6 +1,6 @@
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/api/auth/options'
-import { prisma } from '@/lib/prisma'
+import { safeQuery } from '@/lib/db-wrapper'
 
 export async function requireAdminAuth() {
   const session = await getServerSession(authOptions)
@@ -9,8 +9,10 @@ export async function requireAdminAuth() {
     throw new Error('Unauthorized - No session')
   }
 
-  const admin = await prisma.adminUser.findUnique({
-    where: { email: session.user.email as string },
+  const admin = await safeQuery(async (prisma) => {
+    return await prisma.adminUser.findUnique({
+      where: { email: session.user.email as string },
+    })
   })
 
   if (!admin || admin.role !== 'admin') {
