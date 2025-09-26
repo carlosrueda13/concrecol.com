@@ -8,8 +8,8 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
-import { useToast } from '@/components/ui/use-toast'
-import { useLoading } from '@/contexts/loading-context'
+// import { useToast } from '@/components/ui/use-toast'
+// import { useLoading } from '@/contexts/loading-context'
 import { StaticLocation } from '@/components/static-location-image'
 
 // Esquema de validación para el formulario
@@ -25,8 +25,6 @@ type ContactFormData = z.infer<typeof contactFormSchema>
 
 export default function ContactoPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const { toast } = useToast()
-  const { startLoading, stopLoading, setLoadingMessage } = useLoading()
   
   const { 
     register, 
@@ -39,10 +37,10 @@ export default function ContactoPage() {
 
   const onSubmit = async (data: ContactFormData) => {
     setIsSubmitting(true)
-    setLoadingMessage('Enviando mensaje...')
-    startLoading()
     
     try {
+      console.log('Enviando datos:', data)
+      
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: {
@@ -51,14 +49,13 @@ export default function ContactoPage() {
         body: JSON.stringify(data),
       })
       
+      console.log('Respuesta del servidor:', response.status)
+      
       const result = await response.json()
+      console.log('Resultado:', result)
       
       if (result.success) {
-        toast({
-          title: "Mensaje enviado",
-          description: "Gracias por contactarnos. Hemos recibido tu mensaje y te responderemos a la brevedad.",
-        })
-        
+        alert('¡Mensaje enviado correctamente! Te contactaremos pronto.')
         reset() // Limpiar formulario después del éxito
       } else {
         throw new Error(result.message || 'Error al enviar el mensaje')
@@ -66,14 +63,9 @@ export default function ContactoPage() {
       
     } catch (error) {
       console.error('Error enviando mensaje:', error)
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Hubo un problema al enviar tu mensaje. Intenta nuevamente.",
-      })
+      alert('Hubo un error al enviar el mensaje. Por favor intenta de nuevo.')
     } finally {
       setIsSubmitting(false)
-      stopLoading()
     }
   }
 
