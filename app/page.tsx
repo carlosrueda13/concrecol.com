@@ -6,6 +6,9 @@ import { CategoryWithImage } from '@/types'
 import { Reveal } from '@/components/animations/reveal'
 import { withBasePath } from '@/lib/basePath'
 
+// ✅ Forzar renderizado dinámico
+export const dynamic = 'force-dynamic'
+
 // Función para obtener las categorías activas con una imagen por defecto
 async function getActiveCategories(): Promise<CategoryWithImage[]> {
   const categories = await prisma.sqlCategory.findMany({

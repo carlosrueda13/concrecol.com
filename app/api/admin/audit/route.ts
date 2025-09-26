@@ -3,6 +3,9 @@ import { z } from 'zod'
 import { prisma } from '@/lib/prisma'
 import { requireAdminAuth } from '@/lib/auth-utils'
 
+// ✅ Forzar renderizado dinámico
+export const dynamic = 'force-dynamic'
+
 const auditLogSchema = z.object({
   action: z.string(),
   entity: z.string(),

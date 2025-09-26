@@ -1,11 +1,19 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // ✅ Eliminar output: 'export' para funcionalidad completa del servidor
-  basePath: process.env.NODE_ENV === 'production' ? '/concrecol.com' : '',
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/concrecol.com' : '',
+  // ✅ Configuración para Vercel (no GitHub Pages)
+  // basePath: process.env.NODE_ENV === 'production' ? '/concrecol.com' : '',
+  // assetPrefix: process.env.NODE_ENV === 'production' ? '/concrecol.com' : '',
   
   experimental: {
     serverActions: true
+  },
+  
+  // ✅ Configuración para evitar errores de prerenderizado
+  typescript: {
+    ignoreBuildErrors: false,
+  },
+  eslint: {
+    ignoreDuringBuilds: false,
   },
   
   // ✅ Headers de seguridad mejorados
