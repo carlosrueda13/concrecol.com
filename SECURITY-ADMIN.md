@@ -29,19 +29,19 @@ Endpoint: `/api/admin/manage-admins`
 
 ## 🔑 **Tu Clave Maestra Actual:**
 ```
-ADMIN_MASTER_KEY="concrecol_super_admin_master_key_2025_secure"
+ADMIN_MASTER_KEY="[REDACTED_FOR_SECURITY_REASONS]"
 ```
 
 ## 🚀 **Uso Seguro Recomendado:**
 
-### **Para cambiar TU contraseña:**
+**Para cambiar tu contraseña actual:**
 ```bash
-npm run admin:secure concrecol_super_admin_master_key_2025_secure admin@concrecol.co nueva_contraseña_segura
+npm run admin:secure [TU_CLAVE_MAESTRA] admin@concrecol.co nueva_contraseña_segura
 ```
 
-### **Para crear admin adicional:**
+**Para crear admin adicional:**
 ```bash
-npm run admin:secure concrecol_super_admin_master_key_2025_secure nuevo@concrecol.co contraseña_segura
+npm run admin:secure [TU_CLAVE_MAESTRA] nuevo@concrecol.co contraseña_del_nuevo
 ```
 
 ## ⚠️ **Medidas de Seguridad Adicionales:**
@@ -77,7 +77,7 @@ const AUTHORIZED_SUPER_ADMINS = [
 ### **Para emergencias:**
 ```bash
 # Cambiar contraseña de emergencia
-npm run admin:secure NUEVA_MASTER_KEY admin@concrecol.co nueva_contraseña_ultra_segura
+npm run admin:secure [NUEVA_MASTER_KEY] admin@concrecol.co nueva_contraseña_ultra_segura
 ```
 
 ## 📊 **Resumen de Protecciones:**
