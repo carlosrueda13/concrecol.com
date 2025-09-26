@@ -5,6 +5,7 @@ export class DatabaseWrapper {
   private static instance: DatabaseWrapper | null = null
   private client: PrismaClient | null = null
   private isConnected = false
+  private connectionPromise: Promise<PrismaClient> | null = null
 
   private constructor() {}
 
@@ -16,11 +17,35 @@ export class DatabaseWrapper {
   }
 
   private async connect(): Promise<PrismaClient> {
-    if (this.client && this.isConnected) {
-      return this.client
+    // Si ya hay una conexión en progreso, esperarla
+    if (this.connectionPromise) {
+      return this.connectionPromise
     }
 
+    // Si ya está conectado, reutilizar
+    if (this.client && this.isConnected) {
+      try {
+        // Verificar que la conexión sigue activa
+        await this.client.$queryRaw`SELECT 1`
+        return this.client
+      } catch (error) {
+        console.log('🔄 Reconnecting due to stale connection...')
+        await this.disconnect()
+      }
+    }
+
+    // Crear nueva conexión
+    this.connectionPromise = this.createNewConnection()
+    const client = await this.connectionPromise
+    this.connectionPromise = null
+    return client
+  }
+
+  private async createNewConnection(): Promise<PrismaClient> {
     try {
+      // Limpiar conexión anterior si existe
+      await this.disconnect()
+
       this.client = new PrismaClient({
         log: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
         errorFormat: 'minimal',
@@ -54,25 +79,38 @@ export class DatabaseWrapper {
     }
   }
 
-  async executeQuery<T>(operation: (client: PrismaClient) => Promise<T>): Promise<T> {
-    const client = await this.connect()
+  async executeQuery<T>(operation: (client: PrismaClient) => Promise<T>, retries = 2): Promise<T> {
+    let currentRetry = 0
     
-    try {
-      const result = await operation(client)
-      return result
-    } catch (error) {
-      console.error('❌ Database query failed:', error)
-      
-      // Si es un error de prepared statement, intentar reconectar
-      if (error instanceof Error && error.message.includes('prepared statement')) {
-        console.log('🔄 Reconnecting due to prepared statement error...')
-        await this.disconnect()
-        const newClient = await this.connect()
-        return await operation(newClient)
+    while (currentRetry <= retries) {
+      try {
+        const client = await this.connect()
+        const result = await operation(client)
+        return result
+      } catch (error) {
+        console.error(`❌ Database query failed (attempt ${currentRetry + 1}):`, error)
+        
+        // Si es un error de prepared statement y tenemos intentos restantes
+        if (error instanceof Error && 
+            (error.message.includes('prepared statement') || 
+             error.message.includes('already exists')) && 
+            currentRetry < retries) {
+          
+          console.log(`🔄 Reconnecting due to prepared statement error (attempt ${currentRetry + 1})...`)
+          await this.disconnect()
+          currentRetry++
+          
+          // Esperar un poco antes del siguiente intento
+          await new Promise(resolve => setTimeout(resolve, 100 * currentRetry))
+          continue
+        }
+        
+        // Si no es un error de prepared statement o se agotaron los intentos
+        throw error
       }
-      
-      throw error
     }
+    
+    throw new Error('Max retries exceeded')
   }
 
   // Método para obtener el cliente directamente (para compatibilidad)
