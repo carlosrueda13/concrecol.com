@@ -124,7 +124,24 @@ const dbWrapper = DatabaseWrapper.getInstance()
 
 // Función helper para ejecutar consultas de manera segura
 export async function safeQuery<T>(operation: (client: PrismaClient) => Promise<T>): Promise<T> {
-  return dbWrapper.executeQuery(operation)
+  // Para evitar completamente los errores de prepared statements,
+  // crear un cliente completamente nuevo para cada operación
+  const client = new PrismaClient({
+    log: process.env.NODE_ENV === 'development' ? ['error'] : ['error'],
+    errorFormat: 'minimal',
+    datasourceUrl: process.env.DATABASE_URL,
+  })
+
+  try {
+    await client.$connect()
+    const result = await operation(client)
+    return result
+  } catch (error) {
+    console.error('❌ Database query failed:', error)
+    throw error
+  } finally {
+    await client.$disconnect()
+  }
 }
 
 // Función para obtener el cliente (para compatibilidad con código existente)
