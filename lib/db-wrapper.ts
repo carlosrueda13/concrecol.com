@@ -134,12 +134,71 @@ export async function safeQuery<T>(operation: (client: PrismaClient) => Promise<
 
   try {
     await client.$connect()
+    
+    // 🔧 LIMPIAR PREPARED STATEMENTS ANTES DE LA OPERACIÓN
+    try {
+      await client.$executeRaw`DEALLOCATE ALL`
+      console.log('🧹 Cleaned all prepared statements')
+    } catch (deallocateError) {
+      // Es normal que falle si no hay statements preparados
+      console.log('ℹ️ No prepared statements to clean')
+    }
+    
     const result = await operation(client)
     return result
   } catch (error) {
     console.error('❌ Database query failed:', error)
+    
+    // 🔧 RETRY ESPECÍFICO PARA PREPARED STATEMENT ERRORS
+    if (error instanceof Error && 
+        (error.message.includes('prepared statement') && 
+         (error.message.includes('already exists') || error.message.includes('42P05')))) {
+      
+      console.log('🔄 Detected prepared statement error, retrying with fresh connection...')
+      
+      // Crear un cliente completamente nuevo
+      const retryClient = new PrismaClient({
+        log: ['error'],
+        errorFormat: 'minimal',
+        datasourceUrl: process.env.DATABASE_URL,
+      })
+      
+      try {
+        await retryClient.$connect()
+        
+        // Limpiar agresivamente
+        await retryClient.$executeRaw`DEALLOCATE ALL`
+        
+        // Reintentar la operación
+        const result = await operation(retryClient)
+        console.log('✅ Retry successful!')
+        return result
+      } catch (retryError) {
+        console.error('❌ Retry also failed:', retryError)
+        throw retryError
+      } finally {
+        await retryClient.$disconnect()
+      }
+    }
+    
+    // 🔧 LIMPIEZA DE EMERGENCIA EN CASO DE ERROR
+    try {
+      await client.$executeRaw`DEALLOCATE ALL`
+      console.log('🚨 Emergency cleanup of prepared statements')
+    } catch (cleanupError) {
+      console.log('⚠️ Emergency cleanup failed - this is expected')
+    }
+    
     throw error
   } finally {
+    // 🔧 LIMPIEZA FINAL ANTES DE DESCONECTAR
+    try {
+      await client.$executeRaw`DEALLOCATE ALL`
+      console.log('🔚 Final cleanup of prepared statements')
+    } catch (finalCleanup) {
+      console.log('ℹ️ Final cleanup - no statements to clean')
+    }
+    
     await client.$disconnect()
   }
 }
