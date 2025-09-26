@@ -3,10 +3,10 @@ import { PrismaClient } from '@prisma/client'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/api/auth/options'
 
-const prisma = new PrismaClient()
-
 // GET - Obtener todos los mensajes de contacto (solo admin)
 export async function GET() {
+  const prisma = new PrismaClient()
+  
   try {
     const session = await getServerSession(authOptions)
     
@@ -35,5 +35,7 @@ export async function GET() {
       },
       { status: 500 }
     )
+  } finally {
+    await prisma.$disconnect()
   }
 }

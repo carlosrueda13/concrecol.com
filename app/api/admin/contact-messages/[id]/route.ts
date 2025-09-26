@@ -3,13 +3,13 @@ import { PrismaClient } from '@prisma/client'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/api/auth/options'
 
-const prisma = new PrismaClient()
-
 // PATCH - Marcar mensaje como leído
 export async function PATCH(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const prisma = new PrismaClient()
+  
   try {
     const session = await getServerSession(authOptions)
     
@@ -41,5 +41,7 @@ export async function PATCH(
       },
       { status: 500 }
     )
+  } finally {
+    await prisma.$disconnect()
   }
 }
