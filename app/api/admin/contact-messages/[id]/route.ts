@@ -22,7 +22,7 @@ export async function PATCH(
 
     const { isRead } = await request.json()
     
-    const updatedMessage = await prisma.contactMessage.update({
+    const updatedMessage = await (prisma as any).contactMessage.update({
       where: { id: params.id },
       data: { isRead },
     })

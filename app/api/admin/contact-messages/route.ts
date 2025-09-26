@@ -17,7 +17,7 @@ export async function GET() {
       )
     }
 
-    const messages = await prisma.contactMessage.findMany({
+    const messages = await (prisma as any).contactMessage.findMany({
       orderBy: { createdAt: 'desc' },
     })
 

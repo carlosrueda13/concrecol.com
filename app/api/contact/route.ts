@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
     const validatedData = contactSchema.parse(body)
     
     // Guardar en base de datos
-    const contactMessage = await prisma.contactMessage.create({
+    const contactMessage = await (prisma as any).contactMessage.create({
       data: {
         nombre: validatedData.nombre,
         email: validatedData.email,
@@ -74,8 +74,8 @@ export async function GET() {
   const prisma = new PrismaClient()
   
   try {
-    const totalMessages = await prisma.contactMessage.count()
-    const unreadMessages = await prisma.contactMessage.count({
+    const totalMessages = await (prisma as any).contactMessage.count()
+    const unreadMessages = await (prisma as any).contactMessage.count({
       where: { isRead: false }
     })
     
