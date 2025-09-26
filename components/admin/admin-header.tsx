@@ -7,7 +7,8 @@ import {
   Package, 
   ShoppingCart, 
   LogOut,
-  ListIcon
+  ListIcon,
+  MessageSquare
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
@@ -39,6 +40,13 @@ export function AdminHeader() {
         <Link href="/admin/ordenes">
           <ShoppingCart className="w-4 h-4 mr-2" />
           Pedidos
+        </Link>
+      </Button>
+      
+      <Button variant="ghost" size="sm" asChild>
+        <Link href="/admin/mensajes">
+          <MessageSquare className="w-4 h-4 mr-2" />
+          Mensajes
         </Link>
       </Button>
       

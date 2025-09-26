@@ -42,18 +42,30 @@ export default function ContactoPage() {
     setLoadingMessage('Enviando mensaje...')
     startLoading()
     
-    // Aquí normalmente enviarías los datos a una API
     try {
-      // Simulación de envío de formulario
-      await new Promise(resolve => setTimeout(resolve, 1500))
-      
-      toast({
-        title: "Mensaje enviado",
-        description: "Gracias por contactarnos. Te responderemos a la brevedad.",
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
       })
       
-      reset() // Limpiar formulario después del éxito
+      const result = await response.json()
+      
+      if (result.success) {
+        toast({
+          title: "Mensaje enviado",
+          description: "Gracias por contactarnos. Hemos recibido tu mensaje y te responderemos a la brevedad.",
+        })
+        
+        reset() // Limpiar formulario después del éxito
+      } else {
+        throw new Error(result.message || 'Error al enviar el mensaje')
+      }
+      
     } catch (error) {
+      console.error('Error enviando mensaje:', error)
       toast({
         variant: "destructive",
         title: "Error",
