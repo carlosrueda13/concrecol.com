@@ -1,7 +1,9 @@
 import { compare } from 'bcryptjs'
 import NextAuth, { type NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import { safeQuery } from '@/lib/db-wrapper'
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient()
 
 export const authOptions: NextAuthOptions = {
   pages: {
@@ -25,12 +27,10 @@ export const authOptions: NextAuthOptions = {
           throw new Error('Credenciales invalidas')
         }
 
-        const user = await safeQuery(async (prisma) => {
-          return await prisma.adminUser.findUnique({
-            where: {
-              email: credentials.email,
-            },
-          })
+        const user = await prisma.adminUser.findUnique({
+          where: {
+            email: credentials.email,
+          },
         })
 
         if (!user) {
