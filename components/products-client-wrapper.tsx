@@ -13,8 +13,8 @@ interface ProductsClientWrapperProps {
 export function ProductsClientWrapper({ products, categories }: ProductsClientWrapperProps) {
   return (
     <div className="flex flex-col gap-6 md:flex-row">
-      {/* Filters */}
-      <div className="w-full md:w-64 space-y-4">
+      {/* Filters - Mobile version has a collapsible menu, desktop version shows full sidebar */}
+      <div className="w-full md:w-64 space-y-4 mb-2 md:mb-0">
         <CategoryFilter categories={categories} />
       </div>
 

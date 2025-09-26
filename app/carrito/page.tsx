@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
@@ -16,24 +16,21 @@ import { Badge } from '@/components/ui/badge'
 import { formatPrice } from '@/lib/utils'
 import { useToast } from '@/components/ui/use-toast'
 import { useCart } from '@/contexts/cart-provider'
-import { CartItem } from '@/contexts/cart-provider'
 import { QuoteRequestModal } from '@/components/quote-request-modal'
 import { PDFViewer } from '@/components/pdf-viewer'
 
 export default function CartPage() {
-  const { cart, loading, updateQuantity, removeFromCart, hasScheduledProduct } = useCart()
+  const { cart, loading, updateQuantity, removeFromCart, hasScheduledProduct, cartTotal } = useCart()
   const { toast } = useToast()
   const [quoteModalOpen, setQuoteModalOpen] = useState(false)
   const [pdfViewerOpen, setPdfViewerOpen] = useState(false)
   const [pdfPath, setPdfPath] = useState<string>()
   const [requestingQuote, setRequestingQuote] = useState(false)
 
-  const getSubtotal = (items: CartItem[]) => {
-    return items.reduce(
-      (total, item) => total + item.product.price_per_unit * item.quantity,
-      0
-    )
-  }
+  // Refrescar carrito cuando se monta la página
+  useEffect(() => {
+    // El carrito se refresca automáticamente por el provider
+  }, [])
 
   const handleQuoteRequest = async (data: {
     customerName: string
@@ -184,7 +181,7 @@ export default function CartPage() {
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span>Subtotal</span>
-                <span>{formatPrice(getSubtotal(cart.items))}</span>
+                <span>{formatPrice(cartTotal)}</span>
               </div>
               {hasScheduledProduct && (
                 <div className="pt-4 text-sm animate-fadeIn">

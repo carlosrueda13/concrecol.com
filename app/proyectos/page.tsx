@@ -1,11 +1,15 @@
-import Image from 'next/image'
+'use client'
 
-export const metadata = {
-  title: 'Nuestros Proyectos - Concrecol',
-  description: 'Descubra los proyectos realizados con los productos de Concrecol. Casos de éxito y proyectos destacados en todo el país.',
-}
+import Image from 'next/image'
+import { useState } from 'react'
+import { withBasePath } from '@/lib/basePath'
+
+// Metadata se moverá a un archivo layout.tsx específico para esta ruta
 
 export default function ProyectosPage() {
+  // Estado para la categoría seleccionada
+  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState<string | null>(null);
+  
   // Lista de proyectos de ejemplo
   const proyectos = [
     {
@@ -15,6 +19,7 @@ export default function ProyectosPage() {
       ubicacion: "Bogotá, Colombia",
       año: 2024,
       categorias: ["Residencial", "Edificios Altos"],
+      imagen: "/projects/house.jpg",
     },
     {
       id: 2,
@@ -23,6 +28,7 @@ export default function ProyectosPage() {
       ubicacion: "Antioquia, Colombia",
       año: 2023,
       categorias: ["Infraestructura", "Puentes"],
+      imagen: "/projects/placa-huella.jpg",
     },
     {
       id: 3,
@@ -31,6 +37,7 @@ export default function ProyectosPage() {
       ubicacion: "Cali, Colombia",
       año: 2023,
       categorias: ["Comercial", "Centro Comercial"],
+      imagen: "/projects/water-tank.jpg",
     },
     {
       id: 4,
@@ -39,6 +46,7 @@ export default function ProyectosPage() {
       ubicacion: "Medellín, Colombia",
       año: 2022,
       categorias: ["Salud", "Hospital"],
+      imagen: "/projects/house.jpg",
     },
     {
       id: 5,
@@ -47,6 +55,7 @@ export default function ProyectosPage() {
       ubicacion: "Barranquilla, Colombia",
       año: 2022,
       categorias: ["Deportivo", "Estadio"],
+      imagen: "/projects/water-tank.jpg",
     },
     {
       id: 6,
@@ -55,6 +64,7 @@ export default function ProyectosPage() {
       ubicacion: "Santander, Colombia",
       año: 2021,
       categorias: ["Energía", "Hidroeléctrica"],
+      imagen: "/projects/placa-huella.jpg",
     },
   ]
 
@@ -70,31 +80,75 @@ export default function ProyectosPage() {
         </p>
       </div>
 
-      {/* Filtros - Como ejemplo, no funcionales */}
+      {/* Filtros funcionales */}
       <div className="flex flex-wrap gap-3 justify-center mb-12">
-        <button className="px-4 py-2 bg-[#C4D600] text-[#4D4D4D] font-medium rounded-full">
+        <button 
+          onClick={() => setCategoriaSeleccionada(null)} 
+          className={`px-4 py-2 font-medium rounded-full transition-colors ${
+            categoriaSeleccionada === null 
+              ? 'bg-[#C4D600] text-[#4D4D4D]' 
+              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+          }`}
+        >
           Todos
         </button>
-        <button className="px-4 py-2 bg-gray-200 text-gray-700 font-medium rounded-full hover:bg-gray-300">
+        <button 
+          onClick={() => setCategoriaSeleccionada('Residencial')} 
+          className={`px-4 py-2 font-medium rounded-full transition-colors ${
+            categoriaSeleccionada === 'Residencial' 
+              ? 'bg-[#C4D600] text-[#4D4D4D]' 
+              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+          }`}
+        >
           Residencial
         </button>
-        <button className="px-4 py-2 bg-gray-200 text-gray-700 font-medium rounded-full hover:bg-gray-300">
+        <button 
+          onClick={() => setCategoriaSeleccionada('Comercial')} 
+          className={`px-4 py-2 font-medium rounded-full transition-colors ${
+            categoriaSeleccionada === 'Comercial' 
+              ? 'bg-[#C4D600] text-[#4D4D4D]' 
+              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+          }`}
+        >
           Comercial
         </button>
-        <button className="px-4 py-2 bg-gray-200 text-gray-700 font-medium rounded-full hover:bg-gray-300">
+        <button 
+          onClick={() => setCategoriaSeleccionada('Infraestructura')} 
+          className={`px-4 py-2 font-medium rounded-full transition-colors ${
+            categoriaSeleccionada === 'Infraestructura' 
+              ? 'bg-[#C4D600] text-[#4D4D4D]' 
+              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+          }`}
+        >
           Infraestructura
         </button>
-        <button className="px-4 py-2 bg-gray-200 text-gray-700 font-medium rounded-full hover:bg-gray-300">
+        <button 
+          onClick={() => setCategoriaSeleccionada('Salud')} 
+          className={`px-4 py-2 font-medium rounded-full transition-colors ${
+            categoriaSeleccionada === 'Salud' 
+              ? 'bg-[#C4D600] text-[#4D4D4D]' 
+              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+          }`}
+        >
           Salud
         </button>
       </div>
 
       {/* Listado de Proyectos */}
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {proyectos.map((proyecto) => (
+        {proyectos
+          .filter(proyecto => 
+            categoriaSeleccionada === null || 
+            proyecto.categorias.includes(categoriaSeleccionada)
+          )
+          .map((proyecto) => (
           <div key={proyecto.id} className="bg-white rounded-lg overflow-hidden shadow-lg border border-gray-100">
-            <div className="relative h-56 bg-gray-300 flex items-center justify-center text-gray-500">
-              Imagen del Proyecto
+            <div className="relative h-56 overflow-hidden">
+              <img 
+                src={withBasePath(proyecto.imagen)} 
+                alt={proyecto.titulo}
+                className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+              />
             </div>
             <div className="p-6">
               <div className="flex flex-wrap gap-2 mb-3">

@@ -3,33 +3,51 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { getRateLimiter } from './lib/rate-limiter'
 
+// Define rutas que necesitan rate limiting
+const RATE_LIMITED_PATHS = [
+  '/api/auth',
+  '/api/orders',
+  '/api/cart',
+  '/api/quotes',
+  '/admin/login'
+]
+
 export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname
   const response = NextResponse.next()
 
-  // Security headers
+  // Security headers mejorados
   const headers = response.headers
   headers.set('X-DNS-Prefetch-Control', 'on')
-  headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload')
-  headers.set('X-Frame-Options', 'DENY')
+  headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains')
+  headers.set('X-Frame-Options', 'SAMEORIGIN') // Cambiado de DENY
   headers.set('X-Content-Type-Options', 'nosniff')
-  headers.set('Referrer-Policy', 'origin-when-cross-origin')
-  headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), interest-cohort=()')
+  headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
+  headers.set('X-XSS-Protection', '1; mode=block')
   
-  // Define admin paths that need protection
-  const isAdminPath = path.startsWith('/admin')
-  const isLoginPath = path === '/admin/login'
-
-  // Rate limiting for login attempts
-  if (isLoginPath && request.method === 'POST') {
-    const ip = request.ip ?? '127.0.0.1'
+  // Rate limiting mejorado
+  const shouldRateLimit = RATE_LIMITED_PATHS.some(p => path.startsWith(p))
+  
+  if (shouldRateLimit) {
+    const ip = request.ip ?? request.headers.get('x-forwarded-for') ?? '127.0.0.1'
     const limiter = await getRateLimiter()
-    const { success } = await limiter.limit(ip)
+    const { success, limit, reset, remaining } = await limiter.limit(ip)
     
     if (!success) {
-      return new NextResponse('Too Many Requests', { status: 429 })
+      return new NextResponse('Too Many Requests', { 
+        status: 429,
+        headers: {
+          'X-RateLimit-Limit': limit.toString(),
+          'X-RateLimit-Remaining': remaining.toString(),
+          'X-RateLimit-Reset': new Date(reset).toISOString(),
+        }
+      })
     }
   }
+
+  // Admin auth protection
+  const isAdminPath = path.startsWith('/admin')
+  const isLoginPath = path === '/admin/login'
 
   // Add pathname to headers for use in admin layout
   const requestHeaders = new Headers(request.headers)
@@ -71,5 +89,11 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*']
+  matcher: [
+    '/admin/:path*',
+    '/api/auth/:path*',
+    '/api/orders/:path*',
+    '/api/cart/:path*',
+    '/api/quotes/:path*'
+  ]
 }

@@ -5,20 +5,39 @@ import { prisma } from '@/lib/prisma'
 import { generateQuotePDF } from '@/lib/generate-quote-pdf'
 import { sendEmail, SALES_EMAIL } from '@/lib/email'
 import { generateQuoteClientEmailHtml, generateQuoteSalesEmailHtml } from '@/lib/email-templates'
+import { sanitizeObject, sanitizeEmail, sanitizePhone } from '@/lib/sanitization'
 import path from 'path'
 import crypto from 'crypto'
 
+// ✅ Schema mejorado con validación más estricta
 const quoteRequestSchema = z.object({
-  customerEmail: z.string().email(),
-  customerPhone: z.string(),
-  customerName: z.string(),
-  notes: z.string().optional(),
+  customerEmail: z.string()
+    .email('Email inválido')
+    .max(255, 'Email demasiado largo'),
+  customerPhone: z.string()
+    .min(10, 'Teléfono inválido')
+    .max(20, 'Teléfono demasiado largo')
+    .regex(/^\+?[\d\s\-\(\)]+$/, 'Formato de teléfono inválido'),
+  customerName: z.string()
+    .min(2, 'Nombre demasiado corto')
+    .max(100, 'Nombre demasiado largo')
+    .regex(/^[a-zA-ZÀ-ÿ\u00f1\u00d1\s]+$/, 'El nombre solo puede contener letras y espacios'),
+  notes: z.string()
+    .max(1000, 'Las notas son demasiado largas')
+    .optional(),
 })
 
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { customerEmail, customerPhone, customerName, notes } = quoteRequestSchema.parse(body)
+    
+    // ✅ Sanitizar datos de entrada
+    const sanitizedBody = sanitizeObject(body)
+    const { customerEmail, customerPhone, customerName, notes } = quoteRequestSchema.parse(sanitizedBody)
+    
+    // ✅ Sanitización adicional específica
+    const cleanEmail = sanitizeEmail(customerEmail)
+    const cleanPhone = sanitizePhone(customerPhone)
 
     // Get cart
     const cartId = cookies().get('cartId')?.value
@@ -59,8 +78,8 @@ export async function POST(request: Request) {
       items: cart.items,
       quoteNumber,
       customerName,
-      customerEmail,
-      customerPhone,
+      customerEmail: cleanEmail,
+      customerPhone: cleanPhone,
       notes,
     })
 
@@ -75,7 +94,7 @@ export async function POST(request: Request) {
     
     // Send email to customer
     await sendEmail({
-      to: customerEmail,
+      to: cleanEmail,
       subject: `Cotización #${quoteNumber} - Concrecol`,
       html: generateQuoteClientEmailHtml({
         customerName,

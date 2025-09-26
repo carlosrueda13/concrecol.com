@@ -17,12 +17,12 @@ import {
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/use-toast'
-import { CartItemWithProduct } from '@/lib/types'
 import { checkoutFormSchema, type CheckoutFormData } from '@/lib/validations/checkout'
 import { formatPrice } from '@/lib/utils'
 import { StripePaymentForm } from '@/components/stripe-payment-form'
 import { clearCart } from '@/lib/cart'
 import { useLoading } from '@/contexts/loading-context'
+import { useCart } from '@/contexts/cart-provider'
 
 // Make sure to call loadStripe outside of a component's render to avoid
 // recreating the Stripe object on every render.
@@ -31,13 +31,13 @@ const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
   : null
 
 interface CheckoutFormProps {
-  cartItems: CartItemWithProduct[]
   hasScheduledProduct: boolean
 }
 
-export function CheckoutForm({ cartItems, hasScheduledProduct }: CheckoutFormProps) {
+export function CheckoutForm({ hasScheduledProduct }: CheckoutFormProps) {
   const { toast } = useToast()
   const { startLoading, stopLoading, setLoadingMessage } = useLoading()
+  const { cartItems: contextCartItems, cartTotal } = useCart()
   const [loading, setLoading] = useState(false)
   const [paymentMethod, setPaymentMethod] = useState<'card' | 'pse' | 'transfer'>('card')
   const [deliveryOption, setDeliveryOption] = useState<'pickup' | 'delivery'>('pickup')
@@ -56,10 +56,8 @@ export function CheckoutForm({ cartItems, hasScheduledProduct }: CheckoutFormPro
     }
   })
 
-  const subtotal = cartItems.reduce(
-    (total, item) => total + item.product.price_per_unit * item.quantity,
-    0
-  )
+  // Usar el total del contexto del carrito que se actualiza automáticamente
+  const subtotal = cartTotal
   
   // Asegurarse de que el tipo de documento tenga un valor por defecto desde el inicio
   useEffect(() => {
@@ -99,7 +97,7 @@ export function CheckoutForm({ cartItems, hasScheduledProduct }: CheckoutFormPro
           body: JSON.stringify({
             ...data,
             delivery_option: deliveryOption,
-            items: cartItems,
+            items: contextCartItems,
             requires_scheduling: true,
             payment_status: 'pending',
           }),
@@ -135,7 +133,7 @@ export function CheckoutForm({ cartItems, hasScheduledProduct }: CheckoutFormPro
           body: JSON.stringify({
             ...data,
             delivery_option: deliveryOption,
-            items: cartItems,
+            items: contextCartItems,
             payment_method: 'transfer',
             payment_status: 'pending',
           }),
@@ -166,7 +164,7 @@ export function CheckoutForm({ cartItems, hasScheduledProduct }: CheckoutFormPro
           body: JSON.stringify({
             ...data,
             delivery_option: deliveryOption,
-            items: cartItems,
+            items: contextCartItems,
             payment_method: paymentMethod,
           }),
         })
@@ -331,7 +329,7 @@ export function CheckoutForm({ cartItems, hasScheduledProduct }: CheckoutFormPro
       <div className="rounded-lg border p-6">
         <h3 className="text-lg font-semibold mb-4">Resumen del Pedido</h3>
         <div className="space-y-2">
-          {cartItems.map((item) => (
+          {contextCartItems.map((item) => (
             <div
               key={item.product_id}
               className="flex items-center justify-between text-sm"

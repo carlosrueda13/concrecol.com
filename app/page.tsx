@@ -21,7 +21,7 @@ async function getActiveCategories(): Promise<CategoryWithImage[]> {
   // Asignamos imágenes predeterminadas o personalizadas según el slug
   return categories.map(category => {
     // Intentamos encontrar una imagen personalizada basada en el slug
-    let imageUrl = `/categories/${category.slug}.jpg`;
+    const imageUrl = `/categories/${category.slug}.jpg`;
     
     // Como fallback usamos una imagen genérica
     const fallbackImage = '/categories/default-category.jpg';
@@ -40,17 +40,17 @@ async function getActiveCategories(): Promise<CategoryWithImage[]> {
 export default async function HomePage() {
   return (
     <div className="relative">
-      {/* Hero Section con video de fondo */}
-      <div className="relative isolate overflow-hidden h-screen flex items-center justify-center bg-black" id="hero-section">
+      {/* Hero Section con video de fondo y efecto parallax */}
+      <div className="fixed inset-0 w-full h-screen z-[-1] bg-black">
         <a 
           href="https://youtu.be/M194g0_SACE" 
           target="_blank" 
           rel="noopener noreferrer" 
-          className="absolute inset-0 w-full h-full z-10 cursor-pointer"
+          className="absolute inset-0 w-full h-full cursor-pointer"
           aria-label="Ver video completo en YouTube"
         >
           <video
-            className="absolute inset-0 w-full h-full object-cover opacity-30"
+            className="absolute inset-0 w-full h-full object-cover opacity-70"
             src={withBasePath('/hero-video.mp4')}
             autoPlay
             loop
@@ -58,7 +58,12 @@ export default async function HomePage() {
             playsInline
           />
         </a>
-        <div className="relative z-20 flex flex-col items-center justify-center w-full h-full pointer-events-none">
+        <div className="absolute inset-0 bg-black/50" />
+      </div>
+      
+      {/* Hero Content Section */}
+      <div className="relative isolate h-screen flex items-center justify-center z-10" id="hero-section">
+        <div className="flex flex-col items-center justify-center w-full h-full">
           <img
             src={withBasePath('/logo-hero.png')}
             alt="Logo Concrecol"
@@ -74,11 +79,10 @@ export default async function HomePage() {
             CONSTRUIMOS CONFIANZA, ENTREGAMOS <span className="text-[#C4D600]">CONCRETO</span>.
           </h1>
         </div>
-        <div className="absolute inset-0 bg-black/80 z-5" />
       </div>
 
       {/* About Us Preview Section */}
-      <div className="bg-white py-24 sm:py-32" id="about-section">
+      <div className="relative bg-white py-24 sm:py-32 z-10" id="about-section">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
             <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
@@ -139,7 +143,7 @@ export default async function HomePage() {
       </div>
 
       {/* Featured Categories */}
-      <div className="bg-gray-50 py-24 sm:py-32">
+      <div className="relative bg-gray-50 py-24 sm:py-32 z-10" id="featured-categories">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <Reveal direction="up" className="w-full">
             <div className="mx-auto max-w-2xl text-center">
@@ -184,7 +188,7 @@ export default async function HomePage() {
       </div>
 
       {/* Featured Projects */}
-      <div className="bg-white py-24 sm:py-32">
+      <div className="relative bg-white py-24 sm:py-32 z-10" id="featured-projects">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-center mb-12">
             <Reveal direction="left">
@@ -229,7 +233,7 @@ export default async function HomePage() {
       </div>
 
       {/* CTA Section */}
-      <div className="bg-[#4D4D4D]">
+      <div className="relative bg-[#4D4D4D] z-10" id="cta-section">
         <div className="px-6 py-24 sm:px-6 sm:py-32 lg:px-8">
           <Reveal direction="up" className="w-full">
             <div className="mx-auto max-w-2xl text-center">

@@ -5,27 +5,34 @@ export async function getRateLimiter() {
   // If Redis is not configured, use in-memory rate limiting
   if (!process.env.UPSTASH_REDIS_REST_URL || !process.env.UPSTASH_REDIS_REST_TOKEN) {
     const attempts = new Map()
+    const maxAttempts = 5
+    const windowSize = 60 * 1000 // 1 minute
+    
     return {
       limit: async (identifier: string) => {
         const now = Date.now()
-        const windowSize = 60 * 1000 // 1 minute
-        const maxAttempts = 5
+        const windowStart = now - windowSize
 
         const userAttempts = attempts.get(identifier) || []
-        const windowStart = now - windowSize
         
         // Clean old attempts
         const recentAttempts = userAttempts.filter((timestamp: number) => timestamp > windowStart)
         attempts.set(identifier, recentAttempts)
 
-        if (recentAttempts.length >= maxAttempts) {
-          return { success: false }
-        }
+        const remaining = Math.max(0, maxAttempts - recentAttempts.length)
+        const success = recentAttempts.length < maxAttempts
 
-        recentAttempts.push(now)
-        attempts.set(identifier, recentAttempts)
+        if (success) {
+          recentAttempts.push(now)
+          attempts.set(identifier, recentAttempts)
+        }
         
-        return { success: true }
+        return { 
+          success,
+          limit: maxAttempts,
+          remaining: success ? remaining - 1 : 0,
+          reset: now + windowSize
+        }
       }
     }
   }

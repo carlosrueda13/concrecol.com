@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { Product } from '@prisma/client'
 import { Badge } from '@/components/ui/badge'
 import { formatPrice } from '@/lib/utils'
@@ -16,6 +17,7 @@ interface ProductDetailClientProps {
 }
 
 export function ProductDetailClient({ product }: ProductDetailClientProps) {
+  const [quantity, setQuantity] = useState(1)
   return (
     <div className="space-y-6">
       <div className="space-y-2">
@@ -61,11 +63,13 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
             max={product.stock_quantity}
             step={product.unit_measure === 'M3' ? 0.01 : 1}
             defaultValue={1}
+            onChange={setQuantity}
           />
         </div>
 
         <AddToCartButton
           productId={product.id}
+          quantity={quantity}
           disabled={product.stock_quantity === 0}
         />
       </div>

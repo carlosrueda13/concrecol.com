@@ -7,7 +7,7 @@ import {
   StyleSheet,
   Image,
 } from '@react-pdf/renderer'
-import { CartItem } from '@/contexts/cart-provider'
+import { CartItemWithProduct } from '@/lib/types'
 import { formatPrice } from '@/lib/utils'
 
 const styles = StyleSheet.create({
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
 })
 
 interface QuotePDFProps {
-  items: CartItem[]
+  items: CartItemWithProduct[]
   date: Date
   quoteNumber: string
 }

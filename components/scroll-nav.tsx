@@ -106,9 +106,9 @@ export function ScrollNav() {
 
       {/* Mobile Navigation */}
       {isMenuOpen && (
-        <div className="fixed inset-0 bg-white z-50 md:hidden">
+        <div className="fixed inset-0 bg-white bg-opacity-95 shadow-lg backdrop-blur-sm z-50 md:hidden">
           <div className="flex flex-col h-full">
-            <div className="flex justify-between items-center p-4">
+            <div className="flex justify-between items-center p-4 bg-white shadow-sm">
               <Link href="/" className="flex items-center" onClick={() => setIsMenuOpen(false)}>
                 <img 
                   src={withBasePath('/images/Property 1=Default-1.png')}
@@ -120,7 +120,7 @@ export function ScrollNav() {
                 <X className="h-5 w-5" />
               </Button>
             </div>
-            <nav className="flex flex-col space-y-4 p-4">
+            <nav className="flex flex-col space-y-4 p-4 bg-white">
               <Link 
                 href="/" 
                 className="text-gray-700 text-lg py-2 border-b border-gray-100"

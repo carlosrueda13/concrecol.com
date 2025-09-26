@@ -4,12 +4,20 @@ import { z } from 'zod'
 import { prisma } from '@/lib/prisma'
 import { getServerCart, clearServerCart } from '@/lib/server-cart'
 
-// Schema for cart operations
+// ✅ Schema de validación mejorado
 const cartOperationSchema = z.object({
   operation: z.enum(['add', 'update', 'remove']),
-  productId: z.string(),
-  quantity: z.number().positive().optional(), // Required for add/update, optional for remove
-})
+  productId: z.string().uuid('ID de producto inválido'), // ✅ Validar UUID
+  quantity: z.number()
+    .positive('La cantidad debe ser positiva')
+    .max(1000, 'Cantidad máxima excedida')
+    .optional(),
+}).refine((data) => {
+  if ((data.operation === 'add' || data.operation === 'update') && !data.quantity) {
+    throw new Error('Quantity is required for add/update operations')
+  }
+  return true
+}, 'Quantity validation failed')
 
 export async function POST(request: Request) {
   try {
@@ -173,6 +181,12 @@ export async function POST(request: Request) {
 
     return NextResponse.json(updatedCart)
   } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        { error: error.errors[0].message },
+        { status: 400 }
+      )
+    }
     console.error('[CART_OPERATION]', error)
     return NextResponse.json(
       { error: 'Error processing cart operation' },

@@ -26,7 +26,6 @@ export default async function CheckoutPage() {
           </div>
 
           <CheckoutForm
-            cartItems={cartItems}
             hasScheduledProduct={hasScheduledProduct}
           />
         </div>

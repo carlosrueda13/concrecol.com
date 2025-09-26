@@ -3,7 +3,14 @@ import './globals.css'
 import { Providers } from '@/app/providers'
 import { ConditionalNav } from '@/components/conditional-nav'
 import { Footer } from '@/components/footer'
+import { ConsentBanner } from '@/components/consent-banner'
 import { sukhumvitSet } from './fonts'
+import { validateDevEnv } from '@/lib/env-validation'
+
+// ✅ Validar env vars al inicio
+if (typeof window === 'undefined') {
+  validateDevEnv()
+}
 
 export const metadata: Metadata = {
   title: 'Concrecol - Construimos confianza, entregamos concreto',
@@ -25,6 +32,7 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
+          <ConsentBanner />
         </Providers>
       </body>
     </html>

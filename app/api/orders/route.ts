@@ -8,36 +8,51 @@ import { Order, OrderItem, Product } from '@prisma/client';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/options';
 
-// Schema for customer creating orders
+// ✅ Schema mejorado para órdenes de clientes
 const customerOrderSchema = z.object({
-  customer_name: z.string().min(3, 'El nombre debe tener al menos 3 caracteres').max(100),
-  customer_email: z.string().email('Correo electrónico inválido'),
-  customer_phone: z.string().min(10, 'Teléfono inválido').regex(/^\+?[\d\s-]+$/, 'Teléfono inválido'),
+  customer_name: z.string()
+    .min(3, 'El nombre debe tener al menos 3 caracteres')
+    .max(100, 'El nombre no puede exceder 100 caracteres')
+    .regex(/^[a-zA-ZÀ-ÿ\u00f1\u00d1\s]+$/, 'El nombre solo puede contener letras y espacios'),
+  customer_email: z.string()
+    .email('Correo electrónico inválido')
+    .max(255, 'El email es demasiado largo'),
+  customer_phone: z.string()
+    .min(10, 'Teléfono inválido')
+    .max(20, 'Teléfono demasiado largo')
+    .regex(/^\+?[\d\s\-\(\)]+$/, 'Teléfono inválido'),
   document_type: z.enum(['CC', 'NIT', 'CE', 'PP']),
-  document_number: z.string().min(4, 'El número de documento debe tener al menos 4 caracteres').regex(/^[\d\-\.]+$/, 'El número de documento solo debe contener números, puntos o guiones'),
+  document_number: z.string()
+    .min(4, 'El número de documento debe tener al menos 4 caracteres')
+    .max(20, 'El número de documento es demasiado largo')
+    .regex(/^[\d\-\.]+$/, 'El número de documento solo debe contener números, puntos o guiones'),
   delivery_option: z.enum(['pickup', 'delivery']),
-  delivery_address: z.string().optional(),
+  delivery_address: z.string()
+    .max(500, 'La dirección es demasiado larga')
+    .optional(),
   payment_method: z.enum(['card', 'pse', 'transfer']).optional(),
   requires_scheduling: z.boolean().optional(),
   payment_status: z.enum(['pending', 'paid', 'failed']).optional(),
   items: z.array(
     z.object({
-      product_id: z.string(),
-      quantity: z.number().positive(),
+      product_id: z.string().uuid('ID de producto inválido'),
+      quantity: z.number()
+        .positive('La cantidad debe ser positiva')
+        .max(1000, 'Cantidad máxima excedida'),
       product: z.object({
-        id: z.string(),
-        name: z.string(),
-        price_per_unit: z.number(),
-        unit_measure: z.string(),
+        id: z.string().uuid(),
+        name: z.string().min(1).max(255),
+        price_per_unit: z.number().positive('El precio debe ser positivo'),
+        unit_measure: z.string().min(1).max(50),
         requires_scheduling: z.boolean(),
         sqlCategory: z.object({
-          id: z.string(),
-          name: z.string(),
+          id: z.string().uuid(),
+          name: z.string().min(1).max(100),
         }).optional(),
       }),
     })
-  ),
-  notes: z.string().optional(),
+  ).min(1, 'Debe incluir al menos un producto'),
+  notes: z.string().max(1000, 'Las notas son demasiado largas').optional(),
 });
 
 // Schema for admin creating orders

@@ -1,35 +1,38 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { revalidatePath } from 'next/cache'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { z } from 'zod'
+import { requireAdminAuth } from '@/lib/auth-utils'
 import { prisma } from '@/lib/prisma'
 
-// This is a placeholder for image uploads
-// In a real application, this would interact with a cloud storage service
-// like AWS S3, Cloudinary, or similar
+// ✅ Schema de validación mejorado para URLs de imagen
+const imageUrlSchema = z.string()
+  .url('URL inválida')
+  .refine(
+    (url) => {
+      // Validar que sea una URL de imagen
+      const imageExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.gif']
+      const urlPath = new URL(url).pathname.toLowerCase()
+      return imageExtensions.some(ext => urlPath.endsWith(ext))
+    },
+    'La URL debe ser una imagen válida'
+  )
+  .refine(
+    (url) => {
+      // Validar dominios permitidos
+      const allowedDomains = ['res.cloudinary.com', 'images.unsplash.com', 'githubusercontent.com']
+      const domain = new URL(url).hostname
+      return allowedDomains.some(allowed => domain.includes(allowed))
+    },
+    'Dominio no permitido'
+  )
 
 export async function POST(req: NextRequest) {
   try {
-    // Ensure user is authenticated
-    const session = await getServerSession(authOptions)
+    const { admin } = await requireAdminAuth() // ✅ Usar nueva función de auth
     
-    if (!session?.user) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
-    }
-    
-    // For now, we'll simulate accepting image URLs
-    // In a real implementation, we would handle file uploads and store in cloud storage
     const { imageUrl } = await req.json()
     
-    if (!imageUrl) {
-      return NextResponse.json(
-        { error: 'No image URL provided' },
-        { status: 400 }
-      )
-    }
+    // ✅ Validar URL con schema
+    const validatedUrl = imageUrlSchema.parse(imageUrl)
     
     // Record image upload in audit log
     await prisma.auditLog.create({
@@ -37,24 +40,31 @@ export async function POST(req: NextRequest) {
         action: 'IMAGE_UPLOAD',
         entity: 'IMAGE',
         entityId: Math.random().toString(36).substring(7),
-        adminId: session.user.id,
+        adminId: admin.id,
         details: {
-          message: `Image uploaded: ${imageUrl}`,
-          imageUrl
+          message: `Image uploaded: ${validatedUrl}`,
+          imageUrl: validatedUrl
         },
       },
     })
-    
-    // In a real implementation, this would return a permanent URL from your storage service
-    return NextResponse.json({
-      url: imageUrl,
-      success: true
+
+    return NextResponse.json({ 
+      success: true, 
+      imageUrl: validatedUrl 
     })
-    
-  } catch (error: any) {
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        { error: error.errors[0].message },
+        { status: 400 }
+      )
+    }
+    if (error instanceof Error && error.message.includes('Unauthorized')) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
     console.error('Error uploading image:', error)
     return NextResponse.json(
-      { error: 'Failed to upload image', details: error.message },
+      { error: 'Failed to upload image' },
       { status: 500 }
     )
   }

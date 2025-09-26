@@ -1,8 +1,7 @@
 import { NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
 import { z } from 'zod'
 import { prisma } from '@/lib/prisma'
-import { authOptions } from '@/app/api/auth/options'
+import { requireAdminAuth } from '@/lib/auth-utils'
 
 const auditLogSchema = z.object({
   action: z.string(),
@@ -13,21 +12,10 @@ const auditLogSchema = z.object({
 
 export async function POST(request: Request) {
   try {
-    const session = await getServerSession(authOptions)
-    if (!session?.user) {
-      return new NextResponse('Unauthorized', { status: 401 })
-    }
-
+    const { admin } = await requireAdminAuth() // ✅ Usar nueva función
+    
     const json = await request.json()
     const body = auditLogSchema.parse(json)
-
-    const admin = await prisma.adminUser.findUnique({
-      where: { email: session.user.email as string },
-    })
-
-    if (!admin) {
-      return new NextResponse('Unauthorized', { status: 401 })
-    }
 
     const log = await prisma.auditLog.create({
       data: {
@@ -41,6 +29,9 @@ export async function POST(request: Request) {
 
     return NextResponse.json(log)
   } catch (error) {
+    if (error instanceof Error && error.message.includes('Unauthorized')) {
+      return new NextResponse('Unauthorized', { status: 401 })
+    }
     console.error('[AUDIT_LOG]', error)
     return new NextResponse('Internal Error', { status: 500 })
   }

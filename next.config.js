@@ -1,53 +1,54 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
-  basePath: process.env.NEXT_PUBLIC_BASE_PATH || '',
-  assetPrefix: process.env.NEXT_PUBLIC_BASE_PATH || '',
+  // ✅ Eliminar output: 'export' para funcionalidad completa del servidor
+  basePath: process.env.NODE_ENV === 'production' ? '/concrecol.com' : '',
+  assetPrefix: process.env.NODE_ENV === 'production' ? '/concrecol.com' : '',
+  
   experimental: {
     serverActions: true
   },
+  
+  // ✅ Headers de seguridad mejorados
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'SAMEORIGIN'
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff'
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'strict-origin-when-cross-origin'
+          },
+          {
+            key: 'X-XSS-Protection',
+            value: '1; mode=block'
+          },
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()'
+          }
+        ]
+      }
+    ]
+  },
+  
   images: {
     unoptimized: true,
     domains: [
-      'raw.githubusercontent.com',
-      'github.com',
-      'user-images.githubusercontent.com',
-      'avatars.githubusercontent.com',
-      'camo.githubusercontent.com',
-      'rawgithub.com',
-      'raw.githack.com',
       'res.cloudinary.com',
       'images.unsplash.com',
-      'unsplash.com',
+      'githubusercontent.com',
       'concrecol.com',
       'localhost'
     ],
     remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'raw.githubusercontent.com',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'github.com',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: '**.githubusercontent.com',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'rawgithub.com',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'raw.githack.com',
-        pathname: '/**',
-      },
       {
         protocol: 'https',
         hostname: 'res.cloudinary.com',
@@ -55,7 +56,7 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: '**.unsplash.com',
+        hostname: '**.githubusercontent.com',
         pathname: '/**',
       }
     ],
