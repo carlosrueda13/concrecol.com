@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { useState } from 'react'
-import { withBasePath } from '@/lib/basePath'
+// Removed withBasePath import - using direct paths for Vercel
 
 // Metadata se moverá a un archivo layout.tsx específico para esta ruta
 
@@ -145,7 +145,7 @@ export default function ProyectosPage() {
           <div key={proyecto.id} className="bg-white rounded-lg overflow-hidden shadow-lg border border-gray-100">
             <div className="relative h-56 overflow-hidden">
               <img 
-                src={withBasePath(proyecto.imagen)} 
+                src={proyecto.imagen} 
                 alt={proyecto.titulo}
                 className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
               />

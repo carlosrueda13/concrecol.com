@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button'
 import { ExternalLink } from 'lucide-react'
-import { withBasePath } from '@/lib/basePath'
+// Removed withBasePath import - using direct paths for Vercel
 
 interface StaticLocationProps {
   address: string
@@ -23,7 +23,7 @@ export function StaticLocation({
   // Asegurarnos que el mapa siempre se muestre, incluso si la imagen falla
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     e.currentTarget.onerror = null; // Prevenir bucle infinito
-    e.currentTarget.src = withBasePath('/images/map-placeholder.jpg');
+    e.currentTarget.src = '/images/map-placeholder.jpg';
   };
   
   return (

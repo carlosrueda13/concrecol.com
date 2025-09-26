@@ -4,7 +4,7 @@ import { CheckCircle, BuildingIcon, Users, ArrowRight } from 'lucide-react'
 import { safeQuery } from '@/lib/db-wrapper'
 import { CategoryWithImage } from '@/types'
 import { Reveal } from '@/components/animations/reveal'
-import { withBasePath } from '@/lib/basePath'
+// Removed withBasePath import - using direct paths for Vercel
 
 // ✅ Forzar renderizado dinámico
 export const dynamic = 'force-dynamic'
@@ -94,7 +94,7 @@ export default async function HomePage() {
         >
           <video
             className="absolute inset-0 w-full h-full object-cover opacity-70"
-            src={withBasePath('/hero-video.mp4')}
+            src="/hero-video.mp4"
             autoPlay
             loop
             muted
@@ -108,7 +108,7 @@ export default async function HomePage() {
       <div className="relative isolate h-screen flex items-center justify-center z-10" id="hero-section">
         <div className="flex flex-col items-center justify-center w-full h-full">
           <img
-            src={withBasePath('/logo-hero.png')}
+            src="/logo-hero.png"
             alt="Logo Concrecol"
             className="w-96 h-96 md:w-[32rem] md:h-[32rem] mb-2 drop-shadow-xl"
             style={{ objectFit: 'contain' }}
@@ -172,7 +172,7 @@ export default async function HomePage() {
               <Reveal direction="right">
                 <div className="relative">
                   <img
-                    src={withBasePath('/about-image.jpg')}
+                    src="/about-image.jpg"
                     alt="Equipo de Concrecol"
                     className="rounded-2xl shadow-xl"
                     width={800}
@@ -259,7 +259,7 @@ export default async function HomePage() {
               <Reveal key={project.name} direction="up" delay={0.1 * index}>
                 <div className="bg-white rounded-lg shadow-md overflow-hidden h-full">
                   <img 
-                    src={withBasePath(project.imageUrl)} 
+                    src={project.imageUrl} 
                     alt={project.name}
                     className="w-full h-64 object-cover"
                   />

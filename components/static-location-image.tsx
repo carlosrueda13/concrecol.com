@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button'
 import { ExternalLink } from 'lucide-react'
-import { withBasePath } from '@/lib/basePath'
+// Removed withBasePath import - using direct paths for Vercel
 import Image from 'next/image'
 
 interface StaticLocationProps {
@@ -26,7 +26,7 @@ export function StaticLocation({
       {/* Imagen estática del mapa con marcador */}
       <div className="relative w-full h-80 md:h-96 bg-gray-200 rounded-lg overflow-hidden mb-4 shadow-md">
         <Image
-          src={withBasePath('/images/location-map.png')}
+          src="/images/location-map.png"
           alt={`Ubicación de ${address}`}
           fill
           className="object-cover"
