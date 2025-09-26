@@ -26,11 +26,11 @@ async function getActiveCategories(): Promise<CategoryWithImage[]> {
 
     // Asignamos imágenes predeterminadas o personalizadas según el slug
     return categories.map(category => {
-      // Intentamos encontrar una imagen personalizada basada en el slug
-      const imageUrl = `/categories/${category.slug}.jpg`;
+      // Usamos una imagen placeholder para todas las categorías
+      const imageUrl = '/placeholder.jpg';
       
-      // Como fallback usamos una imagen genérica
-      const fallbackImage = '/categories/default-category.jpg';
+      // Como fallback usamos la misma imagen placeholder
+      const fallbackImage = '/placeholder.jpg';
       
       // Descripción genérica basada en el nombre
       const description = `Explora nuestra selección de productos de ${category.name.toLowerCase()} de alta calidad.`;
@@ -53,7 +53,7 @@ async function getActiveCategories(): Promise<CategoryWithImage[]> {
         is_active: true,
         createdAt: new Date(),
         updatedAt: new Date(),
-        imageUrl: '/categories/concreto.jpg',
+        imageUrl: '/placeholder.jpg',
         description: 'Concreto de alta calidad para todo tipo de construcciones'
       },
       {
@@ -63,7 +63,7 @@ async function getActiveCategories(): Promise<CategoryWithImage[]> {
         is_active: true,
         createdAt: new Date(),
         updatedAt: new Date(),
-        imageUrl: '/categories/materiales.jpg',
+        imageUrl: '/placeholder.jpg',
         description: 'Amplio catálogo de materiales para construcción'
       },
       {
@@ -73,7 +73,7 @@ async function getActiveCategories(): Promise<CategoryWithImage[]> {
         is_active: true,
         createdAt: new Date(),
         updatedAt: new Date(),
-        imageUrl: '/categories/servicios.jpg',
+        imageUrl: '/placeholder.jpg',
         description: 'Servicios profesionales de construcción'
       }
     ];
@@ -172,7 +172,7 @@ export default async function HomePage() {
               <Reveal direction="right">
                 <div className="relative">
                   <img
-                    src="/about-image.jpg"
+                    src="/about-image.JPG"
                     alt="Equipo de Concrecol"
                     className="rounded-2xl shadow-xl"
                     width={800}
@@ -317,18 +317,18 @@ const featuredProjects = [
     name: 'Tanque de almacenamiento de agua',
     description: 'Proyecto de construcción de un tanque de almacenamiento de agua de 500 m³ en el Socorro.',
     location: 'Socorro, Santander',
-    imageUrl: '/projects/water-tank.jpg',
+    imageUrl: '/projects/water-tank.JPG',
   },
   {
     name: 'Placa huella veredal',
     description: 'Construcción de placa huella veredal de 250 metros de longitud con estructura de concreto.',
     location: 'Valle de San José, Santander',
-    imageUrl: '/projects/placa-huella.jpg',
+    imageUrl: '/projects/placa-huella.JPG',
   },
   {
     name: 'Casa residencial de tres pisos',
     description: 'Construcción de una casa residencial de tres pisos con concreto acelerado.',
     location: 'San Gil, Santander',
-    imageUrl: '/projects/house.jpg',
+    imageUrl: '/projects/house.JPG',
   },
 ]

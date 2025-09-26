@@ -19,7 +19,7 @@ export default function ProyectosPage() {
       ubicacion: "Bogotá, Colombia",
       año: 2024,
       categorias: ["Residencial", "Edificios Altos"],
-      imagen: "/projects/house.jpg",
+      imagen: "/projects/house.JPG",
     },
     {
       id: 2,
@@ -28,7 +28,7 @@ export default function ProyectosPage() {
       ubicacion: "Antioquia, Colombia",
       año: 2023,
       categorias: ["Infraestructura", "Puentes"],
-      imagen: "/projects/placa-huella.jpg",
+      imagen: "/projects/placa-huella.JPG",
     },
     {
       id: 3,
@@ -37,7 +37,7 @@ export default function ProyectosPage() {
       ubicacion: "Cali, Colombia",
       año: 2023,
       categorias: ["Comercial", "Centro Comercial"],
-      imagen: "/projects/water-tank.jpg",
+      imagen: "/projects/water-tank.JPG",
     },
     {
       id: 4,
@@ -46,7 +46,7 @@ export default function ProyectosPage() {
       ubicacion: "Medellín, Colombia",
       año: 2022,
       categorias: ["Salud", "Hospital"],
-      imagen: "/projects/house.jpg",
+      imagen: "/projects/house.JPG",
     },
     {
       id: 5,
@@ -55,7 +55,7 @@ export default function ProyectosPage() {
       ubicacion: "Barranquilla, Colombia",
       año: 2022,
       categorias: ["Deportivo", "Estadio"],
-      imagen: "/projects/water-tank.jpg",
+      imagen: "/projects/water-tank.JPG",
     },
     {
       id: 6,
@@ -64,7 +64,7 @@ export default function ProyectosPage() {
       ubicacion: "Santander, Colombia",
       año: 2021,
       categorias: ["Energía", "Hidroeléctrica"],
-      imagen: "/projects/placa-huella.jpg",
+      imagen: "/projects/placa-huella.JPG",
     },
   ]
 
