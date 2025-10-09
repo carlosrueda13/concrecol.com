@@ -13,7 +13,7 @@ interface StaticLocationProps {
 }
 
 export function StaticLocation({
-  address = 'Concrecol, Km 8 San Gil - Socorro, Pinchote, Santander',
+  address = 'Concrecol, KM 8 Via San gil - Socorro, Santander',
   latitude = 6.5254028,
   longitude = -73.2020077,
   className = '',

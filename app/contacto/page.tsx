@@ -98,7 +98,7 @@ export default function ContactoPage() {
               </div>
               <div>
                 <h3 className="font-semibold text-gray-900">Dirección</h3>
-                <p className="text-gray-600">Km 8 San Gil - Socorro, Pinchote, Santander, Colombia</p>
+                <p className="text-gray-600">KM 8 Via San gil - Socorro, Santander, Colombia</p>
                 <p className="text-gray-600 mt-1">Horario: Lunes - Viernes, 7:00 AM - 5:00 PM</p>
               </div>
             </div>            <div className="flex items-start space-x-4">
@@ -109,8 +109,8 @@ export default function ContactoPage() {
               </div>
               <div>
                 <h3 className="font-semibold text-gray-900">Teléfonos</h3>
-                <p className="text-gray-600">Ventas: +57 (601) 123-4567</p>
-                <p className="text-gray-600">Servicio al cliente: +57 (601) 123-4568</p>
+                <p className="text-gray-600">Ventas: +57 321 452 5798</p>
+                <p className="text-gray-600">Servicio al cliente: +57 321 452 5798</p>
               </div>
             </div>
             
@@ -122,8 +122,8 @@ export default function ContactoPage() {
               </div>
               <div>
                 <h3 className="font-semibold text-gray-900">Correo Electrónico</h3>
-                <p className="text-gray-600">Ventas: ventas@concrecol.com</p>
-                <p className="text-gray-600">Soporte: info@concrecol.com</p>
+                <p className="text-gray-600">Ventas: gerencia@concrecol.co</p>
+                <p className="text-gray-600">Soporte: gerencia@concrecol.co</p>
               </div>
             </div>
           </div>
@@ -196,7 +196,7 @@ export default function ContactoPage() {
               <Input 
                 id="telefono" 
                 {...register("telefono")} 
-                placeholder="+57 300 123 4567" 
+                placeholder="+57 321 452 5798" 
               />
               {errors.telefono && (
                 <p className="text-red-500 text-sm">{errors.telefono.message}</p>

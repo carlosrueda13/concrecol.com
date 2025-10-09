@@ -155,7 +155,7 @@ export function CreateOrderForm() {
               <FormItem>
                 <FormLabel>Teléfono</FormLabel>
                 <FormControl>
-                  <Input placeholder="300 123 4567" type="tel" {...field} />
+                  <Input placeholder="+57 321 452 5798" type="tel" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

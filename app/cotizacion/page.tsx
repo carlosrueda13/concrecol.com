@@ -126,7 +126,7 @@ export default function CotizacionPage() {
                 <Input 
                   id="telefono" 
                   {...register("telefono")} 
-                  placeholder="+57 300 123 4567" 
+                  placeholder="+57 321 452 5798" 
                 />
                 {errors.telefono && (
                   <p className="text-red-500 text-sm">{errors.telefono.message}</p>

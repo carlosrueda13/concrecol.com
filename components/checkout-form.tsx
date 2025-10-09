@@ -233,7 +233,7 @@ export function CheckoutForm({ hasScheduledProduct }: CheckoutFormProps) {
             <Input
               id="customer_phone"
               {...register('customer_phone')}
-              placeholder="+57 300 123 4567"
+              placeholder="+57 321 452 5798"
             />
             {errors.customer_phone && (
               <p className="text-sm text-red-500">

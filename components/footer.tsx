@@ -106,8 +106,8 @@ export function Footer() {
             <address className="not-italic text-gray-300">
               <p>Calle 123 #45-67</p>
               <p>Bogotá, Colombia</p>
-              <p className="mt-2">Email: ventas@concrecol.com</p>
-              <p>Teléfono: +57 (601) 123-4567</p>
+              <p className="mt-2">Email: gerencia@concrecol.co</p>
+              <p>Teléfono: +57 321 452 5798</p>
             </address>
           </div>
         </div>
