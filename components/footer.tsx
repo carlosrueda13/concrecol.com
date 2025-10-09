@@ -104,8 +104,8 @@ export function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-3">Contacto</h3>
             <address className="not-italic text-gray-300">
-              <p>Calle 123 #45-67</p>
-              <p>Bogotá, Colombia</p>
+              <p>KM 8 Via San gil - Socorro</p>
+              <p>Santander, Colombia</p>
               <p className="mt-2">Email: gerencia@concrecol.co</p>
               <p>Teléfono: +57 321 452 5798</p>
             </address>
