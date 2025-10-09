@@ -195,7 +195,7 @@ export function CreateOrderForm() {
                   <FormLabel>Dirección de entrega</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Calle 123 #45-67, Edificio, Apto, Ciudad"
+                      placeholder="Ej: KM 8 Via San gil - Socorro, Santander"
                       value={field.value || ''}
                       onChange={field.onChange}
                       onBlur={field.onBlur}

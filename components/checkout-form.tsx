@@ -311,7 +311,7 @@ export function CheckoutForm({ hasScheduledProduct }: CheckoutFormProps) {
             <Input
               id="delivery_address"
               {...register('delivery_address')}
-              placeholder="Calle 123 #45-67, Ciudad"
+              placeholder="Ej: KM 8 Via San gil - Socorro, Santander"
             />
             {errors.delivery_address && (
               <p className="text-sm text-red-500">
