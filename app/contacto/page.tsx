@@ -122,7 +122,7 @@ export default function ContactoPage() {
               </div>
               <div>
                 <h3 className="font-semibold text-gray-900">Correo Electrónico</h3>
-                <p className="text-gray-600">Ventas: gerencia@concrecol.co</p>
+                <p className="text-gray-600">Ventas: ventas@concrecol.co</p>
                 <p className="text-gray-600">Soporte: gerencia@concrecol.co</p>
               </div>
             </div>
