@@ -135,7 +135,7 @@ export default async function HomePage() {
                     Sobre Concrecol
                   </h2>
                   <p className="mt-6 text-lg leading-8 text-gray-600">
-                    Con más de 15 años de experiencia en la industria, nos hemos consolidado como líderes en la producción y distribución de concreto y materiales para la construcción, comprometidos con la calidad y la excelencia.
+                    Concrecol es una concretera con más de 17 años de experiencia en ingeniería civil. Seguimos siendo constructores, ahora con planta de concreto y agregados, ofreciendo soluciones completas, calidad garantizada y confianza en cada obra que transformamos juntos.
                   </p>
                 </Reveal>
                 
