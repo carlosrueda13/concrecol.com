@@ -25,13 +25,13 @@ export default function SobreNosotrosPage() {
             Nuestra Historia
           </h2>
           <p className="text-lg text-gray-600 mb-4">
-            Fundada en 2005, Concrecol nació con la visión de transformar la industria de la construcción en Colombia, ofreciendo productos de la más alta calidad y un servicio excepcional a nuestros clientes.
+            Concrecol nace del trabajo y la experiencia de un grupo empresarial con más de 17 años dedicados a la construcción de vías, instituciones y proyectos de infraestructura al servicio de la región, en alianza con entidades públicas y privadas.
           </p>
           <p className="text-lg text-gray-600 mb-4">
-            A lo largo de los años, hemos crecido hasta convertirnos en un referente en el sector, manteniendo siempre nuestro compromiso con la excelencia, la innovación y la sostenibilidad.
+            Nuestro crecimiento ha estado marcado por la pasión por construir y la búsqueda constante de innovación. Esa visión nos llevó a ampliar nuestras operaciones con una planta de agregados y nuestra propia concretera, que hoy se convierte en la base de nuestra expansión.
           </p>
           <p className="text-lg text-gray-600">
-            Hoy, contamos con una moderna planta de producción, una flota de transporte especializado y un equipo humano altamente capacitado para atender las necesidades de construcción en todo el país.
+            Seguimos siendo constructores, pero ahora con la capacidad de ofrecer soluciones integrales: desde los materiales hasta la ejecución de la obra. Concrecol es historia, presente y futuro al servicio del desarrollo y la confianza de nuestros clientes.
           </p>
         </div>
         <div className="relative h-96 rounded-lg overflow-hidden shadow-xl">
