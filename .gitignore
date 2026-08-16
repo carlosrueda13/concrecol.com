@@ -112,3 +112,6 @@ backup/
 .LSOverride
 Icon
 ._*
+
+opencode.json
+prompts/
