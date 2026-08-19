@@ -70,9 +70,9 @@ export function ScrollNav() {
           {/* Logo */}
           <Link href="/" className="flex items-center">
             <img 
-              src="/images/Property 1=Default-1.png"
+              src={isScrolled ? '/images/Property 1=Default-1.png' : '/logo-hero.png'}
               alt="Concrecol Logo" 
-              className="h-8"
+              className="h-[42px]"
             />
           </Link>
 
