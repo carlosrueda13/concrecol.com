@@ -9,6 +9,19 @@ import { Reveal } from '@/components/animations/reveal'
 // ✅ Forzar renderizado dinámico
 export const dynamic = 'force-dynamic'
 
+// Mapa de imágenes por slug de categoría (mosaico)
+const categoryImageMap: Record<string, string> = {
+  agregados: '/categorias/agregados.jpg',
+  cemento: '/categorias/cemento.jpg',
+  concreto: '/categorias/concreto.jpg',
+  pinturas: '/categorias/pinturas.jpg',
+  preparados: '/categorias/preparados.jpg',
+}
+
+function getCategoryImage(slug: string): string {
+  return categoryImageMap[slug] ?? '/placeholder.jpg'
+}
+
 // Función para obtener las categorías activas con una imagen por defecto
 async function getActiveCategories(): Promise<CategoryWithImage[]> {
   try {
@@ -81,6 +94,7 @@ async function getActiveCategories(): Promise<CategoryWithImage[]> {
 }
 
 export default async function HomePage() {
+  const categories = await getActiveCategories()
   return (
     <div className="relative">
       {/* Hero Section con video de fondo y efecto parallax */}
@@ -199,33 +213,36 @@ export default async function HomePage() {
             </div>
           </Reveal>
           
-          <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-            {(await getActiveCategories()).map((category, index) => (
-              <Reveal key={category.id} direction="up" delay={0.1 * index} className="w-full">
-                <Link
-                  href={`/productos?categoria=${category.slug}`}
-                  className="flex flex-col items-start justify-between group"
+          <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-6 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+            {categories.map((category, index) => {
+              const isLast = index === categories.length - 1
+              const isWide = isLast && categories.length === 5
+              const spanClass = isWide ? 'lg:col-span-2' : ''
+              const aspectClass = isWide ? 'aspect-[4/3] lg:aspect-auto lg:h-full' : 'aspect-[4/3]'
+              return (
+                <Reveal
+                  key={category.id}
+                  direction="up"
+                  delay={0.1 * index}
+                  className={`w-full ${spanClass}${isWide ? ' lg:[&>*]:h-full' : ''}`}
                 >
-                  <div className="relative w-full">
+                  <Link
+                    href={`/productos?categoria=${category.slug}`}
+                    className={`group relative block overflow-hidden rounded-2xl transition-transform duration-300 ease-in-out hover:scale-[1.03] ${aspectClass}`}
+                  >
                     <img
-                      src={category.imageUrl}
+                      src={getCategoryImage(category.slug)}
                       alt={category.name}
-                      className="aspect-[16/9] w-full rounded-2xl bg-gray-100 object-cover sm:aspect-[2/1] lg:aspect-[3/2] group-hover:opacity-90 transition-opacity"
+                      className="absolute inset-0 h-full w-full object-cover grayscale transition-all duration-300 group-hover:grayscale-0"
                     />
-                  </div>
-                  <div className="max-w-xl mt-4">
-                    <div className="relative">
-                      <h3 className="text-lg font-semibold leading-6 text-gray-900 group-hover:text-[#C4D600]">
-                        {category.name}
-                      </h3>
-                      <p className="mt-2 line-clamp-3 text-sm leading-6 text-gray-600">
-                        {category.description}
-                      </p>
-                    </div>
-                  </div>
-                </Link>
-              </Reveal>
-            ))}
+                    <div className="absolute inset-0 bg-black/50 transition-colors duration-300 group-hover:bg-black/30" />
+                    <h3 className="absolute bottom-4 left-4 text-lg font-semibold leading-6 text-white">
+                      {category.name}
+                    </h3>
+                  </Link>
+                </Reveal>
+              )
+            })}
           </div>
         </div>
       </div>
