@@ -9,7 +9,7 @@ import { useCart } from '@/contexts/cart-provider'
 
 export function ScrollNav() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isVisible, setIsVisible] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
   const { cart } = useCart()
   
   const cartItemsCount = cart?.items?.length || 0
@@ -29,8 +29,8 @@ export function ScrollNav() {
         const aboutSection = document.getElementById('about-section');
         if (aboutSection) {
           const aboutSectionTop = aboutSection.getBoundingClientRect().top;
-          // Mostrar la barra de navegación cuando la sección "About Us" esté cerca de la parte superior
-          setIsVisible(aboutSectionTop <= 100);
+          // Cambiar a fondo blanco y enlaces grises cuando la sección "About Us" esté cerca de la parte superior
+          setIsScrolled(aboutSectionTop <= 100);
         }
       }, 10); // Un pequeño retraso para mejorar el rendimiento
     };
@@ -50,12 +50,22 @@ export function ScrollNav() {
   }, [])
 
   return (
-    <header 
-      className={`bg-white shadow-sm fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ${
-        isVisible ? 'translate-y-0' : '-translate-y-full'
-      }`}
-    >
-      <div className="container mx-auto px-4">
+    <header className="fixed top-0 left-0 right-0 z-50">
+      {/* Fondo degradado oscuro sutil (estado inicial sobre el hero) */}
+      <div
+        aria-hidden="true"
+        className={`absolute inset-0 bg-gradient-to-b from-black/70 to-transparent transition-opacity duration-300 ${
+          isScrolled ? 'opacity-0' : 'opacity-100'
+        }`}
+      />
+      {/* Fondo blanco sólido (estado tras superar el umbral) */}
+      <div
+        aria-hidden="true"
+        className={`absolute inset-0 bg-white shadow-sm transition-opacity duration-300 ${
+          isScrolled ? 'opacity-100' : 'opacity-0'
+        }`}
+      />
+      <div className="relative container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center">
@@ -68,19 +78,19 @@ export function ScrollNav() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <Link href="/" className="text-gray-700 hover:text-[#C4D600]">
+            <Link href="/" className={`${isScrolled ? 'text-gray-700' : 'text-white'} transition-colors duration-300 hover:text-[#C4D600]`}>
               Inicio
             </Link>
-            <Link href="/productos" className="text-gray-700 hover:text-[#C4D600]">
+            <Link href="/productos" className={`${isScrolled ? 'text-gray-700' : 'text-white'} transition-colors duration-300 hover:text-[#C4D600]`}>
               Productos
             </Link>
-            <Link href="/sobre-nosotros" className="text-gray-700 hover:text-[#C4D600]">
+            <Link href="/sobre-nosotros" className={`${isScrolled ? 'text-gray-700' : 'text-white'} transition-colors duration-300 hover:text-[#C4D600]`}>
               Sobre Nosotros
             </Link>
-            <Link href="/proyectos" className="text-gray-700 hover:text-[#C4D600]">
+            <Link href="/proyectos" className={`${isScrolled ? 'text-gray-700' : 'text-white'} transition-colors duration-300 hover:text-[#C4D600]`}>
               Nuestros Proyectos
             </Link>
-            <Link href="/contacto" className="text-gray-700 hover:text-[#C4D600]">
+            <Link href="/contacto" className={`${isScrolled ? 'text-gray-700' : 'text-white'} transition-colors duration-300 hover:text-[#C4D600]`}>
               Contacto
             </Link>
           </nav>
@@ -89,7 +99,7 @@ export function ScrollNav() {
           <div className="flex items-center space-x-4">
             <Link href="/carrito" className="relative">
               <Button variant="ghost" size="icon">
-                <ShoppingCart className="h-5 w-5" />
+                <ShoppingCart className={`h-5 w-5 transition-colors duration-300 ${isScrolled ? 'text-gray-700' : 'text-white'}`} />
                 {cartItemsCount > 0 && (
                   <span className="absolute -top-1 -right-1 bg-[#C4D600] text-[#4D4D4D] text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
                     {cartItemsCount}
@@ -98,7 +108,7 @@ export function ScrollNav() {
               </Button>
             </Link>
             <Button variant="ghost" size="icon" className="md:hidden" onClick={toggleMenu}>
-              <Menu className="h-5 w-5" />
+              <Menu className={`h-5 w-5 transition-colors duration-300 ${isScrolled ? 'text-gray-700' : 'text-white'}`} />
             </Button>
           </div>
         </div>
