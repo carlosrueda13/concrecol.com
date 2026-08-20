@@ -34,7 +34,11 @@ export default async function EditProductPage({ params }: EditProductPageProps) 
     requires_scheduling: product.requires_scheduling,
     images: product.images,
     is_active: product.is_active,
-    sqlCategoryId: product.sqlCategoryId
+    sqlCategoryId: product.sqlCategoryId,
+    description: product.description,
+    applications: product.applications,
+    advantages: product.advantages,
+    specifications: product.specifications
   }
 
   return (

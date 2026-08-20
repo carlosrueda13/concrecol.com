@@ -9,6 +9,7 @@ import { UnitMeasure } from '@prisma/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
 import {
   Select,
   SelectContent,
@@ -45,6 +46,10 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
     resolver: zodResolver(productSchema),
     defaultValues: {
       ...initialData,
+      description: initialData?.description ?? '',
+      applications: initialData?.applications || [],
+      advantages: initialData?.advantages ?? '',
+      specifications: initialData?.specifications ?? '',
       price_per_unit: initialData?.price_per_unit || 0,
       stock_quantity: initialData?.stock_quantity || 0,
       requires_scheduling: initialData?.requires_scheduling || false,
@@ -89,6 +94,22 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
     } finally {
       stopLoading()
     }
+  }
+
+  const applications = watch('applications') || []
+
+  const addApplication = () => {
+    setValue('applications', [...applications, ''])
+  }
+
+  const updateApplication = (index: number, value: string) => {
+    const updated = [...applications]
+    updated[index] = value
+    setValue('applications', updated)
+  }
+
+  const removeApplication = (index: number) => {
+    setValue('applications', applications.filter((_, i) => i !== index))
   }
 
   return (
@@ -272,6 +293,66 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
             <p className="text-sm text-red-500">
               {errors.sqlCategoryId.message}
             </p>
+          )}
+        </div>
+
+        <div className="space-y-2 md:col-span-2">
+          <Label htmlFor="description">Descripción</Label>
+          <Textarea id="description" {...register('description')} />
+          {errors.description && (
+            <p className="text-sm text-red-500">{errors.description.message}</p>
+          )}
+        </div>
+
+        <div className="space-y-2 md:col-span-2">
+          <Label>Aplicaciones</Label>
+          <div className="space-y-2">
+            {applications.map((application, index) => (
+              <div key={index} className="flex items-center space-x-2">
+                <Input
+                  value={application}
+                  onChange={(e) => updateApplication(index, e.target.value)}
+                  aria-label={`Aplicación ${index + 1}`}
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => removeApplication(index)}
+                  aria-label={`Quitar aplicación ${index + 1}`}
+                >
+                  Quitar
+                </Button>
+              </div>
+            ))}
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={addApplication}
+              aria-label="Agregar aplicación"
+            >
+              Agregar aplicación
+            </Button>
+          </div>
+          {errors.applications && (
+            <p className="text-sm text-red-500">{errors.applications.message}</p>
+          )}
+        </div>
+
+        <div className="space-y-2 md:col-span-2">
+          <Label htmlFor="advantages">Ventajas</Label>
+          <Textarea id="advantages" {...register('advantages')} />
+          {errors.advantages && (
+            <p className="text-sm text-red-500">{errors.advantages.message}</p>
+          )}
+        </div>
+
+        <div className="space-y-2 md:col-span-2">
+          <Label htmlFor="specifications">Especificaciones</Label>
+          <Textarea id="specifications" {...register('specifications')} />
+          {errors.specifications && (
+            <p className="text-sm text-red-500">{errors.specifications.message}</p>
           )}
         </div>
       </div>

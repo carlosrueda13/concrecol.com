@@ -19,6 +19,10 @@ export const productSchema = z.object({
   images: z.array(z.string().url('URL inválida')).default([]),
   is_active: z.boolean().default(true),
   sqlCategoryId: z.string().min(1, 'Seleccione una categoría'),
+  description: z.string().nullable().optional(),
+  applications: z.array(z.string()).optional(),
+  advantages: z.string().nullable().optional(),
+  specifications: z.string().nullable().optional(),
 })
 
 export type ProductFormData = z.infer<typeof productSchema>
