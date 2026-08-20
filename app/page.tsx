@@ -107,7 +107,7 @@ export default async function HomePage() {
           aria-label="Ver video completo en YouTube"
         >
           <video
-            className="absolute inset-0 w-full h-full object-cover opacity-70"
+            className="absolute inset-0 w-full h-full object-cover opacity-70 scale-125 origin-left"
             src="/hero-video.mp4"
             autoPlay
             loop
