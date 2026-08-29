@@ -22,39 +22,42 @@ export function MainNav({ sticky = true }: { sticky?: boolean }) {
 
   return (
     <header className={`bg-white shadow-sm z-50 ${sticky ? 'sticky top-0' : ''}`}>
-      {/* Barra de contacto (40px) */}
-      <div className="bg-grisCon text-blanco h-10">
-        <div className="container mx-auto px-4 h-full flex items-center justify-between text-xs sm:text-sm">
-          <div className="flex items-center gap-2 min-w-0">
-            <Button
-              type="button"
-              variant="ghost"
-              className="h-8 px-2 text-blanco hover:bg-white/10 hover:text-blanco text-xs sm:text-sm"
-            >
-              <Phone className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-              <span className="truncate">xxx xxx xxxx</span>
-            </Button>
-            <Button
-              type="button"
-              variant="ghost"
-              className="h-8 px-2 text-blanco hover:bg-white/10 hover:text-blanco text-xs sm:text-sm"
-            >
-              <Mail className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-              <span className="truncate">gerencia@concrecol.co</span>
-            </Button>
-          </div>
-          <div className="flex items-center gap-1.5 shrink-0">
-            <MapPin className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-            <span>San Gil, Santander</span>
+      {/* Barra de contacto: franja superior 12px + barra útil 56px (conjunto gris 68px) */}
+      <div className="bg-grisCon text-blanco">
+        <div className="container mx-auto px-4">
+          <div className="h-[12px]" aria-hidden="true" />
+          <div className="flex h-14 items-center justify-between text-texto">
+            <div className="flex items-center gap-2 min-w-0">
+              <Button
+                type="button"
+                variant="ghost"
+                className="h-8 px-2 text-blanco hover:bg-white/10 hover:text-blanco text-texto"
+              >
+                <Phone className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                <span className="truncate">xxx xxx xxxx</span>
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                className="h-8 px-2 text-blanco hover:bg-white/10 hover:text-blanco text-texto"
+              >
+                <Mail className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                <span className="truncate">gerencia@concrecol.co</span>
+              </Button>
+            </div>
+            <div className="flex items-center gap-1.5 shrink-0">
+              <MapPin className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+              <span>San Gil, Santander</span>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Navegación principal (72px) */}
+      {/* Navegación principal (88px) */}
       <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center h-[72px]">
-          {/* Logo 150x40 */}
-          <Link href="/" className="flex items-center w-[150px] h-10 shrink-0">
+        <div className="flex justify-between items-center h-[88px]">
+          {/* Logo 180x48 */}
+          <Link href="/" className="flex items-center w-[180px] h-[48px] shrink-0">
             <img
               src="/images/Property 1=Default-1.png"
               alt="Concrecol Logo"
@@ -75,7 +78,7 @@ export function MainNav({ sticky = true }: { sticky?: boolean }) {
           <div className="flex items-center gap-3">
             <BotonCotizar
               asChild
-              className="hidden md:inline-flex w-[160px] h-[44px]"
+              className="hidden md:inline-flex w-[180px] h-[52px]"
             >
               <Link href="/cotizacion">Cotizar</Link>
             </BotonCotizar>
@@ -99,7 +102,7 @@ export function MainNav({ sticky = true }: { sticky?: boolean }) {
             <div className="flex justify-between items-center p-4">
               <Link
                 href="/"
-                className="flex items-center w-[150px] h-10"
+                className="flex items-center w-[180px] h-[48px]"
                 onClick={toggleMenu}
               >
                 <img

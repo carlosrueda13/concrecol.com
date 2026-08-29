@@ -117,18 +117,19 @@ export default async function HomePage() {
       </section>
 
       {/* Ubicación */}
-      <section id="ubicacion" className="relative scroll-mt-14 bg-blanco py-24 sm:py-32">
+      <section id="ubicacion" className="relative w-full scroll-mt-14 bg-blanco py-24 sm:py-32">
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 xl:px-0">
           <h2 className="font-titulo text-subtitulo text-grisCon">Ubicación</h2>
+          <div aria-hidden="true" className="w-20 h-1 bg-lima mt-4" />
           <div className="mt-8 flex flex-col gap-6 xl:flex-row">
             {/* Mapa: contenedor vacío con borde visible, sin imagen ni servicio de mapas */}
             <div
               role="img"
               aria-label="Mapa de ubicación de Concrecol"
-              className="h-[420px] w-full border-2 border-grisCon bg-grisClaro xl:w-[750px]"
+              className="h-[520px] w-full border-2 border-grisCon bg-grisClaro xl:w-[750px]"
             />
             {/* Panel de ubicación */}
-            <div className="flex w-full flex-col justify-center gap-6 xl:h-[420px] xl:w-[426px]">
+            <div className="flex w-full flex-col justify-center gap-6 xl:h-[520px] xl:w-[426px]">
               <address className="font-texto text-texto not-italic text-grisCon">
                 KM 8 Via San gil - Socorro, Santander, Colombia
               </address>
@@ -155,9 +156,10 @@ export default async function HomePage() {
       </section>
 
       {/* Datos */}
-      <section id="datos" className="relative bg-grisClaro py-24 sm:py-32">
+      <section id="datos" className="relative w-full bg-grisClaro py-24 sm:py-32">
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 xl:px-0">
           <h2 className="font-titulo text-subtitulo text-grisCon">Datos</h2>
+          <div aria-hidden="true" className="w-20 h-1 bg-lima mt-4" />
           <div className="mt-8 flex flex-col gap-8">
             <div className="flex h-[110px] w-full items-center gap-[21px]">
               <Factory className="h-10 w-10 flex-none text-lima" aria-hidden="true" />
@@ -185,10 +187,13 @@ export default async function HomePage() {
       </section>
 
       {/* Catálogo */}
-      <section id="catalogo" className="relative bg-blanco py-24 sm:py-32">
+      <section id="catalogo" className="relative w-full bg-blanco py-24 sm:py-32">
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 xl:px-0">
           <div className="flex flex-wrap items-center justify-between gap-6">
-            <h2 className="font-titulo text-[32px] text-grisCon">Catálogo</h2>
+            <div className="flex flex-col">
+              <h2 className="font-titulo text-[32px] text-grisCon">Catálogo</h2>
+              <div aria-hidden="true" className="w-20 h-1 bg-lima mt-4" />
+            </div>
             <Link
               href="/productos"
               className="font-texto text-texto text-grisCon underline"
@@ -225,14 +230,15 @@ export default async function HomePage() {
       </section>
 
       {/* Líneas de negocio */}
-      <section id="lineas-de-negocio" className="relative bg-grisClaro py-24 sm:py-32">
+      <section id="lineas-de-negocio" className="relative w-full bg-grisCon py-24 sm:py-32">
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 xl:px-0">
-          <h2 className="font-titulo text-[32px] text-grisCon">Líneas de negocio</h2>
+          <h2 className="font-titulo text-[32px] text-blanco">Líneas de negocio</h2>
+          <div aria-hidden="true" className="w-20 h-1 bg-lima mt-4" />
           <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
             {[1, 2, 3].map((n) => (
-              <div key={n} className="flex flex-col gap-6 xl:h-[300px]">
-                <div className="h-[216px] w-full border-2 border-grisCon bg-blanco" />
-                <p className="font-texto text-[20px] text-grisCon">[LÍNEA DE NEGOCIO {n}]</p>
+              <div key={n} className="flex flex-col gap-6 xl:h-[360px]">
+                <div className="h-[260px] w-full border-2 border-blanco bg-blanco" />
+                <p className="font-texto text-[20px] text-blanco">[LÍNEA DE NEGOCIO {n}]</p>
               </div>
             ))}
           </div>
@@ -240,13 +246,14 @@ export default async function HomePage() {
       </section>
 
       {/* Argumentos */}
-      <section id="argumentos" className="relative bg-blanco py-24 sm:py-32">
+      <section id="argumentos" className="relative w-full bg-grisClaro py-24 sm:py-32">
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 xl:px-0">
           <h2 className="font-titulo text-[32px] text-grisCon">Argumentos</h2>
+          <div aria-hidden="true" className="w-20 h-1 bg-lima mt-4" />
           <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
             {[1, 2, 3, 4].map((n) => (
-              <div key={n} className="flex flex-col gap-6 xl:h-[280px]">
-                <div className="h-[180px] w-full border-2 border-grisCon bg-grisClaro" />
+              <div key={n} className="flex flex-col gap-6 xl:h-[340px]">
+                <div className="h-[230px] w-full border-2 border-grisCon bg-grisClaro" />
                 <p className="font-titulo text-[18px] text-grisCon">[ARGUMENTO {n}]</p>
                 <Link
                   href="/sobre-nosotros"
@@ -261,10 +268,13 @@ export default async function HomePage() {
       </section>
 
       {/* Cierre */}
-      <section id="cierre" className="relative flex h-[120px] w-full items-center bg-grisCon">
-        <div className="mx-auto flex w-full max-w-[1200px] flex-wrap items-center justify-center gap-6 px-4 sm:px-6 xl:px-0">
-          <h2 className="font-titulo text-[24px] text-blanco">[Título de cierre]</h2>
-          <BotonCotizar asChild variant="primaria" className="h-[52px] w-[200px]">
+      <section id="cierre" className="relative flex h-[120px] w-full items-center bg-lima">
+        <div className="mx-auto flex w-full max-w-[1200px] flex-wrap items-center justify-center gap-3 px-4 sm:gap-6 sm:px-6 xl:px-0">
+          <div className="flex flex-col items-center">
+            <h2 className="font-titulo text-[24px] text-grisCon">[Título de cierre]</h2>
+            <div aria-hidden="true" className="w-20 h-1 bg-lima mt-4 ring-1 ring-inset ring-grisCon" />
+          </div>
+          <BotonCotizar asChild variant="secundaria" className="h-[52px] w-[200px]">
             <Link href="/cotizacion">Cotizar</Link>
           </BotonCotizar>
         </div>
