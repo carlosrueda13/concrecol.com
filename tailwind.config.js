@@ -19,6 +19,10 @@ module.exports = {
   		colors: {
   			'brand-lime': '#C4D600',
   			'brand-gray': '#4D4D4D',
+  			lima: '#C4D600',
+  			grisCon: '#4D4D4D',
+  			grisClaro: '#D9DAD5',
+  			blanco: '#FFFFFF',
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
@@ -60,6 +64,16 @@ module.exports = {
   				'5': 'hsl(var(--chart-5))'
   			}
   		},
+  		fontFamily: {
+  			titulo: ['var(--font-titulo)'],
+  			texto: ['var(--font-texto)']
+  		},
+  		fontSize: {
+                    titulo: ['56px', { lineHeight: '1.1', textTransform: 'uppercase' }],
+                    subtitulo: ['24px', { lineHeight: '1.3' }],
+                    tarjeta: ['20px', { lineHeight: '1.3' }],
+                    texto: ['16px', { lineHeight: '1.6' }]
+                },
   		keyframes: {
   			'accordion-down': {
   				from: {
