@@ -1,27 +1,12 @@
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { CheckCircle, ArrowRight, Factory, Truck, Award } from 'lucide-react'
+import { Factory, Truck, Award } from 'lucide-react'
 import { safeQuery } from '@/lib/db-wrapper'
 import { CategoryWithImage } from '@/types'
-import { Reveal } from '@/components/animations/reveal'
 import { BotonCotizar } from '@/components/boton-cotizar'
 // Removed withBasePath import - using direct paths for Vercel
 
 // ✅ Forzar renderizado dinámico
 export const dynamic = 'force-dynamic'
-
-// Mapa de imágenes por slug de categoría (mosaico)
-const categoryImageMap: Record<string, string> = {
-  agregados: '/categorias/agregados.jpg',
-  cemento: '/categorias/cemento.jpg',
-  concreto: '/categorias/concreto.jpg',
-  pinturas: '/categorias/pinturas.jpg',
-  preparados: '/categorias/preparados.jpg',
-}
-
-function getCategoryImage(slug: string): string {
-  return categoryImageMap[slug] ?? '/placeholder.jpg'
-}
 
 // Función para obtener las categorías activas con una imagen por defecto
 async function getActiveCategories(): Promise<CategoryWithImage[]> {
@@ -96,6 +81,11 @@ async function getActiveCategories(): Promise<CategoryWithImage[]> {
 
 export default async function HomePage() {
   const categories = await getActiveCategories()
+  // Cinco slots para el catálogo: las primeras 5 categorías y relleno nulo hasta cinco.
+  const catalogSlots: (CategoryWithImage | null)[] = categories.slice(0, 5)
+  while (catalogSlots.length < 5) {
+    catalogSlots.push(null)
+  }
   return (
     <div className="relative">
       {/* Hero Section: imagen de fondo estática, sin video */}
@@ -194,214 +184,91 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* About Us Preview Section */}
-      <div className="relative bg-white py-24 sm:py-32 z-10" id="about-section">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
-            <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
-              <div>
-                <Reveal direction="up">
-                  <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-                    Sobre Concrecol
-                  </h2>
-                  <p className="mt-6 text-lg leading-8 text-gray-600">
-                    Concrecol es una concretera con más de 17 años de experiencia en ingeniería civil. Seguimos siendo constructores, ahora con planta de concreto y agregados, ofreciendo soluciones completas, calidad garantizada y confianza en cada obra que transformamos juntos.
-                  </p>
-                </Reveal>
-                
-                <div className="mt-8 space-y-4">
-                  <Reveal direction="left" delay={0.1}>
-                    <div className="flex items-center gap-x-3">
-                      <CheckCircle className="h-5 w-5 flex-none text-[#C4D600]" />
-                      <p className="text-gray-600">Productos certificados bajo estrictos estándares de calidad</p>
-                    </div>
-                  </Reveal>
-                  <Reveal direction="left" delay={0.2}>
-                    <div className="flex items-center gap-x-3">
-                      <CheckCircle className="h-5 w-5 flex-none text-[#C4D600]" />
-                      <p className="text-gray-600">Equipo profesional con amplia experiencia en el sector</p>
-                    </div>
-                  </Reveal>
-                  <Reveal direction="left" delay={0.3}>
-                    <div className="flex items-center gap-x-3">
-                      <CheckCircle className="h-5 w-5 flex-none text-[#C4D600]" />
-                      <p className="text-gray-600">Soluciones a medida para cada proyecto de construcción</p>
-                    </div>
-                  </Reveal>
-                </div>
-                
-                <Reveal direction="up" delay={0.4}>
-                  <div className="mt-10">
-                    <Link href="/sobre-nosotros">
-                      <Button variant="outline">Conoce nuestra historia</Button>
-                    </Link>
-                  </div>
-                </Reveal>
-              </div>
-              
-              <Reveal direction="right">
-                <div className="relative">
-                  <img
-                    src="/about-image.JPG"
-                    alt="Equipo de Concrecol"
-                    className="rounded-2xl shadow-xl"
-                    width={800}
-                    height={600}
-                  />
-                </div>
-              </Reveal>
-            </div>
+      {/* Catálogo */}
+      <section id="catalogo" className="relative bg-blanco py-24 sm:py-32">
+        <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 xl:px-0">
+          <div className="flex flex-wrap items-center justify-between gap-6">
+            <h2 className="font-titulo text-[32px] text-grisCon">Catálogo</h2>
+            <Link
+              href="/productos"
+              className="font-texto text-texto text-grisCon underline"
+            >
+              Ver todo el catálogo
+            </Link>
           </div>
-        </div>
-      </div>
-
-      {/* Featured Categories */}
-      <div className="relative bg-gray-50 py-24 sm:py-32 z-10" id="featured-categories">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <Reveal direction="up" className="w-full">
-            <div className="mx-auto max-w-2xl text-center">
-              <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-                Nuestras Categorías
-              </h2>
-              <p className="mt-2 text-lg leading-8 text-gray-600">
-                Explora nuestra amplia gama de productos para construcción
-              </p>
-            </div>
-          </Reveal>
-          
-          <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-6 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-            {categories.map((category, index) => {
-              const isLast = index === categories.length - 1
-              const isWide = isLast && categories.length === 5
-              const spanClass = isWide ? 'lg:col-span-2' : ''
-              const aspectClass = isWide ? 'aspect-[4/3] lg:aspect-auto lg:h-full' : 'aspect-[4/3]'
-              return (
-                <Reveal
-                  key={category.id}
-                  direction="up"
-                  delay={0.1 * index}
-                  className={`w-full ${spanClass}${isWide ? ' lg:[&>*]:h-full' : ''}`}
-                >
+          <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+            {catalogSlots.map((category, index) => {
+              if (category) {
+                return (
                   <Link
+                    key={category.id}
                     href={`/productos?categoria=${category.slug}`}
-                    className={`group relative block overflow-hidden rounded-2xl transition-transform duration-300 ease-in-out hover:scale-[1.03] ${aspectClass}`}
+                    className={`relative block h-[260px] overflow-hidden border-2 border-grisCon bg-grisClaro ${index === 4 ? 'xl:col-span-2' : ''}`}
                   >
-                    <img
-                      src={getCategoryImage(category.slug)}
-                      alt={category.name}
-                      className="absolute inset-0 h-full w-full object-cover grayscale transition-all duration-300 group-hover:grayscale-0"
-                    />
-                    <div className="absolute inset-0 bg-black/50 transition-colors duration-300 group-hover:bg-black/30" />
-                    <h3 className="absolute bottom-4 left-4 text-lg font-semibold leading-6 text-white">
+                    <span className="absolute bottom-4 left-4 font-titulo text-[18px] text-grisCon">
                       {category.name}
-                    </h3>
+                    </span>
                   </Link>
-                </Reveal>
+                )
+              }
+              return (
+                <div
+                  key={`slot-${index}`}
+                  className={`flex h-[260px] items-center justify-center border-2 border-dashed border-grisCon bg-grisClaro font-texto text-texto text-grisCon ${index === 4 ? 'xl:col-span-2' : ''}`}
+                >
+                  [Categoría pendiente]
+                </div>
               )
             })}
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Featured Projects */}
-      <div className="relative bg-white py-24 sm:py-32 z-10" id="featured-projects">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row justify-between items-center mb-12">
-            <Reveal direction="left">
-              <div>
-                <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-                  Proyectos Destacados
-                </h2>
-                <p className="mt-2 text-lg leading-8 text-gray-600">
-                  Conoce algunos de nuestros proyectos más importantes
-                </p>
+      {/* Líneas de negocio */}
+      <section id="lineas-de-negocio" className="relative bg-grisClaro py-24 sm:py-32">
+        <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 xl:px-0">
+          <h2 className="font-titulo text-[32px] text-grisCon">Líneas de negocio</h2>
+          <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+            {[1, 2, 3].map((n) => (
+              <div key={n} className="flex flex-col gap-6 xl:h-[300px]">
+                <div className="h-[216px] w-full border-2 border-grisCon bg-blanco" />
+                <p className="font-texto text-[20px] text-grisCon">[LÍNEA DE NEGOCIO {n}]</p>
               </div>
-            </Reveal>
-            
-            <Reveal direction="right">
-              <Link href="/proyectos" className="mt-4 md:mt-0">
-                <Button variant="outline" className="flex items-center gap-2">
-                  Ver todos los proyectos <ArrowRight className="h-4 w-4" />
-                </Button>
-              </Link>
-            </Reveal>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredProjects.map((project, index) => (
-              <Reveal key={project.name} direction="up" delay={0.1 * index}>
-                <div className="bg-white rounded-lg shadow-md overflow-hidden h-full">
-                  <img 
-                    src={project.imageUrl} 
-                    alt={project.name}
-                    className="w-full h-64 object-cover"
-                  />
-                  <div className="p-6">
-                    <h3 className="font-bold text-lg mb-2">{project.name}</h3>
-                    <p className="text-gray-600 mb-4">{project.description}</p>
-                    <p className="text-sm text-gray-500">Ubicación: {project.location}</p>
-                  </div>
-                </div>
-              </Reveal>
             ))}
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* CTA Section */}
-      <div className="relative bg-[#4D4D4D] z-10" id="cta-section">
-        <div className="px-6 py-24 sm:px-6 sm:py-32 lg:px-8">
-          <Reveal direction="up" className="w-full">
-            <div className="mx-auto max-w-2xl text-center">
-              <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-                ¿Listo para comenzar tu proyecto?
-              </h2>
-              <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-gray-300">
-                Contáctanos hoy mismo para obtener una cotización personalizada y asesoría profesional para tu proyecto.
-              </p>
-              
-              <Reveal direction="up" delay={0.2} className="w-full">
-                <div className="mt-10 flex items-center justify-center gap-x-6">
-                  <Link href="/contacto">
-                    <Button size="lg" className="bg-[#C4D600] text-[#4D4D4D] hover:bg-[#C4D600]/90">
-                      Solicitar Cotización
-                    </Button>
-                  </Link>
-                  <Link
-                    href="/productos"
-                    className="text-sm font-semibold leading-6 text-white"
-                  >
-                    Ver Catálogo <span aria-hidden="true">→</span>
-                  </Link>
-                </div>
-              </Reveal>
-            </div>
-          </Reveal>
+      {/* Argumentos */}
+      <section id="argumentos" className="relative bg-blanco py-24 sm:py-32">
+        <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 xl:px-0">
+          <h2 className="font-titulo text-[32px] text-grisCon">Argumentos</h2>
+          <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
+            {[1, 2, 3, 4].map((n) => (
+              <div key={n} className="flex flex-col gap-6 xl:h-[280px]">
+                <div className="h-[180px] w-full border-2 border-grisCon bg-grisClaro" />
+                <p className="font-titulo text-[18px] text-grisCon">[ARGUMENTO {n}]</p>
+                <Link
+                  href="/sobre-nosotros"
+                  className="font-texto text-[15px] text-grisCon underline"
+                >
+                  [ENLACE PENDIENTE]
+                </Link>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      </section>
+
+      {/* Cierre */}
+      <section id="cierre" className="relative flex h-[120px] w-full items-center bg-grisCon">
+        <div className="mx-auto flex w-full max-w-[1200px] flex-wrap items-center justify-center gap-6 px-4 sm:px-6 xl:px-0">
+          <h2 className="font-titulo text-[24px] text-blanco">[Título de cierre]</h2>
+          <BotonCotizar asChild variant="primaria" className="h-[52px] w-[200px]">
+            <Link href="/cotizacion">Cotizar</Link>
+          </BotonCotizar>
+        </div>
+      </section>
     </div>
   )
 }
-
-// Las categorías ahora se obtienen de la base de datos en tiempo real
-
-const featuredProjects = [
-  {
-    name: 'Tanque de almacenamiento de agua',
-    description: 'Proyecto de construcción de un tanque de almacenamiento de agua de 500 m³ en el Socorro.',
-    location: 'Socorro, Santander',
-    imageUrl: '/projects/water-tank.JPG',
-  },
-  {
-    name: 'Placa huella veredal',
-    description: 'Construcción de placa huella veredal de 250 metros de longitud con estructura de concreto.',
-    location: 'Valle de San José, Santander',
-    imageUrl: '/projects/placa-huella.JPG',
-  },
-  {
-    name: 'Casa residencial de tres pisos',
-    description: 'Construcción de una casa residencial de tres pisos con concreto acelerado.',
-    location: 'San Gil, Santander',
-    imageUrl: '/projects/house.JPG',
-  },
-]
