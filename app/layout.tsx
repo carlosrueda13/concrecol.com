@@ -8,6 +8,10 @@ import { ConsentBanner } from '@/components/consent-banner'
 import { sukhumvitSet } from './fonts'
 import { validateDevEnv } from '@/lib/env-validation'
 
+// Referencia inerte: conserva el import de Sukhumvit sin aplicarlo al DOM
+// (evita el warning de variable sin uso sin generar clases ni estilos).
+void sukhumvitSet
+
 const archivoBlack = Archivo_Black({
   weight: '400',
   subsets: ['latin'],
@@ -40,7 +44,7 @@ export default function RootLayout({
   // For the root layout, we'll check the pathname in the admin layout instead
   return (
     <html lang="es" className={`${archivoBlack.variable} ${inter.variable}`}>
-      <body className={`${sukhumvitSet.className} antialiased`}>
+      <body className="font-texto antialiased">
         <Providers>
           <ConditionalNav />
           <main className="min-h-screen">

@@ -3,13 +3,20 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { ShoppingCart, Menu, X } from 'lucide-react'
+import { ShoppingCart, Menu, X, Phone, MapPin, Mail } from 'lucide-react'
 import { useCart } from '@/contexts/cart-provider'
 
-export function MainNav() {
+const NAV_ITEMS = [
+  { label: 'Home', href: '/' },
+  { label: 'Productos', href: '/productos' },
+  { label: 'Constructora', href: '/constructora' },
+  { label: 'Ubicación', href: '/#ubicacion' },
+]
+
+export function MainNav({ sticky = true }: { sticky?: boolean }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { cart } = useCart()
-  
+
   const cartItemsCount = cart?.items?.length || 0
 
   const toggleMenu = () => {
@@ -17,121 +24,126 @@ export function MainNav() {
   }
 
   return (
-    <header className="bg-white shadow-sm sticky top-0 z-50">
+    <header className={`bg-white shadow-sm z-50 ${sticky ? 'sticky top-0' : ''}`}>
+      {/* Barra de contacto (40px) */}
+      <div className="bg-grisCon text-blanco h-10">
+        <div className="container mx-auto px-4 h-full flex items-center justify-between text-xs sm:text-sm">
+          <div className="flex items-center gap-2 min-w-0">
+            <Button
+              type="button"
+              variant="ghost"
+              className="h-8 px-2 text-blanco hover:bg-white/10 hover:text-blanco text-xs sm:text-sm"
+            >
+              <Phone className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+              <span className="truncate">xxx xxx xxxx</span>
+            </Button>
+            <Button
+              type="button"
+              variant="ghost"
+              className="h-8 px-2 text-blanco hover:bg-white/10 hover:text-blanco text-xs sm:text-sm"
+            >
+              <Mail className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+              <span className="truncate">gerencia@concrecol.co</span>
+            </Button>
+          </div>
+          <div className="flex items-center gap-1.5 shrink-0">
+            <MapPin className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+            <span>San Gil, Santander</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Navegación principal (72px) */}
       <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <Link href="/" className="flex items-center">
-            <img 
-              src="/images/Property 1=Default-1.png" 
-              alt="Concrecol Logo" 
-              className="h-8"
+        <div className="flex justify-between items-center h-[72px]">
+          {/* Logo 150x40 */}
+          <Link href="/" className="flex items-center w-[150px] h-10 shrink-0">
+            <img
+              src="/images/Property 1=Default-1.png"
+              alt="Concrecol Logo"
+              className="w-full h-full object-contain"
             />
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
-            <Link href="/" className="text-gray-700 hover:text-[#C4D600]">
-              Inicio
-            </Link>
-            <Link href="/productos" className="text-gray-700 hover:text-[#C4D600]">
-              Productos
-            </Link>
-            <Link href="/sobre-nosotros" className="text-gray-700 hover:text-[#C4D600]">
-              Sobre Nosotros
-            </Link>
-            <Link href="/proyectos" className="text-gray-700 hover:text-[#C4D600]">
-              Nuestros Proyectos
-            </Link>
-            <Link href="/contacto" className="text-gray-700 hover:text-[#C4D600]">
-              Contacto
-            </Link>
+          {/* Navegación de escritorio */}
+          <nav className="hidden md:flex items-center space-x-8" aria-label="Navegación principal">
+            {NAV_ITEMS.map((item) => (
+              <Link key={item.label} href={item.href} className="text-gray-700 hover:text-lima">
+                {item.label}
+              </Link>
+            ))}
           </nav>
 
-          {/* Cart and Mobile Menu */}
-          <div className="flex items-center space-x-4">
-            <Link href="/carrito" className="relative">
+          {/* Acciones a la derecha: carrito, Cotizar y menú móvil */}
+          <div className="flex items-center gap-3">
+            <Link href="/carrito" className="relative" aria-label="Carrito">
               <Button variant="ghost" size="icon">
                 <ShoppingCart className="h-5 w-5" />
                 {cartItemsCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-[#C4D600] text-[#4D4D4D] text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                  <span className="absolute -top-1 -right-1 bg-lima text-grisCon text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
                     {cartItemsCount}
                   </span>
                 )}
               </Button>
             </Link>
-            <Button variant="ghost" size="icon" className="md:hidden" onClick={toggleMenu}>
+            <Button
+              asChild
+              className="hidden md:inline-flex bg-lima text-grisCon hover:bg-lima/90 w-[160px] h-[44px]"
+            >
+              <Link href="/cotizacion">Cotizar</Link>
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden"
+              onClick={toggleMenu}
+              aria-label="Abrir menú"
+            >
               <Menu className="h-5 w-5" />
             </Button>
           </div>
         </div>
       </div>
 
-      {/* Mobile Navigation */}
+      {/* Menú móvil */}
       {isMenuOpen && (
         <div className="fixed inset-0 bg-white z-50 md:hidden">
           <div className="flex flex-col h-full">
             <div className="flex justify-between items-center p-4">
-              <Link href="/" className="flex items-center" onClick={() => setIsMenuOpen(false)}>
-                <img 
-                  src="/images/Property 1=Default-1.png" 
-                  alt="Concrecol Logo" 
-                  className="h-8"
+              <Link
+                href="/"
+                className="flex items-center w-[150px] h-10"
+                onClick={toggleMenu}
+              >
+                <img
+                  src="/images/Property 1=Default-1.png"
+                  alt="Concrecol Logo"
+                  className="w-full h-full object-contain"
                 />
               </Link>
-              <Button variant="ghost" size="icon" onClick={toggleMenu}>
+              <Button variant="ghost" size="icon" onClick={toggleMenu} aria-label="Cerrar menú">
                 <X className="h-5 w-5" />
               </Button>
             </div>
-            <nav className="flex flex-col space-y-4 p-4">
-              <Link 
-                href="/" 
-                className="text-gray-700 text-lg py-2 border-b border-gray-100"
-                onClick={() => setIsMenuOpen(false)}
+            <nav className="flex flex-col space-y-4 p-4" aria-label="Navegación móvil">
+              {NAV_ITEMS.map((item) => (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className="text-gray-700 text-lg py-2 border-b border-gray-100"
+                  onClick={toggleMenu}
+                >
+                  {item.label}
+                </Link>
+              ))}
+              <Button
+                asChild
+                className="bg-lima text-grisCon hover:bg-lima/90 w-full h-[44px] mt-2"
               >
-                Inicio
-              </Link>
-              <Link 
-                href="/productos" 
-                className="text-gray-700 text-lg py-2 border-b border-gray-100"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Productos
-              </Link>
-              <Link 
-                href="/sobre-nosotros" 
-                className="text-gray-700 text-lg py-2 border-b border-gray-100"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Sobre Nosotros
-              </Link>
-              <Link 
-                href="/proyectos" 
-                className="text-gray-700 text-lg py-2 border-b border-gray-100"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Nuestros Proyectos
-              </Link>
-              <Link 
-                href="/contacto" 
-                className="text-gray-700 text-lg py-2 border-b border-gray-100"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Contacto
-              </Link>
-              <Link 
-                href="/carrito" 
-                className="flex items-center text-gray-700 text-lg py-2"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                <ShoppingCart className="h-5 w-5 mr-2" />
-                Carrito
-                {cartItemsCount > 0 && (
-                  <span className="ml-2 bg-[#C4D600] text-[#4D4D4D] text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                    {cartItemsCount}
-                  </span>
-                )}
-              </Link>
+                <Link href="/cotizacion" onClick={toggleMenu}>
+                  Cotizar
+                </Link>
+              </Button>
             </nav>
           </div>
         </div>
