@@ -1,0 +1,74 @@
+/*
+ * Contorno cerrado de 2px (cuatro lados + dos diagonales de 10px), dibujado
+ * por segmentos con `background-image` y todo DENTRO del área recortada por
+ * clip-path, de modo que el recorte no lo elimine.
+ *
+ * - `.secundario` lo usa siempre: es su contorno permanente (interior
+ *   transparente).
+ * - `.principal:focus-visible` lo usa como anillo de foco interior, sobre el
+ *   relleno lima. Como el trazo es #4d4d4d sobre #c4d600, es inequívoco y se
+ *   ve tanto sobre fondo blanco como sobre grisCon (el contraste es contra el
+ *   propio relleno del botón, no contra la página).
+ */
+
+.secundario,
+.principal:focus-visible {
+  background-image:
+    /* borde superior: de x=10px hasta el borde derecho */
+    linear-gradient(#4d4d4d, #4d4d4d),
+    /* borde derecho: de y=0 hasta calc(100% - 10px) */
+    linear-gradient(#4d4d4d, #4d4d4d),
+    /* borde inferior: de x=0 hasta calc(100% - 10px) */
+    linear-gradient(#4d4d4d, #4d4d4d),
+    /* borde izquierdo: de y=10px hasta el borde inferior */
+    linear-gradient(#4d4d4d, #4d4d4d),
+    /* diagonal superior izquierda (10px) */
+    linear-gradient(
+      135deg,
+      transparent calc(50% - 1px),
+      #4d4d4d calc(50% - 1px),
+      #4d4d4d calc(50% + 1px),
+      transparent calc(50% + 1px)
+    ),
+    /* diagonal inferior derecha (10px) */
+    linear-gradient(
+      135deg,
+      transparent calc(50% - 1px),
+      #4d4d4d calc(50% - 1px),
+      #4d4d4d calc(50% + 1px),
+      transparent calc(50% + 1px)
+    );
+
+  background-repeat: no-repeat;
+
+  background-size:
+    calc(100% - 10px) 2px,
+    2px calc(100% - 10px),
+    calc(100% - 10px) 2px,
+    2px calc(100% - 10px),
+    /* 10px del recorte + √2 px: desplaza la diagonal 2px hacia dentro para
+       que el trazo quede íntegro y pegado al borde recortado. */
+    calc(10px + 1.4142px) calc(10px + 1.4142px),
+    calc(10px + 1.4142px) calc(10px + 1.4142px);
+
+  background-position:
+    10px 0,
+    100% 0,
+    0 100%,
+    0 10px,
+    0 0,
+    100% 100%;
+}
+
+.secundario {
+  background-color: transparent;
+}
+
+/*
+ * Foco interior de la variante secundaria: al recibir foco por teclado, el
+ * interior del polígono (recortado por clip-path) se tiñe, de modo que el foco
+ * siga siendo visible dentro de la región recortada.
+ */
+.secundario:focus-visible {
+  background-color: rgba(77, 77, 77, 0.15);
+}

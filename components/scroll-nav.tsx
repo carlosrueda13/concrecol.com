@@ -2,8 +2,9 @@
 
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
-import { Button } from '@/components/ui/button'
+import Image from 'next/image'
 import { MainNav } from '@/components/main-nav'
+import { BotonCotizar } from '@/components/boton-cotizar'
 
 export function ScrollNav() {
   const [isCompactVisible, setIsCompactVisible] = useState(false)
@@ -39,16 +40,19 @@ export function ScrollNav() {
       {/* Barra compacta fija (56px) visible solo tras superar la estructura principal */}
       {isCompactVisible && (
         <div className="fixed top-0 left-0 right-0 z-50 bg-grisCon animate-fadeIn h-14">
-          <div className="container mx-auto px-4 h-full flex justify-between items-center">
-            <Link href="/" className="font-titulo text-blanco text-xl leading-none">
-              Concrecol
+          <div className="container mx-auto px-4 h-full flex justify-between items-center gap-3">
+            <Link href="/" className="flex items-center min-w-0 h-10">
+              <Image
+                src="/logo-hero.png"
+                alt="Concrecol"
+                width={190}
+                height={40}
+                className="max-h-10 w-auto max-w-full"
+              />
             </Link>
-            <Button
-              asChild
-              className="bg-lima text-grisCon hover:bg-lima/90 h-10"
-            >
+            <BotonCotizar asChild className="shrink-0">
               <Link href="/cotizacion">Cotizar</Link>
-            </Button>
+            </BotonCotizar>
           </div>
         </div>
       )}

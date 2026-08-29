@@ -3,8 +3,8 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { ShoppingCart, Menu, X, Phone, MapPin, Mail } from 'lucide-react'
-import { useCart } from '@/contexts/cart-provider'
+import { Menu, X, Phone, MapPin, Mail } from 'lucide-react'
+import { BotonCotizar } from '@/components/boton-cotizar'
 
 const NAV_ITEMS = [
   { label: 'Home', href: '/' },
@@ -15,9 +15,6 @@ const NAV_ITEMS = [
 
 export function MainNav({ sticky = true }: { sticky?: boolean }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const { cart } = useCart()
-
-  const cartItemsCount = cart?.items?.length || 0
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
@@ -74,24 +71,14 @@ export function MainNav({ sticky = true }: { sticky?: boolean }) {
             ))}
           </nav>
 
-          {/* Acciones a la derecha: carrito, Cotizar y menú móvil */}
+          {/* Acciones a la derecha: Cotizar y menú móvil */}
           <div className="flex items-center gap-3">
-            <Link href="/carrito" className="relative" aria-label="Carrito">
-              <Button variant="ghost" size="icon">
-                <ShoppingCart className="h-5 w-5" />
-                {cartItemsCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-lima text-grisCon text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                    {cartItemsCount}
-                  </span>
-                )}
-              </Button>
-            </Link>
-            <Button
+            <BotonCotizar
               asChild
-              className="hidden md:inline-flex bg-lima text-grisCon hover:bg-lima/90 w-[160px] h-[44px]"
+              className="hidden md:inline-flex w-[160px] h-[44px]"
             >
               <Link href="/cotizacion">Cotizar</Link>
-            </Button>
+            </BotonCotizar>
             <Button
               variant="ghost"
               size="icon"
@@ -136,14 +123,11 @@ export function MainNav({ sticky = true }: { sticky?: boolean }) {
                   {item.label}
                 </Link>
               ))}
-              <Button
-                asChild
-                className="bg-lima text-grisCon hover:bg-lima/90 w-full h-[44px] mt-2"
-              >
+              <BotonCotizar asChild className="w-full h-[44px] mt-2">
                 <Link href="/cotizacion" onClick={toggleMenu}>
                   Cotizar
                 </Link>
-              </Button>
+              </BotonCotizar>
             </nav>
           </div>
         </div>
