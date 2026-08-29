@@ -101,7 +101,7 @@ export default async function HomePage() {
       {/* Hero Section: imagen de fondo estática, sin video */}
       <section
         id="hero-section"
-        className="relative h-[600px] w-full bg-grisCon bg-cover bg-center"
+        className="relative h-[calc(100vh-112px)] min-h-[600px] w-full bg-grisCon bg-cover bg-center"
         style={{ backgroundImage: "url('/hero-image.jpg')" }}
       >
         {/* Overlay para legibilidad del texto */}
