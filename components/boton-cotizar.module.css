@@ -78,6 +78,37 @@
 }
 
 /*
+ * Wrapper no interactivo que agrupa el frente y su sombra (filtro SVG local).
+ * El `position: relative` y el `display: inline-flex` se componen con Tailwind
+ * en el TSX (`relative inline-flex` + className) para que utilidades como
+ * `hidden`, `shrink-0` o `md:inline-flex` sigan aplicándose al nodo que
+ * participa en el layout del consumidor (y no a su hijo interactivo). Aquí solo
+ * se neutralizan el padding, el fondo y el borde: esas propiedades pertenecen
+ * exclusivamente al elemento interactivo y no deben duplicarse en el wrapper.
+ * El margen NO se resetea: las clases de margen (p. ej. `mt-2`) deben vivir en
+ * el wrapper, fuera de la caja contra la que se mide la sombra.
+ */
+.wrapper {
+  padding: 0;
+  background: transparent;
+  border: 0;
+}
+
+/*
+ * Capa de sombra sólida e independiente, hermana del frente y posicionada en
+ * la caja del control (`inset: 0` contra el wrapper, que no tiene margen: el
+ * margen del consumidor vive en el wrapper). El relleno opaco, el clip-path del
+ * polígono y el filtro se fijan inline en el TSX; aquí solo se establece el
+ * posicionamiento y se evita que intercepte la interacción. El filtro descarta
+ * el relleno y pinta únicamente la silueta de 4px abajo/derecha.
+ */
+.sombra {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/*
  * Foco interior de la variante contorno: al recibir foco por teclado, el
  * interior del polígono (recortado por clip-path) se tiñe, de modo que el foco
  * siga siendo visible dentro de la región recortada.
