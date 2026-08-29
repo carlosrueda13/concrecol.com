@@ -1,9 +1,10 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { CheckCircle, BuildingIcon, Users, ArrowRight } from 'lucide-react'
+import { CheckCircle, ArrowRight, Factory, Truck, Award } from 'lucide-react'
 import { safeQuery } from '@/lib/db-wrapper'
 import { CategoryWithImage } from '@/types'
 import { Reveal } from '@/components/animations/reveal'
+import { BotonCotizar } from '@/components/boton-cotizar'
 // Removed withBasePath import - using direct paths for Vercel
 
 // ✅ Forzar renderizado dinámico
@@ -97,46 +98,101 @@ export default async function HomePage() {
   const categories = await getActiveCategories()
   return (
     <div className="relative">
-      {/* Hero Section con video de fondo y efecto parallax */}
-      <div className="fixed inset-0 w-full h-screen z-[-1] bg-black">
-        <a 
-          href="https://youtu.be/M194g0_SACE" 
-          target="_blank" 
-          rel="noopener noreferrer" 
-          className="absolute inset-0 w-full h-full cursor-pointer"
-          aria-label="Ver video completo en YouTube"
-        >
-          <video
-            className="absolute inset-0 w-full h-full object-cover opacity-70 scale-125 origin-left"
-            src="/hero-video.mp4"
-            autoPlay
-            loop
-            muted
-            playsInline
-          />
-        </a>
-        <div className="absolute inset-0 bg-black/50" />
-      </div>
-      
-      {/* Hero Content Section */}
-      <div className="relative isolate h-screen flex items-center justify-center z-10" id="hero-section">
-        <div className="flex flex-col items-center justify-center w-full h-full">
-          <img
-            src="/logo-hero.png"
-            alt="Logo Concrecol"
-            className="w-96 h-96 md:w-[32rem] md:h-[32rem] mb-2 drop-shadow-xl"
-            style={{ objectFit: 'contain' }}
-          />
-          <h1 className="text-white text-3xl sm:text-5xl font-extrabold text-center px-4 leading-tight uppercase tracking-wider"
-              style={{
-                textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5), 0 0 8px rgba(0, 0, 0, 0.2)',
-                WebkitTextStroke: '1px rgba(255, 255, 255, 0.15)',
-                letterSpacing: '0.05em'
-              }}>
-            CONSTRUIMOS CONFIANZA, ENTREGAMOS <span className="text-[#C4D600]">CONCRETO</span>.
-          </h1>
+      {/* Hero Section: imagen de fondo estática, sin video */}
+      <section
+        id="hero-section"
+        className="relative h-[600px] w-full bg-grisCon bg-cover bg-center"
+        style={{ backgroundImage: "url('/hero-image.jpg')" }}
+      >
+        {/* Overlay para legibilidad del texto */}
+        <div className="absolute inset-0 bg-grisCon/60" aria-hidden="true" />
+        <div className="relative z-10 mx-auto flex h-full w-full max-w-[1200px] items-center px-4 sm:px-6 xl:px-0">
+          <div className="flex flex-col items-start gap-6">
+            <h1 className="font-titulo text-[32px] leading-[1.1] uppercase text-blanco sm:text-titulo">
+              Construimos confianza, entregamos concreto.
+            </h1>
+            <p className="font-texto text-subtitulo text-blanco">
+              [Bajada — texto pendiente]
+            </p>
+            <div className="flex flex-wrap items-center gap-6">
+              <BotonCotizar asChild variant="primaria" className="h-[56px] w-[220px]">
+                <Link href="/cotizacion">Cotizar</Link>
+              </BotonCotizar>
+              <BotonCotizar asChild variant="secundaria" className="h-[56px] w-[220px]">
+                <Link href="/productos">Ver productos</Link>
+              </BotonCotizar>
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
+
+      {/* Ubicación */}
+      <section id="ubicacion" className="relative scroll-mt-14 bg-blanco py-24 sm:py-32">
+        <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 xl:px-0">
+          <h2 className="font-titulo text-subtitulo text-grisCon">Ubicación</h2>
+          <div className="mt-8 flex flex-col gap-6 xl:flex-row">
+            {/* Mapa: contenedor vacío con borde visible, sin imagen ni servicio de mapas */}
+            <div
+              role="img"
+              aria-label="Mapa de ubicación de Concrecol"
+              className="h-[420px] w-full border-2 border-grisCon bg-grisClaro xl:w-[750px]"
+            />
+            {/* Panel de ubicación */}
+            <div className="flex w-full flex-col justify-center gap-6 xl:h-[420px] xl:w-[426px]">
+              <address className="font-texto text-texto not-italic text-grisCon">
+                KM 8 Via San gil - Socorro, Santander, Colombia
+              </address>
+              <div className="flex flex-col gap-2">
+                <label
+                  htmlFor="ubicacion-campo"
+                  className="font-texto text-texto text-grisCon"
+                >
+                  [Etiqueta del campo]
+                </label>
+                <input
+                  id="ubicacion-campo"
+                  type="text"
+                  placeholder="[Placeholder]"
+                  className="h-[48px] w-full max-w-[380px] border border-grisCon bg-blanco px-3 font-texto text-texto text-grisCon placeholder:text-grisCon/60"
+                />
+              </div>
+              <BotonCotizar type="button" variant="contorno" className="h-[48px] w-fit px-6">
+                [Texto del botón]
+              </BotonCotizar>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Datos */}
+      <section id="datos" className="relative bg-grisClaro py-24 sm:py-32">
+        <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 xl:px-0">
+          <h2 className="font-titulo text-subtitulo text-grisCon">Datos</h2>
+          <div className="mt-8 flex flex-col gap-8">
+            <div className="flex h-[110px] w-full items-center gap-[21px]">
+              <Factory className="h-10 w-10 flex-none text-lima" aria-hidden="true" />
+              <p className="font-texto text-tarjeta text-grisCon">
+                <span>[Etiqueta 1]</span>{' '}
+                <span className="font-titulo">[Dato 1]</span>
+              </p>
+            </div>
+            <div className="flex h-[110px] w-full items-center gap-[21px]">
+              <Truck className="h-10 w-10 flex-none text-lima" aria-hidden="true" />
+              <p className="font-texto text-tarjeta text-grisCon">
+                <span>[Etiqueta 2]</span>{' '}
+                <span className="font-titulo">[Dato 2]</span>
+              </p>
+            </div>
+            <div className="flex h-[110px] w-full items-center gap-[21px]">
+              <Award className="h-10 w-10 flex-none text-lima" aria-hidden="true" />
+              <p className="font-texto text-tarjeta text-grisCon">
+                <span>[Etiqueta 3]</span>{' '}
+                <span className="font-titulo">[Dato 3]</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* About Us Preview Section */}
       <div className="relative bg-white py-24 sm:py-32 z-10" id="about-section">
