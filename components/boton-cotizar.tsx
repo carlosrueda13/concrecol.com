@@ -11,35 +11,33 @@ export interface BotonCotizarProps
   variant?: BotonCotizarVariante
 }
 
-// Recorte diagonal de 10px en la esquina superior izquierda y en la inferior derecha.
+// Diagonal notch: 10px at the top-left corner and 20px at the bottom-right
+// corner. All other corners stay square.
 const CLIP_PATH =
-  'polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px)'
+  'polygon(10px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 10px)'
 
 const variantes: Record<BotonCotizarVariante, string> = {
-  // El anillo de foco interior (contorno cerrado en :focus-visible) lo dibuja
-  // el CSS Module mediante la clase `.primaria`.
-  primaria: `bg-lima text-grisCon hover:bg-lima/90 ${styles.primaria}`,
-  // Fondo grisCon con texto blanco; el anillo de foco interior (trazo blanco)
-  // lo dibuja el CSS Module mediante la clase `.secundaria`.
-  secundaria: `bg-grisCon text-blanco hover:bg-grisCon/90 ${styles.secundaria}`,
-  // Contorno completo (incluidas las diagonales) y foco interior, ambos del
-  // CSS Module; aquí solo se fija el color del texto sobre el interior
-  // transparente.
-  contorno: `text-grisCon ${styles.contorno}`,
+  // Lime fill with dark gray text. The inner focus ring is drawn by the CSS
+  // module (`.primaria:focus-visible`).
+  primaria: `bg-lima text-grisCon ${styles.primaria}`,
+  // Dark gray fill with white text. The inner focus ring is drawn by the CSS
+  // module (`.secundaria:focus-visible`).
+  secundaria: `bg-grisCon text-blanco ${styles.secundaria}`,
+  // White fill with dark gray text. The full 2px outline (diagonals included)
+  // and the inner focus ring are drawn by the CSS module.
+  contorno: `bg-blanco text-grisCon ${styles.contorno}`,
 }
 
-// Color sólido de la capa de sombra independiente, por variante. Para
-// `secundaria` se usa un gris más oscuro que #4D4D4D para que la silueta sea
-// claramente visible sobre el relleno grisCon del propio botón.
+// Solid color of the independent shadow layer, per variant.
 const sombra: Record<BotonCotizarVariante, string> = {
-  primaria: '#4D4D4D',
-  secundaria: '#333333',
-  contorno: '#4D4D4D',
+  primaria: '#000000',
+  secundaria: '#000000',
+  contorno: '#C4D600',
 }
 
-// Utilidades de `display` cuyo efecto debe recaer sobre el wrapper: es el nodo
-// que participa en el layout del consumidor (flex/grid/gap), no el hijo
-// interactivo. `hidden` y `md:inline-flex` entran aquí.
+// Utilities whose display effect must land on the wrapper: it is the node that
+// participates in the consumer layout (flex/grid/gap), not the interactive
+// child. `hidden` and `md:inline-flex` belong here.
 const CLASES_DISPLAY = new Set([
   'block',
   'inline-block',
@@ -57,8 +55,8 @@ const CLASES_DISPLAY = new Set([
   'hidden',
 ])
 
-// Utilidades de flex-item (shrink/grow/basis). `shrink-0` debe aplicar al
-// wrapper, que es el flex item real del contenedor del consumidor.
+// Flex-item utilities (shrink/grow/basis). `shrink-0` must apply to the
+// wrapper, which is the real flex item of the consumer container.
 const CLASES_FLEX = new Set([
   'shrink',
   'shrink-0',
@@ -72,14 +70,14 @@ const CLASES_FLEX = new Set([
 
 type Categoria = 'layout' | 'ambos' | 'visual'
 
-// Clasifica cada token del `className` del consumidor:
-// - 'layout': solo al wrapper (display, shrink/grow, márgenes).
-// - 'ambos': al wrapper y al elemento interactivo (anchuras/alturas), para que
-//   el control llene exactamente la caja del wrapper y la sombra coincida con
-//   el borde del control.
-// - 'visual': solo al elemento interactivo (padding, colores, bordes, …).
+// Classifies each token of the consumer `className`:
+// - 'layout': wrapper only (display, shrink/grow, margins).
+// - 'ambos': wrapper and interactive element (widths/heights), so the control
+//   fills the wrapper box exactly and the shadow matches the control edge.
+// - 'visual': interactive element only (padding, colors, borders, ...).
 function clasificar(token: string): Categoria {
-  // Separa la variante responsive (md:, hover:, max-[600px]:, …) de la base.
+  // Splits the responsive variant (md:, hover:, max-[600px]:, ...) from the
+  // base utility.
   const idx = token.lastIndexOf(':')
   const base = idx >= 0 ? token.slice(idx + 1) : token
 
@@ -110,54 +108,25 @@ const BotonCotizar = React.forwardRef<HTMLButtonElement, BotonCotizarProps>(
   ({ className, variant = 'primaria', asChild = false, style, ...props }, ref) => {
     const Comp = asChild ? Slot : 'button'
 
-    // Identificador único por instancia para el filtro de sombra. `useId`
-    // devuelve tokens con `:` que no son seguros dentro de `url(#…)`, por lo
-    // que se sanitiza conservando la unicidad.
-    const reactId = React.useId()
-    const filtroId = `sombra-cotizar-${reactId.replace(/[^a-zA-Z0-9_-]/g, '')}`
-
     const { wrapper: clasesWrapper, interactivo: clasesInteractivo } =
       partirClases(className)
 
-    // La sombra es un filtro SVG aplicado a una capa sólida hermana del frente
-    // (`.sombra`, recortada con el MISMO polígono de 10px y rellena de color
-    // opaco). Su `SourceAlpha` es, por tanto, el polígono sólido idéntico para
-    // las tres variantes, independiente del fondo. `feOffset` lo desplaza 4px;
-    // `feComposite operator="out"` resta el polígono frontal, dejando solo la
-    // silueta de 4px visible abajo/derecha (nunca se transparenta a través del
-    // interior de `contorno`); `feFlood` la rellena con el color de la variante
-    // y el último `feComposite` compone ese color dentro de la silueta. El
-    // elemento se pinta SOLO con esa silueta (el relleno sólido se descarta en
-    // el filtro). Sin blur. La región se amplía para no recortar los 4px.
     return (
       <span className={cn('relative inline-flex', styles.wrapper, clasesWrapper)}>
-        <svg
-          aria-hidden="true"
-          focusable={false}
-          style={{ position: 'absolute', width: 0, height: 0, overflow: 'hidden' }}
-        >
-          <defs>
-            <filter id={filtroId} x="-20%" y="-20%" width="140%" height="140%">
-              <feOffset in="SourceAlpha" dx="4" dy="4" result="desplazada" />
-              <feComposite in="desplazada" in2="SourceAlpha" operator="out" result="silueta" />
-              <feFlood floodColor={sombra[variant]} result="relleno" />
-              <feComposite in="relleno" in2="silueta" operator="in" />
-            </filter>
-          </defs>
-        </svg>
+        {/* Sibling shadow layer: solid fill, same clip-path as the control,
+            offset exactly 8px down and 8px right, no blur. */}
         <span
           aria-hidden="true"
           className={styles.sombra}
           style={{
             clipPath: CLIP_PATH,
             backgroundColor: sombra[variant],
-            filter: `url(#${filtroId})`,
           }}
         />
         <Comp
           ref={ref}
           className={cn(
-            'relative inline-flex items-center justify-center whitespace-nowrap uppercase font-texto font-semibold rounded-none h-10 px-4 tracking-[0.05em] underline underline-offset-4',
+            'relative z-10 inline-flex items-center justify-center whitespace-nowrap uppercase font-texto font-semibold rounded-none h-10 px-4 tracking-[0.05em] underline underline-offset-4',
             variantes[variant],
             clasesInteractivo,
           )}

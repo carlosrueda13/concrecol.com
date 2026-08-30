@@ -1,19 +1,17 @@
 /*
- * Contorno cerrado de 2px (cuatro lados + dos diagonales de 10px), dibujado
- * por segmentos con `background-image` y todo DENTRO del área recortada por
- * clip-path, de modo que el recorte no lo elimine.
+ * Closed 2px outline (four sides + two diagonals), drawn with background-image
+ * segments, all INSIDE the area clipped by clip-path so the clip does not
+ * remove them.
  *
- * - `.contorno` lo usa siempre: es su contorno permanente (interior
- *   transparente).
- * - `.primaria:focus-visible` lo usa como anillo de foco interior oscuro
- *   (#4d4d4d) sobre el relleno lima (#c4d600): es inequívoco y se ve tanto
- *   sobre fondo blanco como sobre grisCon.
- * - `.secundaria:focus-visible` lo usa como anillo de foco interior claro
- *   (blanco) sobre el relleno grisCon, para que el foco siga siendo visible
- *   sobre el fondo oscuro.
+ * - `.contorno` always uses it: its permanent outline (the interior fill is
+ *   white, set by Tailwind `bg-blanco` on the variant).
+ * - `.primaria:focus-visible` uses it as a dark inner focus ring (#4d4d4d) over
+ *   the lime fill (#c4d600).
+ * - `.secundaria:focus-visible` uses it as a light inner focus ring (white)
+ *   over the dark gray fill.
  */
 
-/* Color del trazo por variante */
+/* Stroke color per variant */
 .contorno,
 .primaria:focus-visible {
   --trazo-contorno: #4d4d4d;
@@ -27,15 +25,15 @@
 .primaria:focus-visible,
 .secundaria:focus-visible {
   background-image:
-    /* borde superior: de x=10px hasta el borde derecho */
+    /* top edge: from x=10px to the right edge */
     linear-gradient(var(--trazo-contorno), var(--trazo-contorno)),
-    /* borde derecho: de y=0 hasta calc(100% - 10px) */
+    /* right edge: from y=0 to calc(100% - 20px) */
     linear-gradient(var(--trazo-contorno), var(--trazo-contorno)),
-    /* borde inferior: de x=0 hasta calc(100% - 10px) */
+    /* bottom edge: from x=0 to calc(100% - 20px) */
     linear-gradient(var(--trazo-contorno), var(--trazo-contorno)),
-    /* borde izquierdo: de y=10px hasta el borde inferior */
+    /* left edge: from y=10px to the bottom edge */
     linear-gradient(var(--trazo-contorno), var(--trazo-contorno)),
-    /* diagonal superior izquierda (10px) */
+    /* top-left diagonal (10px notch) */
     linear-gradient(
       135deg,
       transparent calc(50% - 1px),
@@ -43,7 +41,7 @@
       var(--trazo-contorno) calc(50% + 1px),
       transparent calc(50% + 1px)
     ),
-    /* diagonal inferior derecha (10px) */
+    /* bottom-right diagonal (20px notch) */
     linear-gradient(
       135deg,
       transparent calc(50% - 1px),
@@ -56,13 +54,13 @@
 
   background-size:
     calc(100% - 10px) 2px,
+    2px calc(100% - 20px),
+    calc(100% - 20px) 2px,
     2px calc(100% - 10px),
-    calc(100% - 10px) 2px,
-    2px calc(100% - 10px),
-    /* 10px del recorte + √2 px: desplaza la diagonal 2px hacia dentro para
-       que el trazo quede íntegro y pegado al borde recortado. */
+    /* notch size + sqrt(2)px shifts the stripe inward so the 2px stroke sits
+       flush against the clipped edge */
     calc(10px + 1.4142px) calc(10px + 1.4142px),
-    calc(10px + 1.4142px) calc(10px + 1.4142px);
+    calc(20px + 1.4142px) calc(20px + 1.4142px);
 
   background-position:
     10px 0,
@@ -73,20 +71,16 @@
     100% 100%;
 }
 
-.contorno {
-  background-color: transparent;
-}
-
 /*
- * Wrapper no interactivo que agrupa el frente y su sombra (filtro SVG local).
- * El `position: relative` y el `display: inline-flex` se componen con Tailwind
- * en el TSX (`relative inline-flex` + className) para que utilidades como
- * `hidden`, `shrink-0` o `md:inline-flex` sigan aplicándose al nodo que
- * participa en el layout del consumidor (y no a su hijo interactivo). Aquí solo
- * se neutralizan el padding, el fondo y el borde: esas propiedades pertenecen
- * exclusivamente al elemento interactivo y no deben duplicarse en el wrapper.
- * El margen NO se resetea: las clases de margen (p. ej. `mt-2`) deben vivir en
- * el wrapper, fuera de la caja contra la que se mide la sombra.
+ * Non-interactive wrapper grouping the front control and its shadow layer.
+ * `position: relative` and `display: inline-flex` come from Tailwind in the
+ * TSX (`relative inline-flex` + className) so utilities like `hidden`,
+ * `shrink-0` or `md:inline-flex` still apply to the node that participates in
+ * the consumer layout (not to its interactive child). Here we only neutralize
+ * padding, background and border: those belong to the interactive control and
+ * must not be duplicated on the wrapper. Margin is NOT reset: margin classes
+ * (e.g. `mt-2`) live on the wrapper, outside the box the shadow is measured
+ * against.
  */
 .wrapper {
   padding: 0;
@@ -95,23 +89,24 @@
 }
 
 /*
- * Capa de sombra sólida e independiente, hermana del frente y posicionada en
- * la caja del control (`inset: 0` contra el wrapper, que no tiene margen: el
- * margen del consumidor vive en el wrapper). El relleno opaco, el clip-path del
- * polígono y el filtro se fijan inline en el TSX; aquí solo se establece el
- * posicionamiento y se evita que intercepte la interacción. El filtro descarta
- * el relleno y pinta únicamente la silueta de 4px abajo/derecha.
+ * Solid independent shadow layer, sibling of the front control and positioned
+ * over the control box (inset: 0 against the wrapper, which carries no margin).
+ * The solid fill and the clip-path polygon are set inline in the TSX. It is
+ * offset exactly 8px down and 8px right, has no blur, and sits behind the
+ * control (z-index). pointer-events is disabled so it never intercepts input.
  */
 .sombra {
   position: absolute;
   inset: 0;
+  transform: translate(8px, 8px);
   pointer-events: none;
+  z-index: 0;
 }
 
 /*
- * Foco interior de la variante contorno: al recibir foco por teclado, el
- * interior del polígono (recortado por clip-path) se tiñe, de modo que el foco
- * siga siendo visible dentro de la región recortada.
+ * Inner focus for the outline variant: on keyboard focus the interior of the
+ * polygon (clipped by clip-path) is tinted so focus stays visible inside the
+ * clipped region.
  */
 .contorno:focus-visible {
   background-color: rgba(77, 77, 77, 0.15);
