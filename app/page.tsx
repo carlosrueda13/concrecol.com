@@ -1,14 +1,16 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { Factory, Truck, Award } from 'lucide-react'
 import { safeQuery } from '@/lib/db-wrapper'
 import { CategoryWithImage } from '@/types'
+import { Reveal } from '@/components/animations/reveal'
 import { BotonCotizar } from '@/components/boton-cotizar'
 // Removed withBasePath import - using direct paths for Vercel
 
-// ✅ Forzar renderizado dinámico
+// Forzar renderizado dinamico
 export const dynamic = 'force-dynamic'
 
-// Función para obtener las categorías activas con una imagen por defecto
+// Funcion para obtener las categorias activas con una imagen por defecto
 async function getActiveCategories(): Promise<CategoryWithImage[]> {
   try {
     const categories = await safeQuery(async (prisma) => {
@@ -19,19 +21,19 @@ async function getActiveCategories(): Promise<CategoryWithImage[]> {
         orderBy: {
           name: 'asc'
         },
-        take: 6 // Limitamos a 6 categorías
+        take: 6 // Limitamos a 6 categorias
       });
     });
 
-    // Asignamos imágenes predeterminadas o personalizadas según el slug
+    // Asignamos imagenes predeterminadas o personalizadas segun el slug
     return categories.map(category => {
-      // Usamos una imagen placeholder para todas las categorías
+      // Usamos una imagen placeholder para todas las categorias
       const imageUrl = '/placeholder.jpg';
       
       // Como fallback usamos la misma imagen placeholder
       const fallbackImage = '/placeholder.jpg';
       
-      // Descripción genérica basada en el nombre
+      // Descripcion generica basada en el nombre
       const description = `Explora nuestra selección de productos de ${category.name.toLowerCase()} de alta calidad.`;
       
       return {
@@ -43,7 +45,7 @@ async function getActiveCategories(): Promise<CategoryWithImage[]> {
   } catch (error) {
     console.error('❌ Error fetching categories:', error);
     
-    // Retornar categorías por defecto en caso de error
+    // Retornar categorias por defecto en caso de error
     return [
       {
         id: '1',
@@ -81,14 +83,14 @@ async function getActiveCategories(): Promise<CategoryWithImage[]> {
 
 export default async function HomePage() {
   const categories = await getActiveCategories()
-  // Cinco slots para el catálogo: las primeras 5 categorías y relleno nulo hasta cinco.
+  // Cinco slots para el catalogo: las primeras 5 categorias y relleno nulo hasta cinco.
   const catalogSlots: (CategoryWithImage | null)[] = categories.slice(0, 5)
   while (catalogSlots.length < 5) {
     catalogSlots.push(null)
   }
   return (
     <div className="relative">
-      {/* Hero Section: imagen de fondo estática, sin video */}
+      {/* Hero Section: imagen de fondo estatica, sin video */}
       <section
         id="hero-section"
         className="relative h-[calc(100vh-112px)] min-h-[600px] w-full bg-grisCon bg-cover bg-center"
@@ -116,19 +118,19 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Ubicación */}
+      {/* Ubicacion */}
       <section id="ubicacion" className="relative w-full scroll-mt-14 bg-blanco py-24 sm:py-32">
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 xl:px-0">
           <h2 className="font-titulo text-subtitulo text-grisCon">Ubicación</h2>
           <div aria-hidden="true" className="w-20 h-1 bg-lima mt-4" />
           <div className="mt-8 flex flex-col gap-6 xl:flex-row">
-            {/* Mapa: contenedor vacío con borde visible, sin imagen ni servicio de mapas */}
+            {/* Mapa: contenedor vacio con borde visible, sin imagen ni servicio de mapas */}
             <div
               role="img"
               aria-label="Mapa de ubicación de Concrecol"
               className="h-[520px] w-full border-2 border-grisCon bg-grisClaro xl:w-[750px]"
             />
-            {/* Panel de ubicación */}
+            {/* Panel de ubicacion */}
             <div className="flex w-full flex-col justify-center gap-6 xl:h-[520px] xl:w-[426px]">
               <address className="font-texto text-texto not-italic text-grisCon">
                 KM 8 Via San gil - Socorro, Santander, Colombia
@@ -186,7 +188,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Catálogo */}
+      {/* Catalogo */}
       <section id="catalogo" className="relative w-full bg-blanco py-24 sm:py-32">
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 xl:px-0">
           <div className="flex flex-wrap items-center justify-between gap-6">
@@ -205,31 +207,57 @@ export default async function HomePage() {
             {catalogSlots.map((category, index) => {
               if (category) {
                 return (
-                  <Link
+                  <Reveal
                     key={category.id}
-                    href={`/productos?categoria=${category.slug}`}
-                    className={`relative block h-[260px] overflow-hidden border-2 border-grisCon bg-grisClaro ${index === 4 ? 'xl:col-span-2' : ''}`}
+                    direction="up"
+                    delay={index * 0.1}
+                    className={index === 4 ? 'xl:col-span-2' : ''}
                   >
-                    <span className="absolute bottom-4 left-4 font-titulo text-[18px] text-grisCon">
-                      {category.name}
-                    </span>
-                  </Link>
+                    <Link
+                      href={`/productos?categoria=${category.slug}`}
+                      className="relative block h-[260px] overflow-hidden border-2 border-grisCon bg-grisClaro"
+                    >
+                      <Image
+                        src="/placeholder-producto.jpg"
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                        alt={category.name}
+                      />
+                      <span className="absolute bottom-4 left-4 z-10 font-titulo text-[18px] text-grisCon">
+                        {category.name}
+                      </span>
+                    </Link>
+                  </Reveal>
                 )
               }
               return (
-                <div
+                <Reveal
                   key={`slot-${index}`}
-                  className={`flex h-[260px] items-center justify-center border-2 border-dashed border-grisCon bg-grisClaro font-texto text-texto text-grisCon ${index === 4 ? 'xl:col-span-2' : ''}`}
+                  direction="up"
+                  delay={index * 0.1}
+                  className={index === 4 ? 'xl:col-span-2' : ''}
                 >
-                  [Categoría pendiente]
-                </div>
+                  <div className="relative flex h-[260px] items-center justify-center overflow-hidden border-2 border-dashed border-grisCon bg-grisClaro">
+                    <Image
+                      src="/placeholder-producto.jpg"
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                      alt="Categoría pendiente"
+                    />
+                    <span className="relative z-10 font-texto text-texto text-grisCon">
+                      [Categoría pendiente]
+                    </span>
+                  </div>
+                </Reveal>
               )
             })}
           </div>
         </div>
       </section>
 
-      {/* Líneas de negocio */}
+      {/* Lineas de negocio */}
       <section id="lineas-de-negocio" className="relative w-full bg-grisCon py-24 sm:py-32">
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 xl:px-0">
           <h2 className="font-titulo text-[32px] text-blanco">Líneas de negocio</h2>
