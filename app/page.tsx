@@ -121,7 +121,7 @@ export default async function HomePage() {
       {/* Ubicacion */}
       <section id="ubicacion" className="relative w-full scroll-mt-14 bg-blanco py-24 sm:py-32">
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 xl:px-0">
-          <h2 className="font-titulo text-subtitulo text-grisCon">Ubicación</h2>
+          <h2 className="entrada entrada-izquierda font-titulo text-subtitulo text-grisCon">Ubicación</h2>
           <div aria-hidden="true" className="w-20 h-1 bg-lima mt-4" />
           <div className="mt-8 flex flex-col gap-6 xl:flex-row">
             {/* Mapa: contenedor vacio con borde visible, sin imagen ni servicio de mapas */}
@@ -160,7 +160,7 @@ export default async function HomePage() {
       {/* Datos */}
       <section id="datos" className="relative w-full bg-grisClaro py-24 sm:py-32">
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 xl:px-0">
-          <h2 className="font-titulo text-subtitulo text-grisCon">Datos</h2>
+          <h2 className="entrada entrada-derecha font-titulo text-subtitulo text-grisCon">Datos</h2>
           <div aria-hidden="true" className="w-20 h-1 bg-lima mt-4" />
           <div className="mt-8 flex flex-col gap-8">
             <div className="flex h-[110px] w-full items-center gap-[21px]">
@@ -193,7 +193,7 @@ export default async function HomePage() {
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 xl:px-0">
           <div className="flex flex-wrap items-center justify-between gap-6">
             <div className="flex flex-col">
-              <h2 className="font-titulo text-[32px] text-grisCon">Catálogo</h2>
+              <h2 className="entrada entrada-abajo font-titulo text-[32px] text-grisCon">Catálogo</h2>
               <div aria-hidden="true" className="w-20 h-1 bg-lima mt-4" />
             </div>
             <Link
@@ -264,7 +264,7 @@ export default async function HomePage() {
       {/* Lineas de negocio */}
       <section id="lineas-de-negocio" className="relative w-full bg-grisCon py-24 sm:py-32">
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 xl:px-0">
-          <h2 className="font-titulo text-[32px] text-blanco">Líneas de negocio</h2>
+          <h2 className="entrada entrada-izquierda font-titulo text-[32px] text-blanco">Líneas de negocio</h2>
           <div aria-hidden="true" className="w-20 h-1 bg-lima mt-4" />
           <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
             {[1, 2, 3].map((n) => (
@@ -280,7 +280,7 @@ export default async function HomePage() {
       {/* Argumentos */}
       <section id="argumentos" className="relative w-full bg-grisClaro py-24 sm:py-32">
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 xl:px-0">
-          <h2 className="font-titulo text-[32px] text-grisCon">Argumentos</h2>
+          <h2 className="entrada entrada-derecha font-titulo text-[32px] text-grisCon">Argumentos</h2>
           <div aria-hidden="true" className="w-20 h-1 bg-lima mt-4" />
           <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
             {[1, 2, 3, 4].map((n) => (
@@ -303,7 +303,7 @@ export default async function HomePage() {
       <section id="cierre" className="relative flex h-[120px] w-full items-center bg-lima">
         <div className="mx-auto flex w-full max-w-[1200px] flex-wrap items-center justify-center gap-3 px-4 sm:gap-6 sm:px-6 xl:px-0">
           <div className="flex flex-col items-center">
-            <h2 className="font-titulo text-[24px] text-grisCon">[Título de cierre]</h2>
+            <h2 className="entrada entrada-abajo font-titulo text-[24px] text-grisCon">[Título de cierre]</h2>
             <div aria-hidden="true" className="w-20 h-1 bg-lima mt-4 ring-1 ring-inset ring-grisCon" />
           </div>
           <BotonCotizar asChild variant="secundaria" className="h-[52px] w-[200px]">

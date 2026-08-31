@@ -41,6 +41,58 @@
 .hover-scale:active {
   transform: scale(0.98);
 }
+
+@keyframes entradaAbajo {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes entradaIzquierda {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes entradaDerecha {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.entrada {
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+  animation-timeline: view();
+  animation-range: entry 0% cover 30%;
+}
+
+.entrada-abajo {
+  animation-name: entradaAbajo;
+}
+
+.entrada-izquierda {
+  animation-name: entradaIzquierda;
+}
+
+.entrada-derecha {
+  animation-name: entradaDerecha;
+}
  
 @layer base {
   :root {
