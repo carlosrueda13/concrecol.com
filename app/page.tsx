@@ -210,7 +210,9 @@ export default async function HomePage() {
                   <Reveal
                     key={category.id}
                     direction="up"
-                    delay={index * 0.1}
+                    delay={index * 0.15}
+                    duration={0.6}
+                    distance={60}
                     className={index === 4 ? 'xl:col-span-2' : ''}
                   >
                     <Link
@@ -235,7 +237,9 @@ export default async function HomePage() {
                 <Reveal
                   key={`slot-${index}`}
                   direction="up"
-                  delay={index * 0.1}
+                  delay={index * 0.15}
+                  duration={0.6}
+                  distance={60}
                   className={index === 4 ? 'xl:col-span-2' : ''}
                 >
                   <div className="relative flex h-[260px] items-center justify-center overflow-hidden border-2 border-dashed border-grisCon bg-grisClaro">
