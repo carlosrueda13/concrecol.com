@@ -47,10 +47,10 @@ export default async function ProductsPage({
       {/* Encabezado */}
       <section className="w-full py-16 sm:py-20">
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 xl:px-0">
-          <h1 className="font-titulo text-[40px] leading-[1.1] text-grisCon">
+          <h1 className="animate-fadeInUp font-titulo text-[40px] leading-[1.1] text-grisCon">
             Catálogo de Productos
           </h1>
-          <p className="mt-4 font-texto text-[18px] leading-[1.6] text-grisCon">
+          <p className="animate-fadeInUp mt-4 font-texto text-[18px] leading-[1.6] text-grisCon">
             Explora nuestra selección de productos para construcción
           </p>
         </div>
@@ -70,9 +70,10 @@ export default async function ProductsPage({
             return (
               <div
                 key={product.id}
-                className={`flex w-full flex-col xl:h-[260px] xl:flex-row xl:items-stretch xl:gap-6 ${
+                className={`animate-fadeInUp flex w-full flex-col xl:h-[260px] xl:flex-row xl:items-stretch xl:gap-6 ${
                   imageRight ? 'xl:flex-row-reverse' : ''
                 }`}
+                style={{ animationDelay: `${index * 0.15}s` }}
               >
                 <div className="relative h-[220px] w-full flex-none xl:h-[260px] xl:w-[600px]">
                   <Image
