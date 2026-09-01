@@ -48,12 +48,16 @@ export default async function ProductsPage({
       {/* Encabezado */}
       <section className="w-full py-16 sm:py-20">
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 xl:px-0">
-          <h1 className="font-titulo text-[40px] leading-[1.1] text-grisCon">
-            Catálogo de Productos
-          </h1>
-          <p className="mt-4 font-texto text-[18px] leading-[1.6] text-grisCon">
-            Explora nuestra selección de productos para construcción
-          </p>
+          <Aparece direccion="arriba" distancia={40} duracion={0.6}>
+            <h1 className="font-titulo text-[40px] leading-[1.1] text-grisCon">
+              Catálogo de Productos
+            </h1>
+          </Aparece>
+          <Aparece direccion="arriba" distancia={40} duracion={0.6}>
+            <p className="mt-4 font-texto text-[18px] leading-[1.6] text-grisCon">
+              Explora nuestra selección de productos para construcción
+            </p>
+          </Aparece>
         </div>
       </section>
 
@@ -71,6 +75,7 @@ export default async function ProductsPage({
             const claseBloque = `flex w-full flex-col xl:h-[260px] xl:flex-row xl:items-stretch xl:gap-6 ${
               imageRight ? 'xl:flex-row-reverse' : ''
             }`
+            const direccion = imageRight ? 'derecha' : 'izquierda'
 
             const contenido = (
               <>
@@ -101,18 +106,15 @@ export default async function ProductsPage({
               </>
             )
 
-            if (index === 0) {
-              return (
-                <Aparece key={product.id}>
-                  <div className={claseBloque}>{contenido}</div>
-                </Aparece>
-              )
-            }
-
             return (
-              <div key={product.id} className={claseBloque}>
-                {contenido}
-              </div>
+              <Aparece
+                key={product.id}
+                direccion={direccion}
+                distancia={40}
+                duracion={0.6}
+              >
+                <div className={claseBloque}>{contenido}</div>
+              </Aparece>
             )
           })}
 
