@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
 import { BotonCotizar } from '@/components/boton-cotizar'
+import { Aparece } from '@/components/animations/aparece'
 
 interface ProductsPageProps {
   searchParams?: {
@@ -47,10 +48,10 @@ export default async function ProductsPage({
       {/* Encabezado */}
       <section className="w-full py-16 sm:py-20">
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 xl:px-0">
-          <h1 className="animate-fadeInUp font-titulo text-[40px] leading-[1.1] text-grisCon">
+          <h1 className="font-titulo text-[40px] leading-[1.1] text-grisCon">
             Catálogo de Productos
           </h1>
-          <p className="animate-fadeInUp mt-4 font-texto text-[18px] leading-[1.6] text-grisCon">
+          <p className="mt-4 font-texto text-[18px] leading-[1.6] text-grisCon">
             Explora nuestra selección de productos para construcción
           </p>
         </div>
@@ -67,14 +68,12 @@ export default async function ProductsPage({
                 ? product.description
                 : '[Descripción pendiente]'
 
-            return (
-              <div
-                key={product.id}
-                className={`animate-fadeInUp flex w-full flex-col xl:h-[260px] xl:flex-row xl:items-stretch xl:gap-6 ${
-                  imageRight ? 'xl:flex-row-reverse' : ''
-                }`}
-                style={{ animationDelay: `${index * 0.15}s` }}
-              >
+            const claseBloque = `flex w-full flex-col xl:h-[260px] xl:flex-row xl:items-stretch xl:gap-6 ${
+              imageRight ? 'xl:flex-row-reverse' : ''
+            }`
+
+            const contenido = (
+              <>
                 <div className="relative h-[220px] w-full flex-none xl:h-[260px] xl:w-[600px]">
                   <Image
                     src="/placeholder-producto.jpg"
@@ -99,6 +98,20 @@ export default async function ProductsPage({
                     <Link href={`/productos/${product.slug}`}>Ver ficha</Link>
                   </BotonCotizar>
                 </div>
+              </>
+            )
+
+            if (index === 0) {
+              return (
+                <Aparece key={product.id}>
+                  <div className={claseBloque}>{contenido}</div>
+                </Aparece>
+              )
+            }
+
+            return (
+              <div key={product.id} className={claseBloque}>
+                {contenido}
               </div>
             )
           })}
