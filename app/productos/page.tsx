@@ -62,68 +62,69 @@ export default async function ProductsPage({
       </section>
 
       {/* Listado vertical */}
-      <section className="w-full pb-24">
-        <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-10 px-4 sm:px-6 xl:px-0">
-          {products.map((product, index) => {
-            const imageRight = index % 2 === 0
-            const name = product.name || '[Nombre pendiente]'
-            const description =
-              product.description && product.description.trim().length > 0
-                ? product.description
-                : '[Descripción pendiente]'
+      <section className="w-full">
+        {products.map((product, index) => {
+          const imageRight = index % 2 === 0
+          const name = product.name || '[Nombre pendiente]'
+          const description =
+            product.description && product.description.trim().length > 0
+              ? product.description
+              : '[Descripción pendiente]'
 
-            const claseBloque = `flex w-full flex-col xl:h-[260px] xl:flex-row xl:items-stretch xl:gap-6 ${
-              imageRight ? 'xl:flex-row-reverse' : ''
-            }`
-            const direccion = imageRight ? 'derecha' : 'izquierda'
+          const claseBloque = `flex w-full flex-col xl:h-[260px] xl:flex-row xl:items-stretch xl:gap-6 ${
+            imageRight ? 'xl:flex-row-reverse' : ''
+          }`
+          const direccion = imageRight ? 'derecha' : 'izquierda'
+          const claseFondo = index % 2 === 0 ? 'bg-blanco' : 'bg-grisClaro'
 
-            const contenido = (
-              <>
-                <div className="relative h-[220px] w-full flex-none xl:h-[260px] xl:w-[600px]">
-                  <Image
-                    src="/placeholder-producto.jpg"
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 1279px) 100vw, 600px"
-                    alt={name}
-                  />
+          const contenido = (
+            <>
+              <div className="relative h-[220px] w-full flex-none xl:h-[260px] xl:w-[600px]">
+                <Image
+                  src="/placeholder-producto.jpg"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1279px) 100vw, 600px"
+                  alt={name}
+                />
+              </div>
+              <div className="flex w-full flex-col justify-center px-1 py-6 xl:w-[576px] xl:px-2">
+                <h2 className="font-titulo text-[28px] leading-[1.1] text-grisCon">
+                  {name}
+                </h2>
+                <div aria-hidden="true" className="mt-4 h-1 w-20 bg-lima" />
+                <p className="mt-3 line-clamp-3 font-texto text-[16px] leading-[1.6] text-grisCon">
+                  {description}
+                </p>
+                <BotonCotizar
+                  asChild
+                  variant="primaria"
+                  className="mt-6 h-[44px] w-[160px]"
+                >
+                  <Link href={`/productos/${product.slug}`}>Ver ficha</Link>
+                </BotonCotizar>
+              </div>
+            </>
+          )
+
+          return (
+            <div key={product.id} className={`w-full py-16 ${claseFondo}`}>
+              <Aparece direccion={direccion} distancia={40} duracion={0.6}>
+                <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 xl:px-0">
+                  <div className={claseBloque}>{contenido}</div>
                 </div>
-                <div className="flex w-full flex-col justify-center px-1 py-6 xl:w-[576px] xl:px-2">
-                  <h2 className="font-titulo text-[28px] leading-[1.1] text-grisCon">
-                    {name}
-                  </h2>
-                  <p className="mt-3 line-clamp-3 font-texto text-[16px] leading-[1.6] text-grisCon">
-                    {description}
-                  </p>
-                  <BotonCotizar
-                    asChild
-                    variant="primaria"
-                    className="mt-6 h-[44px] w-[160px]"
-                  >
-                    <Link href={`/productos/${product.slug}`}>Ver ficha</Link>
-                  </BotonCotizar>
-                </div>
-              </>
-            )
-
-            return (
-              <Aparece
-                key={product.id}
-                direccion={direccion}
-                distancia={40}
-                duracion={0.6}
-              >
-                <div className={claseBloque}>{contenido}</div>
               </Aparece>
-            )
-          })}
+            </div>
+          )
+        })}
 
-          {products.length === 0 && (
-            <p className="py-12 text-center font-texto text-[16px] text-grisCon">
+        {products.length === 0 && (
+          <div className="mx-auto w-full max-w-[1200px] px-4 py-12 sm:px-6 xl:px-0">
+            <p className="text-center font-texto text-[16px] text-grisCon">
               [Sin productos disponibles]
             </p>
-          )}
-        </div>
+          </div>
+        )}
       </section>
 
       {/* Cierre */}
