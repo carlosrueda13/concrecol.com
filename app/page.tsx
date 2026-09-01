@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { Factory, Truck, Award, ArrowDown } from 'lucide-react'
 import { safeQuery } from '@/lib/db-wrapper'
 import { CategoryWithImage } from '@/types'
-import { Reveal } from '@/components/animations/reveal'
+import { Aparece } from '@/components/animations/aparece'
 import { BotonCotizar } from '@/components/boton-cotizar'
 // Removed withBasePath import - using direct paths for Vercel
 
@@ -130,8 +130,10 @@ export default async function HomePage() {
       {/* Ubicacion */}
       <section id="ubicacion" className="relative w-full scroll-mt-14 bg-blanco py-24 sm:py-32">
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 xl:px-0">
-          <h2 className="entrada entrada-izquierda font-titulo text-subtitulo text-grisCon">Ubicación</h2>
-          <div aria-hidden="true" className="w-20 h-1 bg-lima mt-4" />
+          <Aparece direccion="izquierda" distancia={40} duracion={0.6}>
+            <h2 className="font-titulo text-subtitulo text-grisCon">Ubicación</h2>
+            <div aria-hidden="true" className="w-20 h-1 bg-lima mt-4" />
+          </Aparece>
           <div className="mt-8 flex flex-col gap-6 xl:flex-row">
             {/* Mapa: contenedor vacio con borde visible, sin imagen ni servicio de mapas */}
             <div
@@ -169,8 +171,10 @@ export default async function HomePage() {
       {/* Datos */}
       <section id="datos" className="relative w-full bg-grisClaro py-24 sm:py-32">
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 xl:px-0">
-          <h2 className="entrada entrada-derecha font-titulo text-subtitulo text-grisCon">Datos</h2>
-          <div aria-hidden="true" className="w-20 h-1 bg-lima mt-4" />
+          <Aparece direccion="derecha" distancia={40} duracion={0.6}>
+            <h2 className="font-titulo text-subtitulo text-grisCon">Datos</h2>
+            <div aria-hidden="true" className="w-20 h-1 bg-lima mt-4" />
+          </Aparece>
           <div className="mt-8 flex flex-col gap-8">
             <div className="flex h-[110px] w-full items-center gap-[21px]">
               <Factory className="h-10 w-10 flex-none text-lima" aria-hidden="true" />
@@ -201,10 +205,12 @@ export default async function HomePage() {
       <section id="catalogo" className="relative w-full bg-blanco py-24 sm:py-32">
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 xl:px-0">
           <div className="flex flex-wrap items-center justify-between gap-6">
-            <div className="flex flex-col">
-              <h2 className="entrada entrada-abajo font-titulo text-[32px] text-grisCon">Catálogo</h2>
-              <div aria-hidden="true" className="w-20 h-1 bg-lima mt-4" />
-            </div>
+            <Aparece direccion="arriba" distancia={40} duracion={0.6}>
+              <div className="flex flex-col">
+                <h2 className="font-titulo text-[32px] text-grisCon">Catálogo</h2>
+                <div aria-hidden="true" className="w-20 h-1 bg-lima mt-4" />
+              </div>
+            </Aparece>
             <Link
               href="/productos"
               className="font-texto text-texto text-grisCon underline"
@@ -216,54 +222,60 @@ export default async function HomePage() {
             {catalogSlots.map((category, index) => {
               if (category) {
                 return (
-                  <Reveal
+                  <div
                     key={category.id}
-                    direction="up"
-                    delay={index * 0.15}
-                    duration={0.6}
-                    distance={60}
                     className={index === 4 ? 'xl:col-span-2' : ''}
                   >
-                    <Link
-                      href={`/productos?categoria=${category.slug}`}
-                      className="relative block h-[260px] overflow-hidden border-2 border-grisCon bg-grisClaro"
+                    <Aparece
+                      direccion="arriba"
+                      distancia={40}
+                      duracion={0.6}
+                      retraso={index * 0.15}
                     >
+                      <Link
+                        href={`/productos?categoria=${category.slug}`}
+                        className="relative block h-[260px] overflow-hidden border-2 border-grisCon bg-grisClaro"
+                      >
+                        <Image
+                          src="/placeholder-producto.jpg"
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                          alt={category.name}
+                        />
+                        <span className="absolute bottom-4 left-4 z-10 font-titulo text-[18px] text-grisCon">
+                          {category.name}
+                        </span>
+                      </Link>
+                    </Aparece>
+                  </div>
+                )
+              }
+              return (
+                <div
+                  key={`slot-${index}`}
+                  className={index === 4 ? 'xl:col-span-2' : ''}
+                >
+                  <Aparece
+                    direccion="arriba"
+                    distancia={40}
+                    duracion={0.6}
+                    retraso={index * 0.15}
+                  >
+                    <div className="relative flex h-[260px] items-center justify-center overflow-hidden border-2 border-dashed border-grisCon bg-grisClaro">
                       <Image
                         src="/placeholder-producto.jpg"
                         fill
                         className="object-cover"
                         sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
-                        alt={category.name}
+                        alt="Categoría pendiente"
                       />
-                      <span className="absolute bottom-4 left-4 z-10 font-titulo text-[18px] text-grisCon">
-                        {category.name}
+                      <span className="relative z-10 font-texto text-texto text-grisCon">
+                        [Categoría pendiente]
                       </span>
-                    </Link>
-                  </Reveal>
-                )
-              }
-              return (
-                <Reveal
-                  key={`slot-${index}`}
-                  direction="up"
-                  delay={index * 0.15}
-                  duration={0.6}
-                  distance={60}
-                  className={index === 4 ? 'xl:col-span-2' : ''}
-                >
-                  <div className="relative flex h-[260px] items-center justify-center overflow-hidden border-2 border-dashed border-grisCon bg-grisClaro">
-                    <Image
-                      src="/placeholder-producto.jpg"
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
-                      alt="Categoría pendiente"
-                    />
-                    <span className="relative z-10 font-texto text-texto text-grisCon">
-                      [Categoría pendiente]
-                    </span>
-                  </div>
-                </Reveal>
+                    </div>
+                  </Aparece>
+                </div>
               )
             })}
           </div>
@@ -273,8 +285,10 @@ export default async function HomePage() {
       {/* Lineas de negocio */}
       <section id="lineas-de-negocio" className="relative w-full bg-grisCon py-24 sm:py-32">
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 xl:px-0">
-          <h2 className="entrada entrada-izquierda font-titulo text-[32px] text-blanco">Líneas de negocio</h2>
-          <div aria-hidden="true" className="w-20 h-1 bg-lima mt-4" />
+          <Aparece direccion="izquierda" distancia={40} duracion={0.6}>
+            <h2 className="font-titulo text-[32px] text-blanco">Líneas de negocio</h2>
+            <div aria-hidden="true" className="w-20 h-1 bg-lima mt-4" />
+          </Aparece>
           <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
             {[1, 2, 3].map((n) => (
               <div key={n} className="flex flex-col gap-6 xl:h-[360px]">
@@ -289,8 +303,10 @@ export default async function HomePage() {
       {/* Argumentos */}
       <section id="argumentos" className="relative w-full bg-grisClaro py-24 sm:py-32">
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 xl:px-0">
-          <h2 className="entrada entrada-derecha font-titulo text-[32px] text-grisCon">Argumentos</h2>
-          <div aria-hidden="true" className="w-20 h-1 bg-lima mt-4" />
+          <Aparece direccion="derecha" distancia={40} duracion={0.6}>
+            <h2 className="font-titulo text-[32px] text-grisCon">Argumentos</h2>
+            <div aria-hidden="true" className="w-20 h-1 bg-lima mt-4" />
+          </Aparece>
           <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
             {[1, 2, 3, 4].map((n) => (
               <div key={n} className="flex flex-col gap-6 xl:h-[340px]">
@@ -311,10 +327,12 @@ export default async function HomePage() {
       {/* Cierre */}
       <section id="cierre" className="relative flex h-[120px] w-full items-center bg-lima">
         <div className="mx-auto flex w-full max-w-[1200px] flex-wrap items-center justify-center gap-3 px-4 sm:gap-6 sm:px-6 xl:px-0">
-          <div className="flex flex-col items-center">
-            <h2 className="entrada entrada-abajo font-titulo text-[24px] text-grisCon">[Título de cierre]</h2>
-            <div aria-hidden="true" className="w-20 h-1 bg-lima mt-4 ring-1 ring-inset ring-grisCon" />
-          </div>
+          <Aparece direccion="arriba" distancia={40} duracion={0.6}>
+            <div className="flex flex-col items-center">
+              <h2 className="font-titulo text-[24px] text-grisCon">[Título de cierre]</h2>
+              <div aria-hidden="true" className="w-20 h-1 bg-lima mt-4 ring-1 ring-inset ring-grisCon" />
+            </div>
+          </Aparece>
           <BotonCotizar asChild variant="secundaria" className="h-[52px] w-[200px]">
             <Link href="/cotizacion">Cotizar</Link>
           </BotonCotizar>
