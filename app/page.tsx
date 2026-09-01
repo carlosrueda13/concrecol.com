@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { Factory, Truck, Award } from 'lucide-react'
+import { Factory, Truck, Award, ArrowDown } from 'lucide-react'
 import { safeQuery } from '@/lib/db-wrapper'
 import { CategoryWithImage } from '@/types'
 import { Reveal } from '@/components/animations/reveal'
@@ -116,6 +116,15 @@ export default async function HomePage() {
             </div>
           </div>
         </div>
+
+        {/* Scroll indicator */}
+        <Link
+          href="#ubicacion"
+          aria-label="Desplazarse a la sección de ubicación"
+          className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 text-blanco"
+        >
+          <ArrowDown className="scroll-indicator h-8 w-8" aria-hidden="true" />
+        </Link>
       </section>
 
       {/* Ubicacion */}
