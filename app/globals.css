@@ -261,3 +261,12 @@
 .carga-fade-out {
   animation: cargaFadeOut 500ms ease forwards;
 }
+
+.corte-diagonal-abajo {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 60px), 0 100%);
+}
+
+.corte-diagonal-arriba {
+  margin-top: -60px;
+  clip-path: polygon(0 60px, 100% 0, 100% 100%, 0 100%);
+}

@@ -315,23 +315,25 @@ export default async function HomePage() {
       </section>
 
       {/* Argumentos */}
-      <section id="argumentos" className="relative w-full bg-grisClaro py-24 sm:py-32">
+      <section id="argumentos" className="corte-diagonal-arriba relative w-full bg-lima pt-[156px] pb-24 sm:pt-[188px] sm:pb-32">
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 xl:px-0">
           <Aparece direccion="derecha" distancia={40} duracion={0.6}>
             <h2 className="font-titulo text-[32px] text-grisCon">Argumentos</h2>
-            <div aria-hidden="true" className="w-20 h-1 bg-lima mt-4" />
+            <div aria-hidden="true" className="w-20 h-1 bg-grisCon mt-4" />
           </Aparece>
           <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
             {[1, 2, 3, 4].map((n) => (
-              <div key={n} className="flex flex-col gap-6 xl:h-[340px]">
-                <div className="h-[230px] w-full border-2 border-grisCon bg-grisClaro" />
-                <p className="font-titulo text-[18px] text-grisCon">[ARGUMENTO {n}]</p>
-                <Link
-                  href="/sobre-nosotros"
-                  className="font-texto text-[15px] text-grisCon underline"
-                >
-                  [ENLACE PENDIENTE]
-                </Link>
+              <div key={n} className="flex flex-col gap-6 bg-grisCon xl:h-[340px]">
+                <div className="h-[180px] w-full border-2 border-grisCon bg-grisClaro" />
+                <div className="flex flex-col gap-6 px-5 pb-5">
+                  <p className="font-titulo text-[18px] text-blanco">[ARGUMENTO {n}]</p>
+                  <Link
+                    href="/sobre-nosotros"
+                    className="font-texto text-[15px] text-lima underline"
+                  >
+                    [ENLACE PENDIENTE]
+                  </Link>
+                </div>
               </div>
             ))}
           </div>
