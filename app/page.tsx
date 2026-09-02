@@ -90,12 +90,17 @@ export default async function HomePage() {
   }
   return (
     <div className="relative">
-      {/* Hero Section: imagen de fondo estatica, sin video */}
+      {/* Hero Section: imagen de fondo con zoom, sin video */}
       <section
         id="hero-section"
-        className="relative h-[calc(100vh-112px)] min-h-[600px] w-full bg-grisCon bg-cover bg-center"
-        style={{ backgroundImage: "url('/hero-image.jpg')" }}
+        className="relative h-[calc(100vh-112px)] min-h-[600px] w-full overflow-hidden bg-grisCon"
       >
+        {/* Capa de imagen de fondo con zoom */}
+        <div
+          className="absolute inset-0 bg-cover bg-center hero-zoom"
+          style={{ backgroundImage: "url('/hero-image.jpg')" }}
+          aria-hidden="true"
+        />
         {/* Overlay para legibilidad del texto */}
         <div className="absolute inset-0 bg-grisCon/60" aria-hidden="true" />
         <div className="relative z-10 mx-auto flex h-full w-full max-w-[1200px] items-center px-4 sm:px-6 xl:px-0">

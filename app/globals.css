@@ -106,6 +106,26 @@
 .scroll-indicator {
   animation: scrollIndicator 2s ease-in-out infinite;
 }
+
+@keyframes zoomHero {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.08);
+  }
+}
+
+.hero-zoom {
+  animation: zoomHero 20s ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-zoom {
+    animation: none;
+    transform: scale(1);
+  }
+}
  
 @layer base {
   :root {
