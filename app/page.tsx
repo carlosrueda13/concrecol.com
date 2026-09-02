@@ -111,6 +111,7 @@ export default async function HomePage() {
             <p className="font-texto text-subtitulo text-blanco">
               [Bajada — texto pendiente]
             </p>
+            <div className="flex flex-col items-start">
             <div className="flex flex-wrap items-center gap-6">
               <BotonCotizar asChild variant="primaria" className="h-[56px] w-[220px]">
                 <Link href="/cotizacion">Cotizar</Link>
@@ -119,17 +120,17 @@ export default async function HomePage() {
                 <Link href="/productos">Ver productos</Link>
               </BotonCotizar>
             </div>
+              {/* Scroll indicator */}
+              <Link
+                href="#ubicacion"
+                aria-label="Desplazarse a la sección de ubicación"
+                className="mt-10 inline-flex text-blanco"
+              >
+                <ArrowDown className="scroll-indicator h-12 w-12" aria-hidden="true" />
+              </Link>
+            </div>
           </div>
         </div>
-
-        {/* Scroll indicator */}
-        <Link
-          href="#ubicacion"
-          aria-label="Desplazarse a la sección de ubicación"
-          className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 text-blanco"
-        >
-          <ArrowDown className="scroll-indicator h-8 w-8" aria-hidden="true" />
-        </Link>
       </section>
 
       {/* Ubicacion */}
