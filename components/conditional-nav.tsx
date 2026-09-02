@@ -7,11 +7,16 @@ import { ScrollNav } from '@/components/scroll-nav'
 export function ConditionalNav() {
   const pathname = usePathname()
   
-  // En la página de inicio, usamos el ScrollNav
+  // En la pagina de inicio, usamos el ScrollNav
   if (pathname === '/') {
     return <ScrollNav />
   }
+
+  // En la pagina de constructora, usamos el ScrollNav con el boton de contacto
+  if (pathname === '/constructora') {
+    return <ScrollNav textoBoton="Contactar" hrefBoton="/contacto" />
+  }
   
-  // En cualquier otra página, usamos el MainNav tradicional
+  // En cualquier otra pagina, usamos el MainNav tradicional
   return <MainNav />
 }

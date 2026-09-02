@@ -11,7 +11,13 @@ import { BotonCotizar } from '@/components/boton-cotizar'
 const CLIP_PATH =
   'polygon(10px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 10px)'
 
-export function ScrollNav() {
+export function ScrollNav({
+  textoBoton = 'Cotizar',
+  hrefBoton = '/cotizacion',
+}: {
+  textoBoton?: string
+  hrefBoton?: string
+}) {
   const [isCompactVisible, setIsCompactVisible] = useState(false)
 
   useEffect(() => {
@@ -71,7 +77,7 @@ export function ScrollNav() {
                   />
                 </Link>
                 <BotonCotizar asChild className="shrink-0">
-                  <Link href="/cotizacion">Cotizar</Link>
+                  <Link href={hrefBoton}>{textoBoton}</Link>
                 </BotonCotizar>
               </div>
             </div>
