@@ -5,6 +5,7 @@ import { Providers } from '@/app/providers'
 import { ConditionalNav } from '@/components/conditional-nav'
 import { Footer } from '@/components/footer'
 import { ConsentBanner } from '@/components/consent-banner'
+import PantallaCarga from '@/components/pantalla-carga'
 import { sukhumvitSet } from './fonts'
 import { validateDevEnv } from '@/lib/env-validation'
 
@@ -26,7 +27,7 @@ const inter = Inter({
   display: 'swap',
 })
 
-// ✅ Validar env vars al inicio
+// Validar env vars al inicio
 if (typeof window === 'undefined') {
   validateDevEnv()
 }
@@ -45,6 +46,7 @@ export default function RootLayout({
   return (
     <html lang="es" className={`${archivoBlack.variable} ${inter.variable}`}>
       <body className="font-texto antialiased">
+        <PantallaCarga />
         <Providers>
           <ConditionalNav />
           <main className="min-h-screen">
