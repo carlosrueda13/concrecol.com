@@ -282,6 +282,14 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Franja marquesina */}
+      <div className="flex h-[72px] w-full items-center overflow-hidden whitespace-nowrap bg-grisCon">
+        <div className="marquesina-track">
+          <span className="font-titulo text-[28px] text-lima uppercase tracking-[0.05em]">CONCRETO PREMEZCLADO · AGREGADOS · CEMENTO · MORTEROS · PLANTA PROPIA EN SAN GIL · </span>
+          <span className="font-titulo text-[28px] text-lima uppercase tracking-[0.05em]" aria-hidden="true">CONCRETO PREMEZCLADO · AGREGADOS · CEMENTO · MORTEROS · PLANTA PROPIA EN SAN GIL · </span>
+        </div>
+      </div>
+
       {/* Lineas de negocio */}
       <section id="lineas-de-negocio" className="relative w-full bg-grisCon py-24 sm:py-32">
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 xl:px-0">

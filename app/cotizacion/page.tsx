@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useSearchParams } from 'next/navigation'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
@@ -18,6 +17,8 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Aparece } from '@/components/animations/aparece'
+import { BotonCotizar } from '@/components/boton-cotizar'
 
 interface ProductoActivo {
   id: string
@@ -130,204 +131,228 @@ function CotizacionForm() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-12">
-      <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
-          Solicita una cotización
-        </h1>
-        <p className="mt-4 text-xl text-gray-600 max-w-3xl mx-auto">
-          Completa el formulario a continuación y nuestro equipo te enviará una
-          cotización detallada para tu proyecto.
-        </p>
-      </div>
-
-      <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-md overflow-hidden p-8">
-        {submitSuccess && (
-          <Alert className="mb-6 border-green-600 bg-green-50 text-green-800">
-            <AlertDescription>
-              Tu solicitud de cotización fue enviada correctamente. Te
-              contactaremos a la brevedad.
-            </AlertDescription>
-          </Alert>
-        )}
-
-        {submitError && (
-          <Alert variant="destructive" className="mb-6">
-            <AlertDescription>{submitError}</AlertDescription>
-          </Alert>
-        )}
-
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          <div className="space-y-4">
-            <h2 className="text-xl font-semibold text-gray-900">
-              Información de contacto
-            </h2>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="nombre">Nombre completo *</Label>
-                <Input
-                  id="nombre"
-                  {...register('nombre')}
-                  placeholder="Tu nombre completo"
-                />
-                {errors.nombre && (
-                  <p className="text-red-500 text-sm">{errors.nombre.message}</p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="telefono">Teléfono *</Label>
-                <Input
-                  id="telefono"
-                  type="tel"
-                  {...register('telefono')}
-                  placeholder="+57 321 452 5798"
-                />
-                {errors.telefono && (
-                  <p className="text-red-500 text-sm">{errors.telefono.message}</p>
-                )}
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="email">Correo electrónico (opcional)</Label>
-              <Input
-                id="email"
-                type="email"
-                {...register('email')}
-                placeholder="ejemplo@correo.com"
-              />
-              {errors.email && (
-                <p className="text-red-500 text-sm">{errors.email.message}</p>
-              )}
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <h2 className="text-xl font-semibold text-gray-900">
-              Detalles del proyecto
-            </h2>
-
-            <div className="space-y-2">
-              <Label htmlFor="producto">Producto de interés (opcional)</Label>
-              <Select
-                value={watch('producto') ?? ''}
-                onValueChange={(value) => setValue('producto', value, { shouldValidate: true })}
-              >
-                <SelectTrigger id="producto">
-                  <SelectValue placeholder="Seleccione un producto" />
-                </SelectTrigger>
-                <SelectContent>
-                  {productos.map((producto) => (
-                    <SelectItem key={producto.id} value={producto.slug}>
-                      {producto.name}
-                    </SelectItem>
-                  ))}
-                  <SelectItem value="otro">Otro</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="tipoResistencia">Tipo o resistencia</Label>
-              <Input
-                id="tipoResistencia"
-                list="tipo-resistencia-sugerencias"
-                {...register('tipoResistencia')}
-                placeholder="Ej: 3000 psi"
-              />
-              <datalist id="tipo-resistencia-sugerencias">
-                <option value="2000 psi" />
-                <option value="3000 psi" />
-                <option value="MR" />
-              </datalist>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="cantidad">Cantidad aproximada</Label>
-              <Input
-                id="cantidad"
-                {...register('cantidad')}
-                placeholder="Ej: 5 m³"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="fechaRequerida">Fecha en que lo necesita</Label>
-              <Input id="fechaRequerida" type="date" {...register('fechaRequerida')} />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="usoPrevisto">Uso previsto</Label>
-              <Input
-                id="usoPrevisto"
-                {...register('usoPrevisto')}
-                placeholder="Ej: placa de cimentación, columnas, viga"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="direccionObra">Dirección / referencias</Label>
-              <Input
-                id="direccionObra"
-                {...register('direccionObra')}
-                placeholder="Ciudad, barrio, referencias de la obra"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="condicionesAcceso">Condiciones de acceso</Label>
-              <Textarea
-                id="condicionesAcceso"
-                {...register('condicionesAcceso')}
-                placeholder="Describe cómo puede ingresar la mezcladora a tu obra"
-                rows={4}
-              />
-              <p className="text-xs text-gray-500">
-                Indique el ancho de vía, la pendiente y el espacio de maniobra
-                disponibles para el ingreso de la mezcladora.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-start space-x-2 pt-4">
-            <Checkbox
-              id="autorizacionDatos"
-              checked={watch('autorizacionDatos')}
-              onCheckedChange={(checked: boolean | 'indeterminate') => {
-                setValue('autorizacionDatos', checked === true)
-              }}
-            />
-            <div className="grid gap-1.5 leading-none">
-              <label
-                htmlFor="autorizacionDatos"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Autorizo a Concrecol el uso de mis datos para contactarme y
-                enviarme la cotización solicitada *
-              </label>
-              {errors.autorizacionDatos && (
-                <p className="text-red-500 text-xs">
-                  {errors.autorizacionDatos.message}
-                </p>
-              )}
-            </div>
-          </div>
-
-          <Button
-            type="submit"
-            className="w-full bg-[#C4D600] text-[#4D4D4D] hover:bg-[#C4D600]/90"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? 'Enviando solicitud...' : 'Solicitar cotización'}
-          </Button>
-
-          <p className="text-xs text-gray-500 text-center">
-            Los campos marcados con * son obligatorios.
+    <div>
+      <header className="bg-blanco">
+        <div className="mx-auto max-w-[1200px] px-4 py-16">
+          <h1 className="text-left font-titulo text-[40px] text-grisCon">
+            Solicita una cotización
+          </h1>
+          <div className="mt-4 h-[4px] w-[80px] bg-lima" />
+          <p className="mt-4 max-w-3xl text-[18px] text-grisCon opacity-70">
+            Completa el formulario a continuación y nuestro equipo te enviará una
+            cotización detallada para tu proyecto.
           </p>
-        </form>
-      </div>
+        </div>
+      </header>
+
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="mx-auto max-w-[1200px] px-4 pt-8">
+          {submitSuccess && (
+            <Alert className="mb-6 bg-lima text-grisCon">
+              <AlertDescription>
+                Tu solicitud de cotización fue enviada correctamente. Te
+                contactaremos a la brevedad.
+              </AlertDescription>
+            </Alert>
+          )}
+
+          {submitError && (
+            <Alert className="mb-6 bg-grisCon text-blanco">
+              <AlertDescription>{submitError}</AlertDescription>
+            </Alert>
+          )}
+        </div>
+
+        <Aparece direccion="arriba" distancia={40} duracion={0.6} retraso={0}>
+          <section className="bg-blanco">
+            <div className="mx-auto max-w-[1200px] px-4 py-16">
+              <h2 className="font-titulo text-2xl text-grisCon">PRODUCTO</h2>
+              <div className="mt-4 h-[4px] w-[80px] bg-lima" />
+              <div className="mt-8 space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="producto">Producto de interés (opcional)</Label>
+                  <Select
+                    value={watch('producto') ?? ''}
+                    onValueChange={(value) => setValue('producto', value, { shouldValidate: true })}
+                  >
+                    <SelectTrigger id="producto">
+                      <SelectValue placeholder="Seleccione un producto" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {productos.map((producto) => (
+                        <SelectItem key={producto.id} value={producto.slug}>
+                          {producto.name}
+                        </SelectItem>
+                      ))}
+                      <SelectItem value="otro">Otro</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="tipoResistencia">Tipo o resistencia</Label>
+                  <Input
+                    id="tipoResistencia"
+                    list="tipo-resistencia-sugerencias"
+                    {...register('tipoResistencia')}
+                    placeholder="Ej: 3000 psi"
+                  />
+                  <datalist id="tipo-resistencia-sugerencias">
+                    <option value="2000 psi" />
+                    <option value="3000 psi" />
+                    <option value="MR" />
+                  </datalist>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="cantidad">Cantidad aproximada</Label>
+                  <Input
+                    id="cantidad"
+                    {...register('cantidad')}
+                    placeholder="Ej: 5 m³"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="fechaRequerida">Fecha en que lo necesita</Label>
+                  <Input id="fechaRequerida" type="date" {...register('fechaRequerida')} />
+                </div>
+              </div>
+            </div>
+          </section>
+        </Aparece>
+
+        <Aparece direccion="arriba" distancia={40} duracion={0.6} retraso={0.15}>
+          <section className="bg-grisClaro">
+            <div className="mx-auto max-w-[1200px] px-4 py-16">
+              <h2 className="font-titulo text-2xl text-grisCon">OBRA</h2>
+              <div className="mt-4 h-[4px] w-[80px] bg-lima" />
+              <div className="mt-8 space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="usoPrevisto">Uso previsto</Label>
+                  <Input
+                    id="usoPrevisto"
+                    {...register('usoPrevisto')}
+                    placeholder="Ej: placa de cimentación, columnas, viga"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="direccionObra">Dirección / referencias</Label>
+                  <Input
+                    id="direccionObra"
+                    {...register('direccionObra')}
+                    placeholder="Ciudad, barrio, referencias de la obra"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="condicionesAcceso">Condiciones de acceso</Label>
+                  <Textarea
+                    id="condicionesAcceso"
+                    {...register('condicionesAcceso')}
+                    placeholder="Describe cómo puede ingresar la mezcladora a tu obra"
+                    rows={4}
+                  />
+                  <p className="text-xs text-grisCon">
+                    Indique el ancho de vía, la pendiente y el espacio de maniobra
+                    disponibles para el ingreso de la mezcladora.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+        </Aparece>
+
+        <Aparece direccion="arriba" distancia={40} duracion={0.6} retraso={0.3}>
+          <section className="bg-blanco">
+            <div className="mx-auto max-w-[1200px] px-4 py-16">
+              <h2 className="font-titulo text-2xl text-grisCon">CONTACTO</h2>
+              <div className="mt-4 h-[4px] w-[80px] bg-lima" />
+              <div className="mt-8 space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="nombre">Nombre completo *</Label>
+                    <Input
+                      id="nombre"
+                      {...register('nombre')}
+                      placeholder="Tu nombre completo"
+                    />
+                    {errors.nombre && (
+                      <p className="text-grisCon text-sm">{errors.nombre.message}</p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="telefono">Teléfono *</Label>
+                    <Input
+                      id="telefono"
+                      type="tel"
+                      {...register('telefono')}
+                      placeholder="+57 321 452 5798"
+                    />
+                    {errors.telefono && (
+                      <p className="text-grisCon text-sm">{errors.telefono.message}</p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="email">Correo electrónico (opcional)</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    {...register('email')}
+                    placeholder="ejemplo@correo.com"
+                  />
+                  {errors.email && (
+                    <p className="text-grisCon text-sm">{errors.email.message}</p>
+                  )}
+                </div>
+
+                <div className="flex items-start space-x-2 pt-4">
+                  <Checkbox
+                    id="autorizacionDatos"
+                    checked={watch('autorizacionDatos')}
+                    onCheckedChange={(checked: boolean | 'indeterminate') => {
+                      setValue('autorizacionDatos', checked === true)
+                    }}
+                  />
+                  <div className="grid gap-1.5 leading-none">
+                    <label
+                      htmlFor="autorizacionDatos"
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                      Autorizo a Concrecol el uso de mis datos para contactarme y
+                      enviarme la cotización solicitada *
+                    </label>
+                    {errors.autorizacionDatos && (
+                      <p className="text-grisCon text-xs">
+                        {errors.autorizacionDatos.message}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="pt-6">
+                  <BotonCotizar
+                    type="submit"
+                    variant="primaria"
+                    className="w-full h-[56px]"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? 'Enviando solicitud...' : 'Solicitar cotización'}
+                  </BotonCotizar>
+
+                  <p className="text-xs text-grisCon text-center mt-4">
+                    Los campos marcados con * son obligatorios.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+        </Aparece>
+      </form>
     </div>
   )
 }
@@ -336,7 +361,7 @@ export default function CotizacionPage() {
   return (
     <Suspense
       fallback={
-        <div className="container mx-auto px-4 py-12 text-center text-gray-500">
+        <div className="container mx-auto px-4 py-12 text-center text-grisCon">
           Cargando formulario…
         </div>
       }

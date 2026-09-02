@@ -205,3 +205,25 @@
     transform: translateZ(0);
   }
 }
+
+@keyframes marquesina {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquesina-track {
+  display: inline-flex;
+  width: max-content;
+  animation: marquesina 30s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquesina-track {
+    animation: none;
+    transform: translateX(0);
+  }
+}
