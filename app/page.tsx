@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowDown } from 'lucide-react'
 import { Aparece } from '@/components/animations/aparece'
@@ -6,6 +7,14 @@ import { BotonCotizar } from '@/components/boton-cotizar'
 
 // Forzar renderizado dinamico
 export const dynamic = 'force-dynamic'
+
+// Lineas de negocio estaticas (marcador, sin base de datos)
+const lineasNegocio = [
+  { nombre: 'Concreto', href: '/productos' },
+  { nombre: 'Agregados', href: '/productos' },
+  { nombre: 'Constructora', href: '/constructora' },
+  { nombre: 'Prefabricados', href: '/productos' },
+]
 
 export default function HomePage() {
   return (
@@ -97,8 +106,8 @@ export default function HomePage() {
       {/* Franja marquesina */}
       <div className="flex h-[72px] w-full items-center overflow-hidden whitespace-nowrap bg-blanco">
         <div className="marquesina-track">
-          <span className="font-titulo text-[28px] text-grisCon uppercase tracking-[0.05em]">CONCRETO PREMEZCLADO · AGREGADOS · CEMENTO · MORTEROS · PLANTA PROPIA EN SAN GIL · </span>
-          <span className="font-titulo text-[28px] text-grisCon uppercase tracking-[0.05em]" aria-hidden="true">CONCRETO PREMEZCLADO · AGREGADOS · CEMENTO · MORTEROS · PLANTA PROPIA EN SAN GIL · </span>
+          <span className="font-titulo text-[28px] text-grisCon uppercase tracking-[0.05em]">CONCRETO · PREFABRICADOS · CONSTRUCTORA · AGREGADOS · PLANTA SANTANDER · </span>
+          <span className="font-titulo text-[28px] text-grisCon uppercase tracking-[0.05em]" aria-hidden="true">CONCRETO · PREFABRICADOS · CONSTRUCTORA · AGREGADOS · PLANTA SANTANDER · </span>
         </div>
       </div>
 
@@ -109,12 +118,31 @@ export default function HomePage() {
             <h2 className="font-titulo text-[32px] text-blanco">Líneas de negocio</h2>
             <div aria-hidden="true" className="w-20 h-1 bg-lima mt-4" />
           </Aparece>
-          <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
-            {[1, 2, 3].map((n) => (
-              <div key={n} className="flex flex-col gap-6 xl:h-[360px]">
-                <div className="h-[260px] w-full border-2 border-blanco bg-blanco" />
-                <p className="font-texto text-[20px] text-blanco">[LÍNEA DE NEGOCIO {n}]</p>
-              </div>
+          <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-4">
+            {lineasNegocio.map((linea, index) => (
+              <Aparece
+                key={linea.nombre}
+                direccion="arriba"
+                distancia={40}
+                duracion={0.6}
+                retraso={index * 0.15}
+              >
+                <Link
+                  href={linea.href}
+                  className="flex h-[380px] w-full flex-col"
+                >
+                  <Image
+                    src="/placeholder-producto.jpg"
+                    alt={linea.nombre}
+                    width={282}
+                    height={260}
+                    className="h-[260px] w-full object-cover"
+                  />
+                  <h3 className="flex flex-1 flex-col justify-end px-5 pb-5 font-titulo text-[20px] text-blanco">
+                    {linea.nombre}
+                  </h3>
+                </Link>
+              </Aparece>
             ))}
           </div>
         </div>
