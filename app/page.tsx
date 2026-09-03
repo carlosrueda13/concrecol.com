@@ -113,12 +113,12 @@ export default function HomePage() {
 
       {/* Lineas de negocio */}
       <section id="lineas-de-negocio" className="relative w-full bg-grisCon py-24 sm:py-32">
-        <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 xl:px-0">
+        <div className="mx-auto w-full max-w-[1280px] px-4 sm:px-6 xl:px-0">
           <Aparece direccion="izquierda" distancia={40} duracion={0.6}>
             <h2 className="font-titulo text-[32px] text-blanco">Líneas de negocio</h2>
             <div aria-hidden="true" className="w-20 h-1 bg-lima mt-4" />
           </Aparece>
-          <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-4">
+          <div className="mt-8 grid grid-cols-1 gap-5 md:grid-cols-2 xl:mx-auto xl:max-w-[1260px] xl:grid-cols-4">
             {lineasNegocio.map((linea, index) => (
               <Aparece
                 key={linea.nombre}
@@ -129,14 +129,14 @@ export default function HomePage() {
               >
                 <Link
                   href={linea.href}
-                  className="flex h-[380px] w-full flex-col"
+                  className="flex h-[360px] w-full flex-col"
                 >
                   <Image
                     src="/placeholder-producto.jpg"
                     alt={linea.nombre}
-                    width={282}
-                    height={260}
-                    className="h-[260px] w-full object-cover"
+                    width={300}
+                    height={225}
+                    className="h-[225px] w-full object-cover"
                   />
                   <h3 className="flex flex-1 flex-col justify-end px-5 pb-5 font-titulo text-[20px] text-blanco">
                     {linea.nombre}
