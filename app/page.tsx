@@ -1,8 +1,5 @@
-import Image from 'next/image'
 import Link from 'next/link'
-import { Factory, Truck, Award, ArrowDown } from 'lucide-react'
-import { safeQuery } from '@/lib/db-wrapper'
-import { CategoryWithImage } from '@/types'
+import { ArrowDown } from 'lucide-react'
 import { Aparece } from '@/components/animations/aparece'
 import { BotonCotizar } from '@/components/boton-cotizar'
 // Removed withBasePath import - using direct paths for Vercel
@@ -10,84 +7,7 @@ import { BotonCotizar } from '@/components/boton-cotizar'
 // Forzar renderizado dinamico
 export const dynamic = 'force-dynamic'
 
-// Funcion para obtener las categorias activas con una imagen por defecto
-async function getActiveCategories(): Promise<CategoryWithImage[]> {
-  try {
-    const categories = await safeQuery(async (prisma) => {
-      return await prisma.sqlCategory.findMany({
-        where: {
-          is_active: true
-        },
-        orderBy: {
-          name: 'asc'
-        },
-        take: 6 // Limitamos a 6 categorias
-      });
-    });
-
-    // Asignamos imagenes predeterminadas o personalizadas segun el slug
-    return categories.map(category => {
-      // Usamos una imagen placeholder para todas las categorias
-      const imageUrl = '/placeholder.jpg';
-      
-      // Como fallback usamos la misma imagen placeholder
-      const fallbackImage = '/placeholder.jpg';
-      
-      // Descripcion generica basada en el nombre
-      const description = `Explora nuestra selección de productos de ${category.name.toLowerCase()} de alta calidad.`;
-      
-      return {
-        ...category,
-        imageUrl,
-        description
-      };
-    });
-  } catch (error) {
-    console.error('❌ Error fetching categories:', error);
-    
-    // Retornar categorias por defecto en caso de error
-    return [
-      {
-        id: '1',
-        name: 'Concreto Premezclado',
-        slug: 'concreto-premezclado',
-        is_active: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        imageUrl: '/placeholder.jpg',
-        description: 'Concreto de alta calidad para todo tipo de construcciones'
-      },
-      {
-        id: '2',
-        name: 'Materiales de Construcción', 
-        slug: 'materiales-construccion',
-        is_active: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        imageUrl: '/placeholder.jpg',
-        description: 'Amplio catálogo de materiales para construcción'
-      },
-      {
-        id: '3',
-        name: 'Servicios Especializados',
-        slug: 'servicios-especializados',
-        is_active: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        imageUrl: '/placeholder.jpg',
-        description: 'Servicios profesionales de construcción'
-      }
-    ];
-  }
-}
-
-export default async function HomePage() {
-  const categories = await getActiveCategories()
-  // Cinco slots para el catalogo: las primeras 5 categorias y relleno nulo hasta cinco.
-  const catalogSlots: (CategoryWithImage | null)[] = categories.slice(0, 5)
-  while (catalogSlots.length < 5) {
-    catalogSlots.push(null)
-  }
+export default function HomePage() {
   return (
     <div className="relative">
       {/* Hero Section: imagen de fondo con zoom, sin video */}
@@ -134,7 +54,7 @@ export default async function HomePage() {
       </section>
 
       {/* Ubicacion */}
-      <section id="ubicacion" className="relative w-full scroll-mt-14 bg-blanco py-24 sm:py-32">
+      <section id="ubicacion" className="relative w-full scroll-mt-14 bg-grisClaro py-24 sm:py-32">
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 xl:px-0">
           <Aparece direccion="izquierda" distancia={40} duracion={0.6}>
             <h2 className="font-titulo text-subtitulo text-grisCon">Ubicación</h2>
@@ -174,125 +94,11 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Datos */}
-      <section id="datos" className="relative w-full bg-grisClaro py-24 sm:py-32">
-        <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 xl:px-0">
-          <Aparece direccion="derecha" distancia={40} duracion={0.6}>
-            <h2 className="font-titulo text-subtitulo text-grisCon">Datos</h2>
-            <div aria-hidden="true" className="w-20 h-1 bg-lima mt-4" />
-          </Aparece>
-          <div className="mt-8 flex flex-col gap-8">
-            <div className="flex h-[110px] w-full items-center gap-[21px]">
-              <Factory className="h-10 w-10 flex-none text-lima" aria-hidden="true" />
-              <p className="font-texto text-tarjeta text-grisCon">
-                <span>[Etiqueta 1]</span>{' '}
-                <span className="font-titulo">[Dato 1]</span>
-              </p>
-            </div>
-            <div className="flex h-[110px] w-full items-center gap-[21px]">
-              <Truck className="h-10 w-10 flex-none text-lima" aria-hidden="true" />
-              <p className="font-texto text-tarjeta text-grisCon">
-                <span>[Etiqueta 2]</span>{' '}
-                <span className="font-titulo">[Dato 2]</span>
-              </p>
-            </div>
-            <div className="flex h-[110px] w-full items-center gap-[21px]">
-              <Award className="h-10 w-10 flex-none text-lima" aria-hidden="true" />
-              <p className="font-texto text-tarjeta text-grisCon">
-                <span>[Etiqueta 3]</span>{' '}
-                <span className="font-titulo">[Dato 3]</span>
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Catalogo */}
-      <section id="catalogo" className="relative w-full bg-blanco py-24 sm:py-32">
-        <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 xl:px-0">
-          <div className="flex flex-wrap items-center justify-between gap-6">
-            <Aparece direccion="arriba" distancia={40} duracion={0.6}>
-              <div className="flex flex-col">
-                <h2 className="font-titulo text-[32px] text-grisCon">Catálogo</h2>
-                <div aria-hidden="true" className="w-20 h-1 bg-lima mt-4" />
-              </div>
-            </Aparece>
-            <Link
-              href="/productos"
-              className="font-texto text-texto text-grisCon underline"
-            >
-              Ver todo el catálogo
-            </Link>
-          </div>
-          <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
-            {catalogSlots.map((category, index) => {
-              if (category) {
-                return (
-                  <div
-                    key={category.id}
-                    className={index === 4 ? 'xl:col-span-2' : ''}
-                  >
-                    <Aparece
-                      direccion="arriba"
-                      distancia={40}
-                      duracion={0.6}
-                      retraso={index * 0.15}
-                    >
-                      <Link
-                        href={`/productos?categoria=${category.slug}`}
-                        className="relative block h-[260px] overflow-hidden border-2 border-grisCon bg-grisClaro"
-                      >
-                        <Image
-                          src="/placeholder-producto.jpg"
-                          fill
-                          className="object-cover"
-                          sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
-                          alt={category.name}
-                        />
-                        <span className="absolute bottom-4 left-4 z-10 font-titulo text-[18px] text-grisCon">
-                          {category.name}
-                        </span>
-                      </Link>
-                    </Aparece>
-                  </div>
-                )
-              }
-              return (
-                <div
-                  key={`slot-${index}`}
-                  className={index === 4 ? 'xl:col-span-2' : ''}
-                >
-                  <Aparece
-                    direccion="arriba"
-                    distancia={40}
-                    duracion={0.6}
-                    retraso={index * 0.15}
-                  >
-                    <div className="relative flex h-[260px] items-center justify-center overflow-hidden border-2 border-dashed border-grisCon bg-grisClaro">
-                      <Image
-                        src="/placeholder-producto.jpg"
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
-                        alt="Categoría pendiente"
-                      />
-                      <span className="relative z-10 font-texto text-texto text-grisCon">
-                        [Categoría pendiente]
-                      </span>
-                    </div>
-                  </Aparece>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      </section>
-
       {/* Franja marquesina */}
-      <div className="flex h-[72px] w-full items-center overflow-hidden whitespace-nowrap bg-grisCon">
+      <div className="flex h-[72px] w-full items-center overflow-hidden whitespace-nowrap bg-blanco">
         <div className="marquesina-track">
-          <span className="font-titulo text-[28px] text-lima uppercase tracking-[0.05em]">CONCRETO PREMEZCLADO · AGREGADOS · CEMENTO · MORTEROS · PLANTA PROPIA EN SAN GIL · </span>
-          <span className="font-titulo text-[28px] text-lima uppercase tracking-[0.05em]" aria-hidden="true">CONCRETO PREMEZCLADO · AGREGADOS · CEMENTO · MORTEROS · PLANTA PROPIA EN SAN GIL · </span>
+          <span className="font-titulo text-[28px] text-grisCon uppercase tracking-[0.05em]">CONCRETO PREMEZCLADO · AGREGADOS · CEMENTO · MORTEROS · PLANTA PROPIA EN SAN GIL · </span>
+          <span className="font-titulo text-[28px] text-grisCon uppercase tracking-[0.05em]" aria-hidden="true">CONCRETO PREMEZCLADO · AGREGADOS · CEMENTO · MORTEROS · PLANTA PROPIA EN SAN GIL · </span>
         </div>
       </div>
 
@@ -308,32 +114,6 @@ export default async function HomePage() {
               <div key={n} className="flex flex-col gap-6 xl:h-[360px]">
                 <div className="h-[260px] w-full border-2 border-blanco bg-blanco" />
                 <p className="font-texto text-[20px] text-blanco">[LÍNEA DE NEGOCIO {n}]</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Argumentos */}
-      <section id="argumentos" className="corte-diagonal-arriba relative w-full bg-lima pt-[156px] pb-24 sm:pt-[188px] sm:pb-32">
-        <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 xl:px-0">
-          <Aparece direccion="derecha" distancia={40} duracion={0.6}>
-            <h2 className="font-titulo text-[32px] text-grisCon">Argumentos</h2>
-            <div aria-hidden="true" className="w-20 h-1 bg-grisCon mt-4" />
-          </Aparece>
-          <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
-            {[1, 2, 3, 4].map((n) => (
-              <div key={n} className="flex flex-col gap-6 bg-grisCon xl:h-[340px]">
-                <div className="h-[180px] w-full border-2 border-grisCon bg-grisClaro" />
-                <div className="flex flex-col gap-6 px-5 pb-5">
-                  <p className="font-titulo text-[18px] text-blanco">[ARGUMENTO {n}]</p>
-                  <Link
-                    href="/sobre-nosotros"
-                    className="font-texto text-[15px] text-lima underline"
-                  >
-                    [ENLACE PENDIENTE]
-                  </Link>
-                </div>
               </div>
             ))}
           </div>
