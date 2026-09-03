@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { UnitMeasure } from '@prisma/client'
+import { LineaNegocio, UnitMeasure } from '@prisma/client'
 
 export const productSchema = z.object({
   name: z.string().min(3, 'El nombre debe tener al menos 3 caracteres'),
@@ -14,6 +14,7 @@ export const productSchema = z.object({
   ], {
     required_error: 'Seleccione una unidad de medida',
   }),
+  lineaNegocio: z.nativeEnum(LineaNegocio).nullable().optional(),
   stock_quantity: z.number().min(0, 'El stock debe ser mayor o igual a 0'),
   requires_scheduling: z.boolean().default(false),
   images: z.array(z.string().url('URL inválida')).default([]),

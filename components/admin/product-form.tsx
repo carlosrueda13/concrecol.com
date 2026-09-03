@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ImagePreview } from '@/components/ui/image-preview'
 import { ImageUpload } from '@/components/ui/image-upload'
-import { UnitMeasure } from '@prisma/client'
+import { LineaNegocio, UnitMeasure } from '@prisma/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -22,6 +22,9 @@ import { useToast } from '@/components/ui/use-toast'
 import { productSchema, type ProductFormData } from '@/lib/validations/product'
 import { createProduct, updateProduct } from '@/app/actions/product'
 import { useLoading } from '@/contexts/loading-context'
+
+// Sentinel value for the "Sin asignar" option, mapped to null on submit.
+const LINEA_SIN_ASIGNAR = 'SIN_ASIGNAR'
 
 interface ProductFormProps {
   categories: {
@@ -292,6 +295,35 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
           {errors.sqlCategoryId && (
             <p className="text-sm text-red-500">
               {errors.sqlCategoryId.message}
+            </p>
+          )}
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="lineaNegocio">Linea de negocio</Label>
+          <Select
+            value={watch('lineaNegocio') ?? LINEA_SIN_ASIGNAR}
+            onValueChange={(value) =>
+              setValue(
+                'lineaNegocio',
+                value === LINEA_SIN_ASIGNAR ? null : (value as LineaNegocio)
+              )
+            }
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Seleccione una línea de negocio" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value={LINEA_SIN_ASIGNAR}>Sin asignar</SelectItem>
+              <SelectItem value={LineaNegocio.CONCRETO}>Concreto</SelectItem>
+              <SelectItem value={LineaNegocio.AGREGADOS}>Agregados</SelectItem>
+              <SelectItem value={LineaNegocio.CONSTRUCTORA}>Constructora</SelectItem>
+              <SelectItem value={LineaNegocio.PREFABRICADOS}>Prefabricados</SelectItem>
+            </SelectContent>
+          </Select>
+          {errors.lineaNegocio && (
+            <p className="text-sm text-red-500">
+              {errors.lineaNegocio.message}
             </p>
           )}
         </div>

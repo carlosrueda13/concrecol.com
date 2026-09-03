@@ -30,6 +30,7 @@ export default async function EditProductPage({ params }: EditProductPageProps) 
     slug: product.slug,
     price_per_unit: product.price_per_unit,
     unit_measure: product.unit_measure,
+    lineaNegocio: product.lineaNegocio,
     stock_quantity: product.stock_quantity,
     requires_scheduling: product.requires_scheduling,
     images: product.images,
