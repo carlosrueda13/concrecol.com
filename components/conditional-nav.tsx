@@ -13,7 +13,7 @@ export function ConditionalNav() {
   }
 
   // En la pagina de constructora, usamos el ScrollNav con el boton de contacto
-  if (pathname === '/constructora') {
+  if (pathname === '/lineas/constructora') {
     return <ScrollNav textoBoton="Contactar" hrefBoton="/contacto" />
   }
   

@@ -28,6 +28,13 @@ enum UnitMeasure {
   GALON
 }
 
+enum LineaNegocio {
+  CONCRETO
+  AGREGADOS
+  CONSTRUCTORA
+  PREFABRICADOS
+}
+
 model Product {
   id                  String       @id @default(cuid())
   name                String
@@ -38,6 +45,7 @@ model Product {
   slug                String       @unique
   price_per_unit      Int
   unit_measure        UnitMeasure
+  lineaNegocio        LineaNegocio?
   stock_quantity      Int         @default(0)
   requires_scheduling Boolean      @default(false)
   images              String[]

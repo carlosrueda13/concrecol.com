@@ -9,7 +9,7 @@ import { BotonCotizar } from '@/components/boton-cotizar'
 const NAV_ITEMS = [
   { label: 'Home', href: '/' },
   { label: 'Productos', href: '/productos' },
-  { label: 'Constructora', href: '/constructora' },
+  { label: 'Constructora', href: '/lineas/constructora' },
   { label: 'Ubicación', href: '/#ubicacion' },
 ]
 
