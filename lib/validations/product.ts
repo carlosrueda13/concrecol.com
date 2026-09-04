@@ -10,7 +10,9 @@ export const productSchema = z.object({
     UnitMeasure.KG,
     UnitMeasure.TON,
     UnitMeasure.BOLSA,
-    UnitMeasure.GALON
+    UnitMeasure.GALON,
+    UnitMeasure.UND,
+    UnitMeasure.M2
   ], {
     required_error: 'Seleccione una unidad de medida',
   }),

@@ -252,6 +252,8 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
               <SelectItem value={UnitMeasure.TON}>Tonelada</SelectItem>
               <SelectItem value={UnitMeasure.BOLSA}>Bolsa</SelectItem>
               <SelectItem value={UnitMeasure.GALON}>Galón</SelectItem>
+              <SelectItem value={UnitMeasure.UND}>Unidad (und)</SelectItem>
+              <SelectItem value={UnitMeasure.M2}>Metro cuadrado (m²)</SelectItem>
             </SelectContent>
           </Select>
           {errors.unit_measure && (

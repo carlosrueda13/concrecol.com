@@ -76,15 +76,36 @@ export default async function LineaPage({ params }: LineaPageProps) {
     notFound()
   }
 
-  const products = await prisma.product.findMany({
-    where: {
-      lineaNegocio: config.linea,
-      is_active: true,
-    },
-    orderBy: {
-      name: 'asc',
-    },
-  })
+  const isPrefabricados = params.linea === 'prefabricados'
+
+  const categories = isPrefabricados
+    ? await prisma.sqlCategory.findMany({
+        where: {
+          is_active: true,
+          products: {
+            some: {
+              lineaNegocio: 'PREFABRICADOS',
+              is_active: true,
+            },
+          },
+        },
+        orderBy: {
+          name: 'asc',
+        },
+      })
+    : null
+
+  const products = isPrefabricados
+    ? null
+    : await prisma.product.findMany({
+        where: {
+          lineaNegocio: config.linea,
+          is_active: true,
+        },
+        orderBy: {
+          name: 'asc',
+        },
+      })
 
   return (
     <div className="relative">
@@ -137,7 +158,45 @@ export default async function LineaPage({ params }: LineaPageProps) {
             </h2>
             <div aria-hidden="true" className="mt-4 h-1 w-20 bg-lima" />
           </Aparece>
-          {products.length > 0 ? (
+          {isPrefabricados ? (
+            categories && categories.length > 0 ? (
+              <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                {categories.map((category, index) => (
+                  <Aparece
+                    key={category.id}
+                    direccion="arriba"
+                    distancia={40}
+                    duracion={0.6}
+                    retraso={index * 0.1}
+                  >
+                    <Link
+                      href={`/lineas/prefabricados/${category.slug}`}
+                      className="flex flex-col border-2 border-grisCon bg-blanco"
+                    >
+                      <div className="relative h-[216px] w-full">
+                        <Image
+                          src="/placeholder-producto.jpg"
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 384px"
+                          alt={category.name}
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1 p-4">
+                        <h3 className="font-titulo text-[20px] leading-[1.3] text-grisCon">
+                          {category.name}
+                        </h3>
+                      </div>
+                    </Link>
+                  </Aparece>
+                ))}
+              </div>
+            ) : (
+              <p className="mt-8 font-texto text-[16px] text-grisCon">
+                {'[Proximamente productos en esta linea]'}
+              </p>
+            )
+          ) : products && products.length > 0 ? (
             <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
               {products.map((product, index) => (
                 <Aparece
