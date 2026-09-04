@@ -26,7 +26,7 @@ const LINEAS: Record<string, ConfigLinea> = {
       '[Linea 2 de texto de concreto]',
       '[Linea 3 de texto de concreto]',
     ],
-    boton: { texto: 'Cotizar', href: '/cotizacion' },
+    boton: { texto: 'Cotizar', href: '/cotizacion?linea=CONCRETO' },
   },
   agregados: {
     linea: LineaNegocio.AGREGADOS,
@@ -37,7 +37,7 @@ const LINEAS: Record<string, ConfigLinea> = {
       '[Linea 2 de texto de agregados]',
       '[Linea 3 de texto de agregados]',
     ],
-    boton: { texto: 'Cotizar', href: '/cotizacion' },
+    boton: { texto: 'Cotizar', href: '/cotizacion?linea=AGREGADOS' },
   },
   constructora: {
     linea: LineaNegocio.CONSTRUCTORA,
@@ -59,7 +59,7 @@ const LINEAS: Record<string, ConfigLinea> = {
       '[Linea 2 de texto de prefabricados]',
       '[Linea 3 de texto de prefabricados]',
     ],
-    boton: { texto: 'Cotizar', href: '/cotizacion' },
+    boton: { texto: 'Cotizar', href: '/cotizacion?linea=PREFABRICADOS' },
   },
 }
 

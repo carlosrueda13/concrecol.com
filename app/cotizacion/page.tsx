@@ -48,6 +48,7 @@ type CotizacionFormData = z.infer<typeof cotizacionFormSchema>
 function CotizacionForm() {
   const searchParams = useSearchParams()
   const productoParam = searchParams.get('producto')
+  const lineaParam = searchParams.get('linea')
 
   const [productos, setProductos] = useState<ProductoActivo[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -70,7 +71,10 @@ function CotizacionForm() {
 
   useEffect(() => {
     let cancelled = false
-    fetch('/api/products?active=true')
+    const url = lineaParam
+      ? `/api/products?active=true&linea=${encodeURIComponent(lineaParam)}`
+      : '/api/products?active=true'
+    fetch(url)
       .then((res) => {
         if (!res.ok) throw new Error('Error al cargar productos')
         return res.json()
@@ -88,7 +92,7 @@ function CotizacionForm() {
     return () => {
       cancelled = true
     }
-  }, [])
+  }, [lineaParam])
 
   // Preseleccionar el producto si ?producto=slug coincide con uno activo
   useEffect(() => {
