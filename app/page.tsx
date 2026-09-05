@@ -11,10 +11,10 @@ export const dynamic = 'force-dynamic'
 
 // Lineas de negocio estaticas (marcador, sin base de datos)
 const lineasNegocio = [
-  { nombre: 'Concreto', href: '/lineas/concreto' },
-  { nombre: 'Agregados', href: '/lineas/agregados' },
-  { nombre: 'Constructora', href: '/lineas/constructora' },
-  { nombre: 'Prefabricados', href: '/lineas/prefabricados' },
+  { nombre: 'Concreto', href: '/lineas/concreto', imagen: '/lineas/concreto.jpg' },
+  { nombre: 'Agregados', href: '/lineas/agregados', imagen: '/lineas/agregados.jpg' },
+  { nombre: 'Constructora', href: '/lineas/constructora', imagen: '/lineas/constructora.jpg' },
+  { nombre: 'Prefabricados', href: '/lineas/prefabricados', imagen: '/lineas/prefabricados.jpg' },
 ]
 
 export default function HomePage() {
@@ -64,7 +64,7 @@ export default function HomePage() {
       </section>
 
       {/* Franja marquesina */}
-      <div className="flex h-[72px] w-full items-center overflow-hidden whitespace-nowrap bg-grisClaro">
+      <div className="flex h-[72px] w-full items-center overflow-hidden whitespace-nowrap bg-lima">
         <div className="marquesina-track">
           <span className="font-titulo text-[28px] text-grisCon uppercase tracking-[0.05em]">CONCRETO · PREFABRICADOS · CONSTRUCTORA · AGREGADOS · PLANTA SANTANDER · </span>
           <span className="font-titulo text-[28px] text-grisCon uppercase tracking-[0.05em]" aria-hidden="true">CONCRETO · PREFABRICADOS · CONSTRUCTORA · AGREGADOS · PLANTA SANTANDER · </span>
@@ -95,16 +95,18 @@ export default function HomePage() {
               >
                 <Link
                   href={linea.href}
-                  className="flex h-[520px] w-full flex-col"
+                  className="group flex h-[520px] w-full flex-col"
                 >
-                  <Image
-                    src="/placeholder-producto.jpg"
-                    alt={linea.nombre}
-                    width={300}
-                    height={325}
-                    className="h-[325px] w-full object-cover"
-                  />
-                  <div className="flex flex-1 flex-col justify-end bg-blanco">
+                  <div className="relative h-[325px] w-full overflow-hidden">
+                    <Image
+                      src={linea.imagen}
+                      alt={linea.nombre}
+                      width={300}
+                      height={325}
+                      className="h-[325px] w-full object-cover transition-transform duration-300 group-hover:scale-110"
+                    />
+                  </div>
+                  <div className="flex flex-1 flex-col justify-center bg-lima">
                     <h3 className="px-5 pb-5 font-titulo text-[28px] text-grisCon">
                       {linea.nombre}
                     </h3>
