@@ -27,7 +27,7 @@ export default function HomePage() {
       >
         {/* Capa de imagen de fondo con zoom */}
         <div
-          className="absolute inset-0 bg-cover bg-center hero-zoom"
+          className="absolute inset-0 bg-contain bg-no-repeat bg-center hero-zoom"
           style={{ backgroundImage: "url('/hero-image.jpg')" }}
           aria-hidden="true"
         />

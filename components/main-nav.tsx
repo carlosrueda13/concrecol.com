@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { Menu, X, Phone, MapPin, Mail } from 'lucide-react'
+import { Menu, X, Phone, Mail } from 'lucide-react'
 import { BotonCotizar } from '@/components/boton-cotizar'
 
 const NAV_ITEMS = [
@@ -36,7 +36,7 @@ export function MainNav({ sticky = true }: { sticky?: boolean }) {
                 className="h-8 px-2 text-blanco hover:bg-white/10 hover:text-blanco text-texto"
               >
                 <Phone className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-                <span className="truncate">xxx xxx xxxx</span>
+                <span className="truncate">321 452 5798</span>
               </Button>
               <Button
                 type="button"
@@ -47,10 +47,6 @@ export function MainNav({ sticky = true }: { sticky?: boolean }) {
                 <span className="truncate">gerencia@concrecol.co</span>
               </Button>
             </div>
-            <div className="flex items-center gap-1.5 shrink-0">
-              <MapPin className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-              <span>San Gil, Santander</span>
-            </div>
           </div>
         </div>
       </div>
@@ -58,8 +54,8 @@ export function MainNav({ sticky = true }: { sticky?: boolean }) {
       {/* Navegación principal (88px) */}
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-[88px]">
-          {/* Logo 180x48 */}
-          <Link href="/" className="flex items-center w-[180px] h-[48px] shrink-0">
+          {/* Logo 220x60 */}
+          <Link href="/" className="flex items-center w-[220px] h-[60px] shrink-0">
             <img
               src="/images/Property 1=Default-1.png"
               alt="Concrecol Logo"
@@ -104,7 +100,7 @@ export function MainNav({ sticky = true }: { sticky?: boolean }) {
             <div className="flex justify-between items-center p-4">
               <Link
                 href="/"
-                className="flex items-center w-[180px] h-[48px]"
+                className="flex items-center w-[220px] h-[60px]"
                 onClick={toggleMenu}
               >
                 <img
