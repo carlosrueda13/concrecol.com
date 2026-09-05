@@ -5,7 +5,7 @@ export function Ubicacion() {
   return (
     <>
       {/* Ubicacion */}
-      <section id="ubicacion" className="relative w-full scroll-mt-14 bg-grisClaro py-24 sm:py-32">
+      <section id="ubicacion" className="relative w-full scroll-mt-14 bg-blanco py-24 sm:py-32">
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 xl:px-0">
           <Aparece direccion="izquierda" distancia={40} duracion={0.6}>
             <h2 className="font-titulo text-subtitulo text-grisCon">Ubicación</h2>

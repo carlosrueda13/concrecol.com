@@ -71,24 +71,28 @@ export default function HomePage() {
         </div>
       </section>
 
-      <Ubicacion />
-
       {/* Franja marquesina */}
-      <div className="flex h-[72px] w-full items-center overflow-hidden whitespace-nowrap bg-blanco">
+      <div className="flex h-[72px] w-full items-center overflow-hidden whitespace-nowrap bg-grisClaro">
         <div className="marquesina-track">
           <span className="font-titulo text-[28px] text-grisCon uppercase tracking-[0.05em]">CONCRETO · PREFABRICADOS · CONSTRUCTORA · AGREGADOS · PLANTA SANTANDER · </span>
           <span className="font-titulo text-[28px] text-grisCon uppercase tracking-[0.05em]" aria-hidden="true">CONCRETO · PREFABRICADOS · CONSTRUCTORA · AGREGADOS · PLANTA SANTANDER · </span>
         </div>
       </div>
 
+      <Ubicacion />
+
       {/* Lineas de negocio */}
-      <section id="lineas-de-negocio" className="relative w-full bg-grisCon py-24 sm:py-32">
-        <div className="mx-auto w-full max-w-[1280px] px-4 sm:px-6 xl:px-0">
+      <section
+        id="lineas-de-negocio"
+        className="relative w-full bg-grisCon py-24 sm:py-32 -mt-[64px]"
+        style={{ clipPath: 'polygon(0 64px, 100% 0, 100% 100%, 0 100%)' }}
+      >
+        <div className="mx-auto w-full max-w-[1840px] px-4 sm:px-6 xl:px-0">
           <Aparece direccion="izquierda" distancia={40} duracion={0.6}>
-            <h2 className="font-titulo text-[32px] text-blanco">Líneas de negocio</h2>
+            <h2 className="font-titulo text-[46px] text-blanco">Líneas de negocio</h2>
             <div aria-hidden="true" className="w-20 h-1 bg-lima mt-4" />
           </Aparece>
-          <div className="mt-8 grid grid-cols-1 gap-5 md:grid-cols-2 xl:mx-auto xl:max-w-[1260px] xl:grid-cols-4">
+          <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 xl:mx-auto xl:max-w-[1840px] xl:grid-cols-4">
             {lineasNegocio.map((linea, index) => (
               <Aparece
                 key={linea.nombre}
@@ -99,18 +103,20 @@ export default function HomePage() {
               >
                 <Link
                   href={linea.href}
-                  className="flex h-[360px] w-full flex-col"
+                  className="flex h-[520px] w-full flex-col"
                 >
                   <Image
                     src="/placeholder-producto.jpg"
                     alt={linea.nombre}
                     width={300}
-                    height={225}
-                    className="h-[225px] w-full object-cover"
+                    height={325}
+                    className="h-[325px] w-full object-cover"
                   />
-                  <h3 className="flex flex-1 flex-col justify-end px-5 pb-5 font-titulo text-[20px] text-blanco">
-                    {linea.nombre}
-                  </h3>
+                  <div className="flex flex-1 flex-col justify-end bg-blanco">
+                    <h3 className="px-5 pb-5 font-titulo text-[28px] text-grisCon">
+                      {linea.nombre}
+                    </h3>
+                  </div>
                 </Link>
               </Aparece>
             ))}
