@@ -11,7 +11,6 @@ interface ConfigLinea {
   linea: LineaNegocio
   nombre: string
   titulo: string
-  textos: [string, string, string]
   boton: { texto: string; href: string }
 }
 
@@ -20,45 +19,25 @@ const LINEAS: Record<string, ConfigLinea> = {
   concreto: {
     linea: LineaNegocio.CONCRETO,
     nombre: 'Concreto',
-    titulo: '[Titulo de la linea de concreto]',
-    textos: [
-      '[Linea 1 de texto de concreto]',
-      '[Linea 2 de texto de concreto]',
-      '[Linea 3 de texto de concreto]',
-    ],
+    titulo: 'Concreto premezclado listo para tu obra',
     boton: { texto: 'Cotizar', href: '/cotizacion?linea=CONCRETO' },
   },
   agregados: {
     linea: LineaNegocio.AGREGADOS,
     nombre: 'Agregados',
-    titulo: '[Titulo de la linea de agregados]',
-    textos: [
-      '[Linea 1 de texto de agregados]',
-      '[Linea 2 de texto de agregados]',
-      '[Linea 3 de texto de agregados]',
-    ],
+    titulo: 'Agregados de cantera para cada etapa de la obra',
     boton: { texto: 'Cotizar', href: '/cotizacion?linea=AGREGADOS' },
   },
   constructora: {
     linea: LineaNegocio.CONSTRUCTORA,
     nombre: 'Constructora',
-    titulo: '[Titulo de la constructora]',
-    textos: [
-      '[Linea 1 de texto de la constructora]',
-      '[Linea 2 de texto de la constructora]',
-      '[Linea 3 de texto de la constructora]',
-    ],
+    titulo: 'Proyectos propios, la misma calidad que ofrecemos',
     boton: { texto: 'Contactar', href: '/contacto' },
   },
   prefabricados: {
     linea: LineaNegocio.PREFABRICADOS,
     nombre: 'Prefabricados',
-    titulo: '[Titulo de la linea de prefabricados]',
-    textos: [
-      '[Linea 1 de texto de prefabricados]',
-      '[Linea 2 de texto de prefabricados]',
-      '[Linea 3 de texto de prefabricados]',
-    ],
+    titulo: 'Prefabricados de concreto para obra y acabados',
     boton: { texto: 'Cotizar', href: '/cotizacion?linea=PREFABRICADOS' },
   },
 }
@@ -123,17 +102,6 @@ export default async function LineaPage({ params }: LineaPageProps) {
               <h1 className="font-titulo text-[32px] leading-[1.1] uppercase text-blanco sm:text-titulo">
                 {config.titulo}
               </h1>
-              <div className="flex flex-col gap-1">
-                <p className="font-texto text-[18px] leading-[1.6] text-blanco">
-                  {config.textos[0]}
-                </p>
-                <p className="font-texto text-[18px] leading-[1.6] text-blanco">
-                  {config.textos[1]}
-                </p>
-                <p className="font-texto text-[18px] leading-[1.6] text-blanco">
-                  {config.textos[2]}
-                </p>
-              </div>
               <BotonCotizar
                 asChild
                 variant="primaria"
