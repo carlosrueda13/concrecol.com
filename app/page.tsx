@@ -25,10 +25,18 @@ export default function HomePage() {
         id="hero-section"
         className="relative h-[calc(100vh-112px)] min-h-[600px] w-full overflow-hidden bg-grisCon"
       >
+        <div
+          className="absolute inset-0 bg-cover bg-center scale-110"
+          style={{
+            backgroundImage: "url('/projects/house.JPG')",
+            filter: 'blur(24px) brightness(0.7)',
+          }}
+          aria-hidden="true"
+        />
         {/* Capa de imagen de fondo con zoom */}
         <div
           className="absolute inset-0 bg-contain bg-no-repeat bg-center hero-zoom"
-          style={{ backgroundImage: "url('/imagen-planta.JPG')" }}
+          style={{ backgroundImage: "url('/projects/house.JPG')" }}
           aria-hidden="true"
         />
         {/* Overlay para legibilidad del texto */}
