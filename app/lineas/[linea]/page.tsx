@@ -12,6 +12,7 @@ interface ConfigLinea {
   nombre: string
   titulo: string
   boton: { texto: string; href: string }
+  imagenHero: string
 }
 
 // Configuracion por linea de negocio: parametro de ruta -> enum de Prisma.
@@ -21,24 +22,28 @@ const LINEAS: Record<string, ConfigLinea> = {
     nombre: 'Concreto',
     titulo: 'Concreto premezclado listo para tu obra',
     boton: { texto: 'Cotizar', href: '/cotizacion?linea=CONCRETO' },
+    imagenHero: '/lineas/concreto.jpg',
   },
   agregados: {
     linea: LineaNegocio.AGREGADOS,
     nombre: 'Agregados',
     titulo: 'Agregados de cantera para cada etapa de la obra',
     boton: { texto: 'Cotizar', href: '/cotizacion?linea=AGREGADOS' },
+    imagenHero: '/lineas/agregados.jpg',
   },
   constructora: {
     linea: LineaNegocio.CONSTRUCTORA,
     nombre: 'Constructora',
     titulo: 'Proyectos propios, la misma calidad que ofrecemos',
     boton: { texto: 'Contactar', href: '/contacto' },
+    imagenHero: '/lineas/constructora.jpg',
   },
   prefabricados: {
     linea: LineaNegocio.PREFABRICADOS,
     nombre: 'Prefabricados',
     titulo: 'Prefabricados de concreto para obra y acabados',
     boton: { texto: 'Cotizar', href: '/cotizacion?linea=PREFABRICADOS' },
+    imagenHero: '/lineas/prefabricados.jpg',
   },
 }
 
@@ -92,7 +97,7 @@ export default async function LineaPage({ params }: LineaPageProps) {
       <section
         id="hero-section"
         className="relative h-[calc(100vh-112px)] min-h-[600px] w-full bg-grisCon bg-cover bg-center"
-        style={{ backgroundImage: "url('/hero-image.jpg')" }}
+        style={{ backgroundImage: `url('${config.imagenHero}')` }}
       >
         {/* Overlay para legibilidad del texto */}
         <div className="absolute inset-0 bg-grisCon/60" aria-hidden="true" />
