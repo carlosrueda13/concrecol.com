@@ -28,7 +28,7 @@ export default function HomePage() {
         {/* Capa de imagen de fondo con zoom */}
         <div
           className="absolute inset-0 bg-contain bg-no-repeat bg-center hero-zoom"
-          style={{ backgroundImage: "url('/hero-image.jpg')" }}
+          style={{ backgroundImage: "url('/imagen-planta.JPG')" }}
           aria-hidden="true"
         />
         {/* Overlay para legibilidad del texto */}
