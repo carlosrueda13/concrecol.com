@@ -19,7 +19,12 @@ export const productSchema = z.object({
   lineaNegocio: z.nativeEnum(LineaNegocio).nullable().optional(),
   stock_quantity: z.number().min(0, 'El stock debe ser mayor o igual a 0'),
   requires_scheduling: z.boolean().default(false),
-  images: z.array(z.string().url('URL inválida')).default([]),
+  images: z.array(
+    z.string().refine(
+      (val) => val.startsWith('/') || /^https?:\/\//.test(val),
+      { message: 'URL inválida' }
+    )
+  ).default([]),
   is_active: z.boolean().default(true),
   sqlCategoryId: z.string().min(1, 'Seleccione una categoría'),
   description: z.string().nullable().optional(),

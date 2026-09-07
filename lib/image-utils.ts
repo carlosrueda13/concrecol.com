@@ -9,6 +9,14 @@
 export function isValidImageUrl(url: string): boolean {
   if (!url) return false
   
+  // Rutas relativas (archivos dentro de public/) son validas
+  // directamente, sin pasar por new URL() ni por la lista de
+  // dominios externos.
+  if (url.startsWith('/')) {
+    const validExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.avif']
+    return validExtensions.some(ext => url.toLowerCase().endsWith(ext))
+  }
+  
   try {
     const parsed = new URL(url)
     // Check if it's using a valid protocol
@@ -40,6 +48,9 @@ export function isValidImageUrl(url: string): boolean {
  */
 export function transformGitHubUrl(url: string): string {
   if (!url) return url
+  
+  // Rutas relativas se devuelven sin cambios
+  if (url.startsWith('/')) return url
   
   try {
     const parsed = new URL(url)
