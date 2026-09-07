@@ -75,6 +75,40 @@ export async function POST(request: NextRequest) {
       },
     })
 
+    // Enviar notificacion por EmailJS (best-effort: un fallo no debe romper la solicitud)
+    try {
+      const emailjsResponse = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          service_id: process.env.EMAILJS_SERVICE_ID,
+          template_id: process.env.EMAILJS_TEMPLATE_ID,
+          user_id: process.env.EMAILJS_PUBLIC_KEY,
+          accessToken: process.env.EMAILJS_PRIVATE_KEY,
+          template_params: {
+            nombre: validatedData.nombre.trim(),
+            telefono: validatedData.telefono.trim(),
+            email: emailValue || 'No proporcionado',
+            producto: productoNombre || 'No especificado',
+            tipoResistencia: validatedData.tipoResistencia || 'No especificado',
+            cantidad: validatedData.cantidad || 'No especificado',
+            fechaRequerida: validatedData.fechaRequerida || 'No especificado',
+            usoPrevisto: validatedData.usoPrevisto || 'No especificado',
+            direccionObra: validatedData.direccionObra || 'No especificado',
+            condicionesAcceso: validatedData.condicionesAcceso || 'No especificado',
+          },
+        }),
+      })
+
+      if (!emailjsResponse.ok) {
+        console.error('[EMAILJS]', await emailjsResponse.text())
+      }
+    } catch (emailjsError) {
+      console.error('[EMAILJS]', emailjsError)
+    }
+
     return NextResponse.json(
       {
         success: true,
