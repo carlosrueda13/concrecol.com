@@ -47,6 +47,18 @@ const LINEAS: Record<string, ConfigLinea> = {
   },
 }
 
+// Imagen por categoria de Prefabricados: slug -> ruta de la imagen.
+const CATEGORIA_IMAGEN_PREFABRICADOS: Record<string, string> = {
+  adoquines: '/categorias-prefabricados/adoquines.jpg',
+  'bloques-divisorios': '/categorias-prefabricados/bloques-divisorios.jpg',
+  'bloques-estructurales': '/categorias-prefabricados/bloques-estructurales.jpg',
+  calados: '/categorias-prefabricados/calados.jpg',
+  decks: '/categorias-prefabricados/decks.jpg',
+  'espacio-publico': '/categorias-prefabricados/espacio-publico.jpg',
+  gramoquin: '/categorias-prefabricados/gramoquin.jpg',
+  losetas: '/categorias-prefabricados/losetas.jpg',
+}
+
 interface LineaPageProps {
   params: {
     linea: string
@@ -152,7 +164,10 @@ export default async function LineaPage({ params }: LineaPageProps) {
                     >
                       <div className="relative h-[216px] w-full">
                         <Image
-                          src="/placeholder-producto.jpg"
+                          src={
+                            CATEGORIA_IMAGEN_PREFABRICADOS[category.slug] ||
+                            '/placeholder-producto.jpg'
+                          }
                           fill
                           className="object-cover"
                           sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 384px"
