@@ -64,7 +64,7 @@ export function Ubicacion() {
           </Aparece>
           <div className="mt-8 flex flex-col gap-6 xl:flex-row">
             {/* Mapa de cobertura interactivo (Leaflet + OpenStreetMap) */}
-            <div className="h-[520px] w-full overflow-hidden xl:w-[750px]">
+            <div className="relative z-0 h-[520px] w-full overflow-hidden xl:w-[750px]">
               <MapaCobertura lugarBuscado={resultado} />
             </div>
             {/* Panel de ubicacion */}
