@@ -5,6 +5,7 @@ import { LineaNegocio } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 import { Aparece } from '@/components/animations/aparece'
 import { BotonCotizar } from '@/components/boton-cotizar'
+import { Carousel } from '@/components/carousel'
 import { Ubicacion } from '@/components/ubicacion'
 
 interface ConfigLinea {
@@ -59,6 +60,50 @@ const CATEGORIA_IMAGEN_PREFABRICADOS: Record<string, string> = {
   losetas: '/categorias-prefabricados/losetas.jpg',
 }
 
+// Proyectos propios de la Constructora: nombre y galeria de imagenes.
+const PROYECTOS_CONSTRUCTORA = [
+  {
+    nombre: 'Parque Barichara',
+    images: [
+      '/projects/parque-barichara-1.jpeg',
+      '/projects/parque-barichara-2.jpeg',
+      '/projects/parque-barichara-3.jpeg',
+    ],
+  },
+  {
+    nombre: 'Mantenimiento Casa de la Cultura Galán',
+    images: [
+      '/projects/casa-cultura-galan-1.jpeg',
+      '/projects/casa-cultura-galan-2.jpeg',
+      '/projects/casa-cultura-galan-3.jpeg',
+    ],
+  },
+  {
+    nombre: 'Mobiliario Alcaldía de Galán',
+    images: [
+      '/projects/mobiliario-alcaldia-galan-1.jpeg',
+      '/projects/mobiliario-alcaldia-galan-2.jpeg',
+      '/projects/mobiliario-alcaldia-galan-3.jpeg',
+    ],
+  },
+  {
+    nombre: 'Mantenimiento vial',
+    images: [
+      '/projects/mantenimiento-vial-1.jpeg',
+      '/projects/mantenimiento-vial-2.jpeg',
+      '/projects/mantenimiento-vial-3.jpeg',
+    ],
+  },
+  {
+    nombre: 'Zona de juegos infantil',
+    images: [
+      '/projects/zona-juegos-infantil-1.jpeg',
+      '/projects/zona-juegos-infantil-2.jpeg',
+      '/projects/zona-juegos-infantil-3.jpeg',
+    ],
+  },
+]
+
 interface LineaPageProps {
   params: {
     linea: string
@@ -73,6 +118,7 @@ export default async function LineaPage({ params }: LineaPageProps) {
   }
 
   const isPrefabricados = params.linea === 'prefabricados'
+  const isConstructora = params.linea === 'constructora'
 
   const categories = isPrefabricados
     ? await prisma.sqlCategory.findMany({
@@ -91,17 +137,18 @@ export default async function LineaPage({ params }: LineaPageProps) {
       })
     : null
 
-  const products = isPrefabricados
-    ? null
-    : await prisma.product.findMany({
-        where: {
-          lineaNegocio: config.linea,
-          is_active: true,
-        },
-        orderBy: {
-          name: 'asc',
-        },
-      })
+  const products =
+    isPrefabricados || isConstructora
+      ? null
+      : await prisma.product.findMany({
+          where: {
+            lineaNegocio: config.linea,
+            is_active: true,
+          },
+          orderBy: {
+            name: 'asc',
+          },
+        })
 
   return (
     <div className="relative">
@@ -143,11 +190,27 @@ export default async function LineaPage({ params }: LineaPageProps) {
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 xl:px-0">
           <Aparece direccion="arriba" distancia={40} duracion={0.6}>
             <h2 className="font-titulo text-[40px] leading-[1.1] text-blanco">
-              Nuestros productos en {config.nombre}
+              {isConstructora ? 'Nuestros proyectos' : `Nuestros productos en ${config.nombre}`}
             </h2>
             <div aria-hidden="true" className="mt-4 h-1 w-20 bg-lima" />
           </Aparece>
-          {isPrefabricados ? (
+          {isConstructora ? (
+            <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+              {PROYECTOS_CONSTRUCTORA.map((proyecto) => (
+                <div
+                  key={proyecto.nombre}
+                  className="flex flex-col border-2 border-grisCon bg-blanco"
+                >
+                  <Carousel images={proyecto.images} productName={proyecto.nombre} />
+                  <div className="flex flex-col gap-1 p-4">
+                    <h3 className="font-titulo text-[20px] leading-[1.3] text-grisCon">
+                      {proyecto.nombre}
+                    </h3>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : isPrefabricados ? (
             categories && categories.length > 0 ? (
               <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
                 {categories.map((category, index) => (
