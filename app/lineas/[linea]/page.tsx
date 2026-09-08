@@ -186,7 +186,7 @@ export default async function LineaPage({ params }: LineaPageProps) {
         id="productos"
         className="relative mt-0 sm:-mt-[64px] w-full bg-grisCon py-24 sm:py-32 sm:[clip-path:polygon(0_64px,100%_0,100%_100%,0_100%)]"
       >
-        <div className="mx-auto w-full max-w-[1800px] px-4 sm:px-6 xl:px-0">
+        <div className="mx-auto w-full max-w-[1800px] px-8 sm:px-6 xl:px-0">
           <Aparece direccion="arriba" distancia={40} duracion={0.6}>
             <h2 className="font-titulo text-[40px] leading-[1.1] text-blanco">
               {isConstructora ? 'Nuestros proyectos' : `Nuestros productos en ${config.nombre}`}
@@ -264,7 +264,7 @@ export default async function LineaPage({ params }: LineaPageProps) {
                     href={`/productos/${product.slug}`}
                     className="group relative flex flex-col border-2 border-grisCon bg-blanco"
                   >
-                    <div className="relative h-[380px] w-full overflow-hidden">
+                    <div className="relative h-[180px] sm:h-[380px] w-full overflow-hidden">
                       <Image
                         src={product.images[0] || '/placeholder-producto.jpg'}
                         fill

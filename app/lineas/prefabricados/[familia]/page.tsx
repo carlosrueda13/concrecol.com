@@ -56,7 +56,7 @@ export default async function FamiliaPage({ params }: FamiliaPageProps) {
 
       {/* Productos de la familia */}
       <section id="productos" className="relative w-full bg-blanco py-24 sm:py-32">
-        <div className="mx-auto w-full max-w-[1800px] px-4 sm:px-6 xl:px-0">
+        <div className="mx-auto w-full max-w-[1800px] px-8 sm:px-6 xl:px-0">
           {products.length > 0 ? (
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
               {products.map((product, index) => (
@@ -71,7 +71,7 @@ export default async function FamiliaPage({ params }: FamiliaPageProps) {
                     href={`/productos/${product.slug}`}
                     className="group relative flex flex-col border-2 border-grisCon bg-blanco"
                   >
-                    <div className="relative h-[380px] w-full">
+                    <div className="relative h-[180px] sm:h-[380px] w-full">
                       <Image
                         src={product.images[0] || '/placeholder-producto.jpg'}
                         fill

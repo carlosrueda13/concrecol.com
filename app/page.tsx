@@ -78,7 +78,7 @@ export default function HomePage() {
         id="lineas-de-negocio"
         className="relative w-full bg-grisCon py-24 sm:py-32 mt-0 sm:-mt-[64px] sm:[clip-path:polygon(0_64px,100%_0,100%_100%,0_100%)]"
       >
-        <div className="mx-auto w-full max-w-[1840px] px-4 sm:px-6 xl:px-0">
+        <div className="mx-auto w-full max-w-[1840px] px-8 sm:px-6 xl:px-0">
           <Aparece direccion="izquierda" distancia={40} duracion={0.6}>
             <h2 className="font-titulo text-[46px] text-blanco">Líneas de negocio</h2>
             <div aria-hidden="true" className="w-20 h-1 bg-lima mt-4" />
@@ -94,7 +94,7 @@ export default function HomePage() {
               >
                 <Link
                   href={linea.href}
-                  className="group flex h-[520px] w-full flex-col"
+                  className="group flex h-[220px] sm:h-[520px] w-full flex-col"
                 >
                   <div className="relative h-[325px] w-full overflow-hidden">
                     <Image
@@ -102,7 +102,7 @@ export default function HomePage() {
                       alt={linea.nombre}
                       width={300}
                       height={325}
-                      className="h-[325px] w-full object-cover transition-transform duration-300 group-hover:scale-110"
+                      className="h-[140px] sm:h-[325px] w-full object-cover transition-transform duration-300 group-hover:scale-110"
                     />
                   </div>
                   <div className="flex flex-1 flex-col justify-center bg-lima">
@@ -122,7 +122,7 @@ export default function HomePage() {
       </section>
 
       {/* Cierre */}
-      <section id="cierre" className="relative flex h-[120px] w-full items-center bg-blanco">
+      <section id="cierre" className="relative flex w-full items-center bg-blanco py-8">
         <div className="mx-auto flex w-full max-w-[1200px] flex-wrap items-center justify-center gap-3 px-4 sm:gap-6 sm:px-6 xl:px-0">
           <Aparece direccion="arriba" distancia={40} duracion={0.6}>
             <div className="flex flex-col items-center">
