@@ -237,7 +237,7 @@ export default async function LineaPage({ params }: LineaPageProps) {
                           alt={category.name}
                         />
                       </div>
-                      <div className="flex flex-col gap-1 p-4">
+                      <div className="flex min-h-[140px] flex-col gap-1 p-4 justify-center">
                         <h3 className="font-titulo text-[20px] leading-[1.3] text-grisCon">
                           {category.name}
                         </h3>
