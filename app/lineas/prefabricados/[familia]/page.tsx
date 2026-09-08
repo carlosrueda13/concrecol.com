@@ -71,7 +71,7 @@ export default async function FamiliaPage({ params }: FamiliaPageProps) {
                     href={`/productos/${product.slug}`}
                     className="group relative flex flex-col border-2 border-grisCon bg-blanco"
                   >
-                    <div className="relative h-[216px] w-full">
+                    <div className="relative h-[300px] w-full">
                       <Image
                         src={product.images[0] || '/placeholder-producto.jpg'}
                         fill
@@ -79,8 +79,8 @@ export default async function FamiliaPage({ params }: FamiliaPageProps) {
                         sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 384px"
                         alt={product.name}
                       />
-                      <div className="absolute inset-0 flex items-center bg-grisCon/0 p-4 opacity-0 transition-all duration-300 group-hover:bg-grisCon/95 group-hover:opacity-100">
-                        <p className="font-texto text-[14px] leading-[1.6] text-blanco line-clamp-6">
+                      <div className="absolute inset-0 flex items-center justify-center text-center bg-grisCon/0 p-4 opacity-0 transition-all duration-300 group-hover:bg-grisCon/95 group-hover:opacity-100">
+                        <p className="font-texto text-[17px] leading-[1.6] text-blanco line-clamp-6">
                           {product.description}
                         </p>
                       </div>

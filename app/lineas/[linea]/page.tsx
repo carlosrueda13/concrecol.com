@@ -265,7 +265,7 @@ export default async function LineaPage({ params }: LineaPageProps) {
                     href={`/productos/${product.slug}`}
                     className="group relative flex flex-col border-2 border-grisCon bg-blanco"
                   >
-                    <div className="relative h-[216px] w-full overflow-hidden">
+                    <div className="relative h-[300px] w-full overflow-hidden">
                       <Image
                         src={product.images[0] || '/placeholder-producto.jpg'}
                         fill
@@ -274,8 +274,8 @@ export default async function LineaPage({ params }: LineaPageProps) {
                         alt={product.name}
                       />
                       {product.description ? (
-                        <div className="absolute inset-0 flex items-center justify-center bg-grisCon/80 p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                          <p className="line-clamp-3 text-center font-texto text-[14px] leading-[1.5] text-blanco">
+                        <div className="absolute inset-0 flex items-center justify-center text-center bg-grisCon/80 p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                          <p className="line-clamp-6 text-center font-texto text-[17px] leading-[1.6] text-blanco">
                             {product.description}
                           </p>
                         </div>
