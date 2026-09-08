@@ -123,11 +123,11 @@ export default function HomePage() {
       </section>
 
       {/* Cierre */}
-      <section id="cierre" className="relative flex h-[120px] w-full items-center bg-lima">
+      <section id="cierre" className="relative flex h-[120px] w-full items-center bg-blanco">
         <div className="mx-auto flex w-full max-w-[1200px] flex-wrap items-center justify-center gap-3 px-4 sm:gap-6 sm:px-6 xl:px-0">
           <Aparece direccion="arriba" distancia={40} duracion={0.6}>
             <div className="flex flex-col items-center">
-              <h2 className="font-titulo text-[24px] text-grisCon">[Título de cierre]</h2>
+              <h2 className="font-titulo text-[24px] text-grisCon">Construyamos juntos tu próximo proyecto</h2>
               <div aria-hidden="true" className="w-20 h-1 bg-lima mt-4 ring-1 ring-inset ring-grisCon" />
             </div>
           </Aparece>
