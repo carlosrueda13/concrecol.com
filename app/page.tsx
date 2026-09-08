@@ -76,8 +76,7 @@ export default function HomePage() {
       {/* Lineas de negocio */}
       <section
         id="lineas-de-negocio"
-        className="relative w-full bg-grisCon py-24 sm:py-32 -mt-[64px]"
-        style={{ clipPath: 'polygon(0 64px, 100% 0, 100% 100%, 0 100%)' }}
+        className="relative w-full bg-grisCon py-24 sm:py-32 mt-0 sm:-mt-[64px] sm:[clip-path:polygon(0_64px,100%_0,100%_100%,0_100%)]"
       >
         <div className="mx-auto w-full max-w-[1840px] px-4 sm:px-6 xl:px-0">
           <Aparece direccion="izquierda" distancia={40} duracion={0.6}>
