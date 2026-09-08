@@ -71,7 +71,7 @@ export default async function FamiliaPage({ params }: FamiliaPageProps) {
                     href={`/productos/${product.slug}`}
                     className="group relative flex flex-col border-2 border-grisCon bg-blanco"
                   >
-                    <div className="relative h-[300px] w-full">
+                    <div className="relative h-[380px] w-full">
                       <Image
                         src={product.images[0] || '/placeholder-producto.jpg'}
                         fill

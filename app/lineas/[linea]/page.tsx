@@ -225,7 +225,7 @@ export default async function LineaPage({ params }: LineaPageProps) {
                       href={`/lineas/prefabricados/${category.slug}`}
                       className="flex flex-col border-2 border-grisCon bg-blanco"
                     >
-                      <div className="relative h-[216px] w-full">
+                      <div className="relative h-[300px] w-full">
                         <Image
                           src={
                             CATEGORIA_IMAGEN_PREFABRICADOS[category.slug] ||
@@ -265,7 +265,7 @@ export default async function LineaPage({ params }: LineaPageProps) {
                     href={`/productos/${product.slug}`}
                     className="group relative flex flex-col border-2 border-grisCon bg-blanco"
                   >
-                    <div className="relative h-[300px] w-full overflow-hidden">
+                    <div className="relative h-[380px] w-full overflow-hidden">
                       <Image
                         src={product.images[0] || '/placeholder-producto.jpg'}
                         fill
