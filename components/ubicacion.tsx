@@ -69,6 +69,65 @@ export function Ubicacion() {
     }
   }
 
+  async function usarUbicacionActual() {
+    if (!navigator.geolocation) {
+      setError('Tu navegador no permite obtener tu ubicacion')
+      return
+    }
+
+    setBuscando(true)
+    setError(null)
+    setResultado(null)
+    setDentroDeCobertura(false)
+
+    try {
+      const posicion = await new Promise<GeolocationPosition>((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject)
+      })
+
+      const lat = posicion.coords.latitude
+      const lon = posicion.coords.longitude
+
+      let label = 'Tu ubicación actual'
+
+      try {
+        const respuesta = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`,
+        )
+
+        if (respuesta.ok) {
+          const datos = (await respuesta.json()) as { display_name?: string }
+          if (datos.display_name && datos.display_name.trim() !== '') {
+            label = datos.display_name
+          }
+        }
+      } catch {
+        // Conserva el label de respaldo si falla el reverse geocoding
+      }
+
+      setDentroDeCobertura(
+        calcularDistanciaKm(COORDENADAS_PLANTA.lat, COORDENADAS_PLANTA.lng, lat, lon) <=
+          RADIO_COBERTURA_KM,
+      )
+
+      setResultado({ lat, lon, label })
+    } catch (err) {
+      console.error('[GEOLOCATION]', err)
+      const geoError = err as GeolocationPositionError
+      if (geoError?.code === 1) {
+        setError('Permiso de ubicacion denegado. Habilitalo en la configuracion del navegador.')
+      } else if (geoError?.code === 2) {
+        setError('No se pudo determinar tu ubicacion (posicion no disponible).')
+      } else if (geoError?.code === 3) {
+        setError('La solicitud de ubicacion tardo demasiado, intenta de nuevo.')
+      } else {
+        setError('No se pudo obtener tu ubicacion. Verifica los permisos de ubicacion del navegador.')
+      }
+    } finally {
+      setBuscando(false)
+    }
+  }
+
   return (
     <>
       {/* Ubicacion */}
@@ -119,6 +178,15 @@ export function Ubicacion() {
                   Buscar
                 </BotonCotizar>
               </div>
+              <button
+                type="button"
+                onClick={usarUbicacionActual}
+                disabled={buscando}
+                className="flex items-center gap-1 font-texto text-[14px] text-grisCon underline underline-offset-2 hover:text-lima disabled:opacity-50"
+              >
+                <MapPin className="h-4 w-4" aria-hidden="true" />
+                Usar mi ubicación actual
+              </button>
               {resultado &&
                 (dentroDeCobertura ? (
                   <div className="mt-4 border-2 border-lima bg-lima/10 p-4">
