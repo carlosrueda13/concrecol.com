@@ -3,7 +3,13 @@
 import { useState } from 'react'
 import { Aparece } from '@/components/animations/aparece'
 import { BotonCotizar } from '@/components/boton-cotizar'
-import { MapaCobertura, type LugarBuscado } from '@/components/mapa-cobertura'
+import {
+  COORDENADAS_PLANTA,
+  MapaCobertura,
+  RADIO_COBERTURA_KM,
+  calcularDistanciaKm,
+  type LugarBuscado,
+} from '@/components/mapa-cobertura'
 import { Input } from '@/components/ui/input'
 import { MapPin } from 'lucide-react'
 
@@ -12,6 +18,7 @@ export function Ubicacion() {
   const [resultado, setResultado] = useState<LugarBuscado | null>(null)
   const [buscando, setBuscando] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [dentroDeCobertura, setDentroDeCobertura] = useState(false)
 
   async function buscar() {
     if (!texto.trim()) return
@@ -19,6 +26,7 @@ export function Ubicacion() {
     setBuscando(true)
     setError(null)
     setResultado(null)
+    setDentroDeCobertura(false)
 
     try {
       const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(texto + ', Santander, Colombia')}&format=json&limit=1`
@@ -41,9 +49,17 @@ export function Ubicacion() {
       }
 
       const lugar = datos[0]
+      const lat = parseFloat(lugar.lat)
+      const lon = parseFloat(lugar.lon)
+
+      setDentroDeCobertura(
+        calcularDistanciaKm(COORDENADAS_PLANTA.lat, COORDENADAS_PLANTA.lng, lat, lon) <=
+          RADIO_COBERTURA_KM,
+      )
+
       setResultado({
-        lat: parseFloat(lugar.lat),
-        lon: parseFloat(lugar.lon),
+        lat,
+        lon,
         label: lugar.display_name,
       })
     } catch {
@@ -103,6 +119,20 @@ export function Ubicacion() {
                   Buscar
                 </BotonCotizar>
               </div>
+              {resultado &&
+                (dentroDeCobertura ? (
+                  <div className="mt-4 border-2 border-lima bg-lima/10 p-4">
+                    <p className="font-titulo text-[28px] uppercase text-lima">
+                      ¡Llegamos a donde estes!
+                    </p>
+                  </div>
+                ) : (
+                  <div className="mt-4 border-2 border-grisCon bg-grisClaro p-4">
+                    <p className="font-texto text-[18px] text-grisCon">
+                      Lo sentimos, este lugar está fuera de nuestra zona de cobertura.
+                    </p>
+                  </div>
+                ))}
             </div>
           </div>
         </div>

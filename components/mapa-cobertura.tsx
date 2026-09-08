@@ -7,10 +7,37 @@ import { useEffect } from 'react'
 import { Circle, MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet'
 
 // Coordenadas de la planta San Gil
-const COORDENADAS_PLANTA = { lat: 6.524959942352748, lng: -73.19613522714694 }
+export const COORDENADAS_PLANTA = { lat: 6.524959942352748, lng: -73.19613522714694 }
 
 // Radio de cobertura de entregas en kilometros
-const RADIO_COBERTURA_KM = 40
+export const RADIO_COBERTURA_KM = 40
+
+// Radio terrestre medio en kilometros
+const RADIO_TERRESTRE_KM = 6371
+
+// Distancia de Haversine entre dos puntos en kilometros
+export function calcularDistanciaKm(
+  lat1: number,
+  lon1: number,
+  lat2: number,
+  lon2: number,
+): number {
+  const aRadianes = Math.PI / 180
+
+  const deltaLat = (lat2 - lat1) * aRadianes
+  const deltaLon = (lon2 - lon1) * aRadianes
+
+  const senoLat = Math.sin(deltaLat / 2)
+  const senoLon = Math.sin(deltaLon / 2)
+
+  const a =
+    senoLat * senoLat +
+    Math.cos(lat1 * aRadianes) * Math.cos(lat2 * aRadianes) * senoLon * senoLon
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+
+  return RADIO_TERRESTRE_KM * c
+}
 
 // Icono del marcador con las tres URLs CDN de Leaflet 1.9.4
 const ICONO_MARCADOR = L.icon({
