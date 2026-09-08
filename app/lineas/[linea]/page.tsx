@@ -187,7 +187,7 @@ export default async function LineaPage({ params }: LineaPageProps) {
         className="relative -mt-[64px] w-full bg-grisCon py-24 sm:py-32"
         style={{ clipPath: 'polygon(0 64px, 100% 0, 100% 100%, 0 100%)' }}
       >
-        <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 xl:px-0">
+        <div className="mx-auto w-full max-w-[1800px] px-4 sm:px-6 xl:px-0">
           <Aparece direccion="arriba" distancia={40} duracion={0.6}>
             <h2 className="font-titulo text-[40px] leading-[1.1] text-blanco">
               {isConstructora ? 'Nuestros proyectos' : `Nuestros productos en ${config.nombre}`}
@@ -195,7 +195,7 @@ export default async function LineaPage({ params }: LineaPageProps) {
             <div aria-hidden="true" className="mt-4 h-1 w-20 bg-lima" />
           </Aparece>
           {isConstructora ? (
-            <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+            <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
               {PROYECTOS_CONSTRUCTORA.map((proyecto) => (
                 <div
                   key={proyecto.nombre}
@@ -212,7 +212,7 @@ export default async function LineaPage({ params }: LineaPageProps) {
             </div>
           ) : isPrefabricados ? (
             categories && categories.length > 0 ? (
-              <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+              <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
                 {categories.map((category, index) => (
                   <Aparece
                     key={category.id}
@@ -252,7 +252,7 @@ export default async function LineaPage({ params }: LineaPageProps) {
               </p>
             )
           ) : products && products.length > 0 ? (
-            <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+            <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
               {products.map((product, index) => (
                 <Aparece
                   key={product.id}
@@ -263,16 +263,23 @@ export default async function LineaPage({ params }: LineaPageProps) {
                 >
                   <Link
                     href={`/productos/${product.slug}`}
-                    className="flex flex-col border-2 border-grisCon bg-blanco"
+                    className="group relative flex flex-col border-2 border-grisCon bg-blanco"
                   >
-                    <div className="relative h-[216px] w-full">
+                    <div className="relative h-[216px] w-full overflow-hidden">
                       <Image
                         src={product.images[0] || '/placeholder-producto.jpg'}
                         fill
-                        className="object-cover"
+                        className="object-cover transition-transform duration-300 group-hover:scale-105"
                         sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 384px"
                         alt={product.name}
                       />
+                      {product.description ? (
+                        <div className="absolute inset-0 flex items-center justify-center bg-grisCon/80 p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                          <p className="line-clamp-3 text-center font-texto text-[14px] leading-[1.5] text-blanco">
+                            {product.description}
+                          </p>
+                        </div>
+                      ) : null}
                     </div>
                     <div className="flex flex-col gap-1 p-4">
                       <h3 className="font-titulo text-[20px] leading-[1.3] text-grisCon">
