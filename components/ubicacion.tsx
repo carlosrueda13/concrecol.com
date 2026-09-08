@@ -144,49 +144,57 @@ export function Ubicacion() {
             </div>
             {/* Panel de ubicacion */}
             <div className="flex w-full flex-col justify-center gap-6 xl:h-[520px] xl:w-[426px]">
-              <address className="font-texto text-[20px] not-italic text-grisCon">
-                KM 8 Via San gil - Socorro, Santander, Colombia
-              </address>
-              <div className="flex items-center gap-2">
-                <MapPin className="h-6 w-6 text-lima animate-pulse" aria-hidden="true" />
-                <p className="font-titulo text-[24px] text-lima">
-                  ¿Dónde nos necesitas?
-                </p>
-              </div>
-              <div className="flex items-start gap-2">
-                <div className="flex w-full flex-col gap-1">
-                  <Input
-                    type="text"
-                    value={texto}
-                    onChange={(e) => setTexto(e.target.value)}
-                    placeholder="Nombre de tu pueblo o municipio"
-                    className="h-[48px]"
-                  />
-                  {error && (
-                    <p role="alert" className="font-texto text-[14px] text-red-600">
-                      {error}
-                    </p>
-                  )}
+              <Aparece direccion="derecha" distancia={40} duracion={0.6} retraso={0}>
+                <address className="font-texto text-[20px] not-italic text-grisCon">
+                  KM 8 Via San gil - Socorro, Santander, Colombia
+                </address>
+              </Aparece>
+              <Aparece direccion="derecha" distancia={40} duracion={0.6} retraso={0.1}>
+                <div className="flex items-center gap-2">
+                  <MapPin className="h-6 w-6 text-lima animate-pulse" aria-hidden="true" />
+                  <p className="font-titulo text-[24px] text-lima">
+                    ¿Dónde nos necesitas?
+                  </p>
                 </div>
-                <BotonCotizar
-                  type="button"
-                  variant="contorno"
-                  className="h-[48px] w-fit px-6"
-                  onClick={buscar}
-                  disabled={buscando}
-                >
-                  Buscar
-                </BotonCotizar>
-              </div>
-              <button
-                type="button"
-                onClick={usarUbicacionActual}
-                disabled={buscando}
-                className="flex items-center gap-1 font-texto text-[14px] text-grisCon underline underline-offset-2 hover:text-lima disabled:opacity-50"
-              >
-                <MapPin className="h-4 w-4" aria-hidden="true" />
-                Usar mi ubicación actual
-              </button>
+              </Aparece>
+              <Aparece direccion="derecha" distancia={40} duracion={0.6} retraso={0.2}>
+                <div className="flex w-full flex-col gap-6">
+                  <div className="flex items-start gap-2">
+                    <div className="flex w-full flex-col gap-1">
+                      <Input
+                        type="text"
+                        value={texto}
+                        onChange={(e) => setTexto(e.target.value)}
+                        placeholder="Nombre de tu pueblo o municipio"
+                        className="h-[48px]"
+                      />
+                      {error && (
+                        <p role="alert" className="font-texto text-[14px] text-red-600">
+                          {error}
+                        </p>
+                      )}
+                    </div>
+                    <BotonCotizar
+                      type="button"
+                      variant="contorno"
+                      className="h-[48px] w-fit px-6"
+                      onClick={buscar}
+                      disabled={buscando}
+                    >
+                      Buscar
+                    </BotonCotizar>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={usarUbicacionActual}
+                    disabled={buscando}
+                    className="flex items-center gap-1 font-texto text-[14px] text-grisCon underline underline-offset-2 hover:text-lima disabled:opacity-50"
+                  >
+                    <MapPin className="h-4 w-4" aria-hidden="true" />
+                    Usar mi ubicación actual
+                  </button>
+                </div>
+              </Aparece>
               {resultado &&
                 (dentroDeCobertura ? (
                   <div className="mt-4 border-2 border-lima bg-lima/10 p-4">
