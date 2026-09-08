@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowDown } from 'lucide-react'
+import { ArrowDown, ArrowRight } from 'lucide-react'
 import { Aparece } from '@/components/animations/aparece'
 import { BotonCotizar } from '@/components/boton-cotizar'
 import { Ubicacion } from '@/components/ubicacion'
@@ -110,6 +110,10 @@ export default function HomePage() {
                     <h3 className="px-5 pb-5 font-titulo text-[28px] text-grisCon">
                       {linea.nombre}
                     </h3>
+                    <div className="mt-1 flex items-center gap-1 px-5 font-texto text-[16px] uppercase tracking-[0.05em] text-grisCon/70">
+                      <span>Ver más</span>
+                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+                    </div>
                   </div>
                 </Link>
               </Aparece>
