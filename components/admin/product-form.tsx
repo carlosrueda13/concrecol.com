@@ -5,10 +5,11 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ImagePreview } from '@/components/ui/image-preview'
 import { ImageUpload } from '@/components/ui/image-upload'
-import { UnitMeasure } from '@prisma/client'
+import { LineaNegocio, UnitMeasure } from '@prisma/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
 import {
   Select,
   SelectContent,
@@ -21,6 +22,9 @@ import { useToast } from '@/components/ui/use-toast'
 import { productSchema, type ProductFormData } from '@/lib/validations/product'
 import { createProduct, updateProduct } from '@/app/actions/product'
 import { useLoading } from '@/contexts/loading-context'
+
+// Sentinel value for the "Sin asignar" option, mapped to null on submit.
+const LINEA_SIN_ASIGNAR = 'SIN_ASIGNAR'
 
 interface ProductFormProps {
   categories: {
@@ -45,6 +49,10 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
     resolver: zodResolver(productSchema),
     defaultValues: {
       ...initialData,
+      description: initialData?.description ?? '',
+      applications: initialData?.applications || [],
+      advantages: initialData?.advantages ?? '',
+      specifications: initialData?.specifications ?? '',
       price_per_unit: initialData?.price_per_unit || 0,
       stock_quantity: initialData?.stock_quantity || 0,
       requires_scheduling: initialData?.requires_scheduling || false,
@@ -89,6 +97,22 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
     } finally {
       stopLoading()
     }
+  }
+
+  const applications = watch('applications') || []
+
+  const addApplication = () => {
+    setValue('applications', [...applications, ''])
+  }
+
+  const updateApplication = (index: number, value: string) => {
+    const updated = [...applications]
+    updated[index] = value
+    setValue('applications', updated)
+  }
+
+  const removeApplication = (index: number) => {
+    setValue('applications', applications.filter((_, i) => i !== index))
   }
 
   return (
@@ -228,6 +252,8 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
               <SelectItem value={UnitMeasure.TON}>Tonelada</SelectItem>
               <SelectItem value={UnitMeasure.BOLSA}>Bolsa</SelectItem>
               <SelectItem value={UnitMeasure.GALON}>Galón</SelectItem>
+              <SelectItem value={UnitMeasure.UND}>Unidad (und)</SelectItem>
+              <SelectItem value={UnitMeasure.M2}>Metro cuadrado (m²)</SelectItem>
             </SelectContent>
           </Select>
           {errors.unit_measure && (
@@ -272,6 +298,95 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
             <p className="text-sm text-red-500">
               {errors.sqlCategoryId.message}
             </p>
+          )}
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="lineaNegocio">Linea de negocio</Label>
+          <Select
+            value={watch('lineaNegocio') ?? LINEA_SIN_ASIGNAR}
+            onValueChange={(value) =>
+              setValue(
+                'lineaNegocio',
+                value === LINEA_SIN_ASIGNAR ? null : (value as LineaNegocio)
+              )
+            }
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Seleccione una línea de negocio" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value={LINEA_SIN_ASIGNAR}>Sin asignar</SelectItem>
+              <SelectItem value={LineaNegocio.CONCRETO}>Concreto</SelectItem>
+              <SelectItem value={LineaNegocio.AGREGADOS}>Agregados</SelectItem>
+              <SelectItem value={LineaNegocio.CONSTRUCTORA}>Constructora</SelectItem>
+              <SelectItem value={LineaNegocio.PREFABRICADOS}>Prefabricados</SelectItem>
+            </SelectContent>
+          </Select>
+          {errors.lineaNegocio && (
+            <p className="text-sm text-red-500">
+              {errors.lineaNegocio.message}
+            </p>
+          )}
+        </div>
+
+        <div className="space-y-2 md:col-span-2">
+          <Label htmlFor="description">Descripción</Label>
+          <Textarea id="description" {...register('description')} />
+          {errors.description && (
+            <p className="text-sm text-red-500">{errors.description.message}</p>
+          )}
+        </div>
+
+        <div className="space-y-2 md:col-span-2">
+          <Label>Aplicaciones</Label>
+          <div className="space-y-2">
+            {applications.map((application, index) => (
+              <div key={index} className="flex items-center space-x-2">
+                <Input
+                  value={application}
+                  onChange={(e) => updateApplication(index, e.target.value)}
+                  aria-label={`Aplicación ${index + 1}`}
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => removeApplication(index)}
+                  aria-label={`Quitar aplicación ${index + 1}`}
+                >
+                  Quitar
+                </Button>
+              </div>
+            ))}
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={addApplication}
+              aria-label="Agregar aplicación"
+            >
+              Agregar aplicación
+            </Button>
+          </div>
+          {errors.applications && (
+            <p className="text-sm text-red-500">{errors.applications.message}</p>
+          )}
+        </div>
+
+        <div className="space-y-2 md:col-span-2">
+          <Label htmlFor="advantages">Ventajas</Label>
+          <Textarea id="advantages" {...register('advantages')} />
+          {errors.advantages && (
+            <p className="text-sm text-red-500">{errors.advantages.message}</p>
+          )}
+        </div>
+
+        <div className="space-y-2 md:col-span-2">
+          <Label htmlFor="specifications">Especificaciones</Label>
+          <Textarea id="specifications" {...register('specifications')} />
+          {errors.specifications && (
+            <p className="text-sm text-red-500">{errors.specifications.message}</p>
           )}
         </div>
       </div>

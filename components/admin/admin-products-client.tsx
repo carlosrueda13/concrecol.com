@@ -12,6 +12,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { deleteProduct } from '@/app/actions/product'
+import { formatCurrency } from '@/lib/utils'
 
 interface AdminProductsClientProps {
   products: Array<{
@@ -46,10 +47,7 @@ export function AdminProductsClient({ products }: AdminProductsClientProps) {
               <TableCell>{product.name}</TableCell>
               <TableCell>{product.sqlCategory.name}</TableCell>
               <TableCell>
-                {new Intl.NumberFormat('es-CO', {
-                  style: 'currency',
-                  currency: 'COP',
-                }).format(product.price_per_unit)}
+                {formatCurrency(product.price_per_unit)}
               </TableCell>
               <TableCell>{product.stock_quantity}</TableCell>
               <TableCell>

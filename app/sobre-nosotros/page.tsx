@@ -36,7 +36,7 @@ export default function SobreNosotrosPage() {
         </div>
         <div className="relative h-96 rounded-lg overflow-hidden shadow-xl">
           <img 
-            src="/imagen-planta.jpg" 
+            src="/imagen-planta.JPG" 
             alt="Planta de Concrecol" 
             className="w-full h-full object-cover"
           />

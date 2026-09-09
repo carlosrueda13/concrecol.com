@@ -46,21 +46,6 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/productos" className="text-gray-300 hover:text-[#C4D600]">
-                  Productos
-                </Link>
-              </li>
-              <li>
-                <Link href="/sobre-nosotros" className="text-gray-300 hover:text-[#C4D600]">
-                  Sobre Nosotros
-                </Link>
-              </li>
-              <li>
-                <Link href="/proyectos" className="text-gray-300 hover:text-[#C4D600]">
-                  Nuestros Proyectos
-                </Link>
-              </li>
-              <li>
                 <Link href="/contacto" className="text-gray-300 hover:text-[#C4D600]">
                   Contacto
                 </Link>
@@ -75,26 +60,26 @@ export function Footer() {
           
           {/* Products */}
           <div>
-            <h3 className="text-lg font-semibold mb-3">Nuestros Productos</h3>
+            <h3 className="text-lg font-semibold mb-3">Líneas de Negocio</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/productos?categoria=concreto" className="text-gray-300 hover:text-[#C4D600]">
+                <Link href="/lineas/concreto" className="text-gray-300 hover:text-[#C4D600]">
                   Concreto
                 </Link>
               </li>
               <li>
-                <Link href="/productos?categoria=cemento" className="text-gray-300 hover:text-[#C4D600]">
-                  Cemento
-                </Link>
-              </li>
-              <li>
-                <Link href="/productos?categoria=pinturas" className="text-gray-300 hover:text-[#C4D600]">
-                  Pinturas
-                </Link>
-              </li>
-              <li>
-                <Link href="/productos?categoria=agregados" className="text-gray-300 hover:text-[#C4D600]">
+                <Link href="/lineas/agregados" className="text-gray-300 hover:text-[#C4D600]">
                   Agregados
+                </Link>
+              </li>
+              <li>
+                <Link href="/lineas/constructora" className="text-gray-300 hover:text-[#C4D600]">
+                  Constructora
+                </Link>
+              </li>
+              <li>
+                <Link href="/lineas/prefabricados" className="text-gray-300 hover:text-[#C4D600]">
+                  Prefabricados
                 </Link>
               </li>
             </ul>

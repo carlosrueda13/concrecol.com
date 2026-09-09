@@ -9,6 +9,17 @@ import { createAuditLog } from '@/lib/audit'
 
 const prisma = new PrismaClient()
 
+function normalizeText(value: string | null | undefined): string | null {
+  if (value == null) return null
+  const trimmed = value.trim()
+  return trimmed === '' ? null : trimmed
+}
+
+function normalizeApplications(value: string[] | undefined): string[] {
+  if (!Array.isArray(value)) return []
+  return value.map((item) => item.trim()).filter((item) => item !== '')
+}
+
 export async function createProduct(data: ProductFormData) {
   const session = await getServerSession(authOptions)
   if (!session) {
@@ -21,7 +32,13 @@ export async function createProduct(data: ProductFormData) {
 
     // Create product
     const product = await prisma.product.create({
-      data: validatedData,
+      data: {
+        ...validatedData,
+        description: normalizeText(validatedData.description),
+        applications: normalizeApplications(validatedData.applications),
+        advantages: normalizeText(validatedData.advantages),
+        specifications: normalizeText(validatedData.specifications),
+      },
     })
 
     // Log action
@@ -51,10 +68,26 @@ export async function updateProduct(id: string, data: Partial<ProductFormData>) 
     // Validate data
     const validatedData = productUpdateSchema.parse(data)
 
+    // Normalize the optional fields without overwriting omitted ones
+    const updateData = { ...validatedData }
+
+    if (validatedData.description !== undefined) {
+      updateData.description = normalizeText(validatedData.description)
+    }
+    if (validatedData.applications !== undefined) {
+      updateData.applications = normalizeApplications(validatedData.applications)
+    }
+    if (validatedData.advantages !== undefined) {
+      updateData.advantages = normalizeText(validatedData.advantages)
+    }
+    if (validatedData.specifications !== undefined) {
+      updateData.specifications = normalizeText(validatedData.specifications)
+    }
+
     // Update product
     const product = await prisma.product.update({
       where: { id },
-      data: validatedData,
+      data: updateData,
     })
 
     // Log action

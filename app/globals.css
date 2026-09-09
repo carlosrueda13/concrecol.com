@@ -41,6 +41,91 @@
 .hover-scale:active {
   transform: scale(0.98);
 }
+
+@keyframes entradaAbajo {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes entradaIzquierda {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes entradaDerecha {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.entrada {
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+  animation-timeline: view();
+  animation-range: entry 0% cover 30%;
+}
+
+.entrada-abajo {
+  animation-name: entradaAbajo;
+}
+
+.entrada-izquierda {
+  animation-name: entradaIzquierda;
+}
+
+.entrada-derecha {
+  animation-name: entradaDerecha;
+}
+
+@keyframes scrollIndicator {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(10px);
+  }
+}
+
+.scroll-indicator {
+  animation: scrollIndicator 2s ease-in-out infinite;
+}
+
+@keyframes zoomHero {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.08);
+  }
+}
+
+.hero-zoom {
+  animation: zoomHero 20s ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-zoom {
+    animation: none;
+    transform: scale(1);
+  }
+}
  
 @layer base {
   :root {
@@ -139,4 +224,49 @@
     backface-visibility: hidden;
     transform: translateZ(0);
   }
+}
+
+@keyframes marquesina {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquesina-track {
+  display: inline-flex;
+  width: max-content;
+  animation: marquesina 30s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquesina-track {
+    animation: none;
+    transform: translateX(0);
+  }
+}
+
+
+@keyframes cargaFadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.carga-fade-out {
+  animation: cargaFadeOut 500ms ease forwards;
+}
+
+.corte-diagonal-abajo {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 60px), 0 100%);
+}
+
+.corte-diagonal-arriba {
+  margin-top: -60px;
+  clip-path: polygon(0 60px, 100% 0, 100% 100%, 0 100%);
 }

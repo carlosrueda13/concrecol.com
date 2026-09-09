@@ -10,6 +10,7 @@ interface RevealProps {
   delay?: number
   direction?: 'up' | 'down' | 'left' | 'right' | 'none'
   duration?: number
+  distance?: number
   className?: string
 }
 
@@ -19,32 +20,33 @@ export const Reveal: React.FC<RevealProps> = ({
   delay = 0,
   direction = 'up',
   duration = 0.5,
+  distance = 50,
   className = "",
 }) => {
   const controls = useAnimation()
   const [ref, inView] = useInView({ threshold: 0.2, triggerOnce: true })
 
-  // Configurar las variantes según la dirección
+  // Configure variants based on the direction
   const getVariants = (): Variants => {
     switch (direction) {
       case 'up':
         return {
-          hidden: { opacity: 0, y: 50 },
+          hidden: { opacity: 0, y: distance },
           visible: { opacity: 1, y: 0 },
         }
       case 'down':
         return {
-          hidden: { opacity: 0, y: -50 },
+          hidden: { opacity: 0, y: -distance },
           visible: { opacity: 1, y: 0 },
         }
       case 'left':
         return {
-          hidden: { opacity: 0, x: -50 },
+          hidden: { opacity: 0, x: -distance },
           visible: { opacity: 1, x: 0 },
         }
       case 'right':
         return {
-          hidden: { opacity: 0, x: 50 },
+          hidden: { opacity: 0, x: distance },
           visible: { opacity: 1, x: 0 },
         }
       case 'none':

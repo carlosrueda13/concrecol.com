@@ -6,8 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model SqlCategory {
@@ -26,14 +27,28 @@ enum UnitMeasure {
   TON
   BOLSA
   GALON
+  UND
+  M2
+}
+
+enum LineaNegocio {
+  CONCRETO
+  AGREGADOS
+  CONSTRUCTORA
+  PREFABRICADOS
 }
 
 model Product {
   id                  String       @id @default(cuid())
   name                String
+  description         String?
+  applications        String[]     @default([])
+  advantages          String?
+  specifications      String?
   slug                String       @unique
   price_per_unit      Int
   unit_measure        UnitMeasure
+  lineaNegocio        LineaNegocio?
   stock_quantity      Int         @default(0)
   requires_scheduling Boolean      @default(false)
   images              String[]
@@ -100,8 +115,17 @@ model ContactMessage {
   nombre    String
   email     String
   telefono  String
-  asunto    String
-  mensaje   String
+  asunto    String?
+  mensaje   String?
+  tipo      String?
+  producto  String?
+  cantidad  String?
+  fechaRequerida String?
+  usoPrevisto String?
+  direccionObra String?
+  condicionesAcceso String?
+  rutUrl    String?
+  autorizacionDatos Boolean @default(false)
   isRead    Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
