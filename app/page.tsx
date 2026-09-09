@@ -38,9 +38,6 @@ export default function HomePage() {
             <h1 className="font-titulo text-[32px] leading-[1.1] uppercase text-blanco sm:text-titulo">
               Construimos confianza, entregamos concreto.
             </h1>
-            <p className="font-texto text-subtitulo text-blanco">
-              [Bajada — texto pendiente]
-            </p>
             <div className="flex flex-col items-start">
             <div className="flex flex-wrap items-center gap-6">
               <BotonCotizar asChild variant="primaria" className="h-[56px] w-[220px]">

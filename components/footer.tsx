@@ -46,21 +46,6 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/productos" className="text-gray-300 hover:text-[#C4D600]">
-                  Productos
-                </Link>
-              </li>
-              <li>
-                <Link href="/sobre-nosotros" className="text-gray-300 hover:text-[#C4D600]">
-                  Sobre Nosotros
-                </Link>
-              </li>
-              <li>
-                <Link href="/proyectos" className="text-gray-300 hover:text-[#C4D600]">
-                  Nuestros Proyectos
-                </Link>
-              </li>
-              <li>
                 <Link href="/contacto" className="text-gray-300 hover:text-[#C4D600]">
                   Contacto
                 </Link>
