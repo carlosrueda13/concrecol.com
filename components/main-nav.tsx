@@ -38,14 +38,16 @@ export function MainNav({ sticky = true }: { sticky?: boolean }) {
                 <Phone className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
                 <span className="truncate">321 452 5798</span>
               </Button>
-              <Button
-                type="button"
-                variant="ghost"
-                className="h-8 px-2 text-blanco hover:bg-white/10 hover:text-blanco text-texto"
-              >
-                <Mail className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-                <span className="truncate">gerencia@concrecol.co</span>
-              </Button>
+              <div className="hidden sm:block">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="h-8 px-2 text-blanco hover:bg-white/10 hover:text-blanco text-texto"
+                >
+                  <Mail className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                  <span className="truncate">gerencia@concrecol.co</span>
+                </Button>
+              </div>
             </div>
           </div>
         </div>

@@ -35,15 +35,15 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-grisCon/60" aria-hidden="true" />
         <div className="relative z-10 mx-auto flex h-full w-full max-w-[1200px] items-center px-4 sm:px-6 xl:px-0">
           <div className="flex flex-col items-start gap-6">
-            <h1 className="font-titulo text-[32px] leading-[1.1] uppercase text-blanco sm:text-titulo">
+            <h1 className="font-titulo text-[24px] leading-[1.1] uppercase text-blanco sm:text-titulo">
               Construimos confianza, entregamos concreto.
             </h1>
             <div className="flex flex-col items-start">
             <div className="flex flex-wrap items-center gap-6">
-              <BotonCotizar asChild variant="primaria" className="h-[56px] w-[220px]">
+              <BotonCotizar asChild variant="primaria" className="h-[48px] w-full sm:h-[56px] sm:w-[220px]">
                 <Link href="/cotizacion">Cotizar</Link>
               </BotonCotizar>
-              <BotonCotizar asChild variant="secundaria" className="h-[56px] w-[220px]">
+              <BotonCotizar asChild variant="secundaria" className="h-[48px] w-full sm:h-[56px] sm:w-[220px]">
                 <Link href="/productos">Ver productos</Link>
               </BotonCotizar>
             </div>
