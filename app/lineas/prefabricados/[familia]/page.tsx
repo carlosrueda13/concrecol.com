@@ -55,7 +55,10 @@ export default async function FamiliaPage({ params }: FamiliaPageProps) {
       <Ubicacion />
 
       {/* Productos de la familia */}
-      <section id="productos" className="relative w-full bg-blanco py-24 sm:py-32">
+      <section
+        id="productos"
+        className="relative mt-0 sm:-mt-[64px] w-full bg-grisCon py-24 sm:py-32 sm:[clip-path:polygon(0_64px,100%_0,100%_100%,0_100%)]"
+      >
         <div className="mx-auto w-full max-w-[1800px] px-10 sm:px-6 xl:px-0">
           {products.length > 0 ? (
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
@@ -92,7 +95,7 @@ export default async function FamiliaPage({ params }: FamiliaPageProps) {
               ))}
             </div>
           ) : (
-            <p className="font-texto text-[16px] text-grisCon">
+            <p className="font-texto text-[16px] text-blanco">
               {'[Proximamente productos en esta linea]'}
             </p>
           )}
