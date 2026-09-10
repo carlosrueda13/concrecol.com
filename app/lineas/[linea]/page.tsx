@@ -277,7 +277,7 @@ export default async function LineaPage({ params }: LineaPageProps) {
                         </div>
                       ) : null}
                     </div>
-                    <div className="flex flex-col gap-1 p-4">
+                    <div className="flex min-h-[88px] flex-col gap-1 p-4 justify-center">
                       <h3 className="font-titulo text-[20px] leading-[1.3] text-grisCon">
                         {product.name}
                       </h3>
