@@ -44,7 +44,7 @@ export default function HomePage() {
                 <Link href="/cotizacion">Cotizar</Link>
               </BotonCotizar>
               <BotonCotizar asChild variant="secundaria" className="h-[48px] w-full sm:h-[56px] sm:w-[220px]">
-                <Link href="/productos">Ver productos</Link>
+                <Link href="#lineas-de-negocio">Ver Líneas</Link>
               </BotonCotizar>
             </div>
               {/* Scroll indicator */}
