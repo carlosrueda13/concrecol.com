@@ -55,8 +55,11 @@ export default async function FamiliaPage({ params }: FamiliaPageProps) {
       <Ubicacion />
 
       {/* Productos de la familia */}
-      <section id="productos" className="relative w-full bg-blanco py-24 sm:py-32">
-        <div className="mx-auto w-full max-w-[1800px] px-8 sm:px-6 xl:px-0">
+      <section
+        id="productos"
+        className="relative mt-0 sm:-mt-[64px] w-full bg-grisCon py-24 sm:py-32 sm:[clip-path:polygon(0_64px,100%_0,100%_100%,0_100%)]"
+      >
+        <div className="mx-auto w-full max-w-[1800px] px-10 sm:px-6 xl:px-8">
           {products.length > 0 ? (
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
               {products.map((product, index) => (
@@ -67,10 +70,7 @@ export default async function FamiliaPage({ params }: FamiliaPageProps) {
                   duracion={0.6}
                   retraso={index * 0.1}
                 >
-                  <Link
-                    href={`/productos/${product.slug}`}
-                    className="group relative flex flex-col border-2 border-grisCon bg-blanco"
-                  >
+                  <div className="group relative flex flex-col border-2 border-grisCon bg-blanco">
                     <div className="relative h-[180px] sm:h-[380px] w-full">
                       <Image
                         src={product.images[0] || '/placeholder-producto.jpg'}
@@ -90,12 +90,12 @@ export default async function FamiliaPage({ params }: FamiliaPageProps) {
                         {product.name}
                       </h3>
                     </div>
-                  </Link>
+                  </div>
                 </Aparece>
               ))}
             </div>
           ) : (
-            <p className="font-texto text-[16px] text-grisCon">
+            <p className="font-texto text-[16px] text-blanco">
               {'[Proximamente productos en esta linea]'}
             </p>
           )}
