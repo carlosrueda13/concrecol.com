@@ -91,7 +91,7 @@ export default function HomePage() {
               >
                 <Link
                   href={linea.href}
-                  className="group flex h-[220px] sm:h-[520px] w-full flex-col"
+                  className="group flex h-[220px] sm:h-[520px] w-full flex-col border-[6px] border-blanco shadow-[10px_10px_0_0_rgba(0,0,0,0.95)]"
                 >
                   <div className="relative h-[325px] w-full overflow-hidden">
                     <Image

@@ -70,7 +70,7 @@ export default async function FamiliaPage({ params }: FamiliaPageProps) {
                   duracion={0.6}
                   retraso={index * 0.1}
                 >
-                  <div className="group relative flex flex-col border-2 border-grisCon bg-blanco">
+                  <div className="group relative flex flex-col border-2 border-grisCon bg-blanco shadow-[10px_10px_0_0_rgba(0,0,0,0.95)]">
                     <div className="relative h-[180px] sm:h-[380px] w-full">
                       <Image
                         src={product.images[0] || '/placeholder-producto.jpg'}
