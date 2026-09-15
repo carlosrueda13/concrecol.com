@@ -12,11 +12,20 @@ import { Checkbox } from '@/components/ui/checkbox'
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
 import { Alert, AlertDescription } from '@/components/ui/alert'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/components/ui/dialog'
 import { Aparece } from '@/components/animations/aparece'
 import { BotonCotizar } from '@/components/boton-cotizar'
 
@@ -25,7 +34,30 @@ interface ProductoActivo {
   name: string
   slug: string
   is_active: boolean
+  lineaNegocio: string | null
 }
+
+// Orden de las lineas de negocio mostradas en el selector de producto.
+const ORDEN_LINEAS = ['CONCRETO', 'AGREGADOS', 'PREFABRICADOS'] as const
+type LineaOrden = (typeof ORDEN_LINEAS)[number]
+
+const ETIQUETAS_LINEA: Record<LineaOrden, string> = {
+  CONCRETO: 'Concreto',
+  AGREGADOS: 'Agregados',
+  PREFABRICADOS: 'Prefabricados',
+}
+
+// Fecha de hoy en formato local YYYY-MM-DD. Usa metodos locales para
+// evitar el desfase de un dia que introduce toISOString (UTC).
+function obtenerFechaHoyLocal(): string {
+  const now = new Date()
+  const year = now.getFullYear()
+  const month = String(now.getMonth() + 1).padStart(2, '0')
+  const day = String(now.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
+const hoy = obtenerFechaHoyLocal()
 
 const cotizacionFormSchema = z.object({
   nombre: z.string().min(3, 'El nombre debe tener al menos 3 caracteres'),
@@ -34,7 +66,12 @@ const cotizacionFormSchema = z.object({
   producto: z.string().optional(),
   tipoResistencia: z.string().optional(),
   cantidad: z.string().optional(),
-  fechaRequerida: z.string().optional(),
+  fechaRequerida: z
+    .string()
+    .optional()
+    .refine((val) => !val || val >= hoy, {
+      message: 'La fecha no puede ser anterior a hoy',
+    }),
   usoPrevisto: z.string().optional(),
   direccionObra: z.string().optional(),
   condicionesAcceso: z.string().optional(),
@@ -118,6 +155,15 @@ function CotizacionForm() {
       }
 
       setSubmitSuccess(true)
+
+      const mensajeWhatsapp = encodeURIComponent(
+        `Hola, acabo de solicitar una cotización desde la página web. Mi nombre es ${data.nombre}.`
+      )
+      window.open(
+        `https://wa.me/573214525798?text=${mensajeWhatsapp}`,
+        '_blank'
+      )
+
       reset()
     } catch (error) {
       setSubmitError(
@@ -129,6 +175,60 @@ function CotizacionForm() {
       setIsSubmitting(false)
     }
   }
+
+  // Agrupa los productos por linea de negocio en el orden definido.
+  const gruposLinea = ORDEN_LINEAS.map((linea) => ({
+    linea,
+    etiqueta: ETIQUETAS_LINEA[linea],
+    productos: productos
+      .filter((p) => p.lineaNegocio === linea)
+      .sort((a, b) => a.name.localeCompare(b.name)),
+  }))
+
+  // Productos sin linea de negocio asignada.
+  const productosOtros = productos
+    .filter((p) => p.lineaNegocio === null)
+    .sort((a, b) => a.name.localeCompare(b.name))
+
+  // Linea de negocio del producto seleccionado en el formulario.
+  // null cuando no hay seleccion o el valor es "otro".
+  const productoSeleccionado = watch('producto')
+  const lineaSeleccionada =
+    productoSeleccionado && productoSeleccionado !== 'otro'
+      ? (productos.find((p) => p.slug === productoSeleccionado)?.lineaNegocio ??
+          null)
+      : null
+
+  // Configuracion del campo tipoResistencia segun la linea de negocio.
+  const configTipoResistencia =
+    lineaSeleccionada === 'AGREGADOS'
+      ? {
+          label: 'Tipo',
+          placeholder: 'Ej: Arena',
+          list: 'sugerencias-agregados',
+          opciones: ['Arena', 'Grava', 'Base/Sub-base/Recebo'],
+        }
+      : lineaSeleccionada === 'PREFABRICADOS'
+        ? {
+            label: 'Tipo o especificacion',
+            placeholder: 'Ej: color, acabado, medida',
+            list: undefined,
+            opciones: [],
+          }
+        : {
+            label: 'Tipo o resistencia',
+            placeholder: 'Ej: 3000 psi',
+            list: 'sugerencias-concreto',
+            opciones: [
+              '2000 psi',
+              '2500 psi',
+              '3000 psi',
+              '3500 psi',
+              '4000 psi',
+              'MR',
+              'Fluido/Bombeable',
+            ],
+          }
 
   return (
     <div>
@@ -147,15 +247,6 @@ function CotizacionForm() {
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mx-auto max-w-[1200px] px-4 pt-8">
-          {submitSuccess && (
-            <Alert className="mb-6 bg-lima text-grisCon">
-              <AlertDescription>
-                Tu solicitud de cotización fue enviada correctamente. Te
-                contactaremos a la brevedad.
-              </AlertDescription>
-            </Alert>
-          )}
-
           {submitError && (
             <Alert className="mb-6 bg-grisCon text-blanco">
               <AlertDescription>{submitError}</AlertDescription>
@@ -164,107 +255,6 @@ function CotizacionForm() {
         </div>
 
         <Aparece direccion="arriba" distancia={40} duracion={0.6} retraso={0}>
-          <section className="bg-blanco">
-            <div className="mx-auto max-w-[1200px] px-4 py-16">
-              <h2 className="font-titulo text-2xl text-grisCon">PRODUCTO</h2>
-              <div className="mt-4 h-[4px] w-[80px] bg-lima" />
-              <div className="mt-8 space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="producto">Producto de interés (opcional)</Label>
-                  <Select
-                    value={watch('producto') ?? ''}
-                    onValueChange={(value) => setValue('producto', value, { shouldValidate: true })}
-                  >
-                    <SelectTrigger id="producto">
-                      <SelectValue placeholder="Seleccione un producto" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {productos.map((producto) => (
-                        <SelectItem key={producto.id} value={producto.slug}>
-                          {producto.name}
-                        </SelectItem>
-                      ))}
-                      <SelectItem value="otro">Otro</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="tipoResistencia">Tipo o resistencia</Label>
-                  <Input
-                    id="tipoResistencia"
-                    list="tipo-resistencia-sugerencias"
-                    {...register('tipoResistencia')}
-                    placeholder="Ej: 3000 psi"
-                  />
-                  <datalist id="tipo-resistencia-sugerencias">
-                    <option value="2000 psi" />
-                    <option value="3000 psi" />
-                    <option value="MR" />
-                  </datalist>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="cantidad">Cantidad aproximada</Label>
-                  <Input
-                    id="cantidad"
-                    {...register('cantidad')}
-                    placeholder="Ej: 5 m³"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="fechaRequerida">Fecha en que lo necesita</Label>
-                  <Input id="fechaRequerida" type="date" {...register('fechaRequerida')} />
-                </div>
-              </div>
-            </div>
-          </section>
-        </Aparece>
-
-        <Aparece direccion="arriba" distancia={40} duracion={0.6} retraso={0.15}>
-          <section className="bg-grisClaro">
-            <div className="mx-auto max-w-[1200px] px-4 py-16">
-              <h2 className="font-titulo text-2xl text-grisCon">OBRA</h2>
-              <div className="mt-4 h-[4px] w-[80px] bg-lima" />
-              <div className="mt-8 space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="usoPrevisto">Uso previsto</Label>
-                  <Input
-                    id="usoPrevisto"
-                    {...register('usoPrevisto')}
-                    placeholder="Ej: placa de cimentación, columnas, viga"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="direccionObra">Dirección / referencias</Label>
-                  <Input
-                    id="direccionObra"
-                    {...register('direccionObra')}
-                    placeholder="Ciudad, barrio, referencias de la obra"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="condicionesAcceso">Condiciones de acceso</Label>
-                  <Textarea
-                    id="condicionesAcceso"
-                    {...register('condicionesAcceso')}
-                    placeholder="Describe cómo puede ingresar la mezcladora a tu obra"
-                    rows={4}
-                  />
-                  <p className="text-xs text-grisCon">
-                    Indique el ancho de vía, la pendiente y el espacio de maniobra
-                    disponibles para el ingreso de la mezcladora.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </section>
-        </Aparece>
-
-        <Aparece direccion="arriba" distancia={40} duracion={0.6} retraso={0.3}>
           <section className="bg-blanco">
             <div className="mx-auto max-w-[1200px] px-4 py-16">
               <h2 className="font-titulo text-2xl text-grisCon">CONTACTO</h2>
@@ -333,26 +323,194 @@ function CotizacionForm() {
                     )}
                   </div>
                 </div>
+              </div>
+            </div>
+          </section>
+        </Aparece>
 
-                <div className="pt-6">
-                  <BotonCotizar
-                    type="submit"
-                    variant="primaria"
-                    className="w-full h-[56px]"
-                    disabled={isSubmitting}
+        <Aparece direccion="arriba" distancia={40} duracion={0.6} retraso={0.15}>
+          <section className="bg-blanco">
+            <div className="mx-auto max-w-[1200px] px-4 py-16">
+              <h2 className="font-titulo text-2xl text-grisCon">PRODUCTO</h2>
+              <div className="mt-4 h-[4px] w-[80px] bg-lima" />
+              <div className="mt-8 space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="producto">Producto de interés (opcional)</Label>
+                  <Select
+                    value={watch('producto') ?? ''}
+                    onValueChange={(value) => setValue('producto', value, { shouldValidate: true })}
                   >
-                    {isSubmitting ? 'Enviando solicitud...' : 'Solicitar cotización'}
-                  </BotonCotizar>
+                    <SelectTrigger id="producto">
+                      <SelectValue placeholder="Seleccione un producto" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {gruposLinea.map((grupo) =>
+                        grupo.productos.length > 0 ? (
+                          <SelectGroup key={grupo.linea}>
+                            <div className="px-2 py-1.5 text-xs font-semibold text-grisCon">
+                              {grupo.etiqueta}
+                            </div>
+                            {grupo.productos.map((producto) => (
+                              <SelectItem key={producto.id} value={producto.slug}>
+                                {producto.name}
+                              </SelectItem>
+                            ))}
+                          </SelectGroup>
+                        ) : null
+                      )}
+                      {productosOtros.length > 0 ? (
+                        <SelectGroup>
+                          <div className="px-2 py-1.5 text-xs font-semibold text-grisCon">
+                            Otros
+                          </div>
+                          {productosOtros.map((producto) => (
+                            <SelectItem key={producto.id} value={producto.slug}>
+                              {producto.name}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      ) : null}
+                      <SelectItem value="otro">Otro</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
 
-                  <p className="text-xs text-grisCon text-center mt-4">
-                    Los campos marcados con * son obligatorios.
+                <div className="space-y-2">
+                  <Label htmlFor="tipoResistencia">
+                    {configTipoResistencia.label}
+                  </Label>
+                  <Input
+                    id="tipoResistencia"
+                    list={configTipoResistencia.list}
+                    {...register('tipoResistencia')}
+                    placeholder={configTipoResistencia.placeholder}
+                  />
+                  {configTipoResistencia.list ? (
+                    <datalist id={configTipoResistencia.list}>
+                      {configTipoResistencia.opciones.map((opcion) => (
+                        <option key={opcion} value={opcion} />
+                      ))}
+                    </datalist>
+                  ) : null}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="cantidad">Cantidad aproximada</Label>
+                  <Input
+                    id="cantidad"
+                    {...register('cantidad')}
+                    placeholder="Ej: 5 m³"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="fechaRequerida">Fecha en que lo necesita</Label>
+                  <Input
+                    id="fechaRequerida"
+                    type="date"
+                    min={hoy}
+                    {...register('fechaRequerida')}
+                  />
+                  {errors.fechaRequerida && (
+                    <p className="text-grisCon text-sm">
+                      {errors.fechaRequerida.message}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          </section>
+        </Aparece>
+
+        <Aparece direccion="arriba" distancia={40} duracion={0.6} retraso={0.3}>
+          <section className="bg-grisClaro">
+            <div className="mx-auto max-w-[1200px] px-4 py-16">
+              <h2 className="font-titulo text-2xl text-grisCon">OBRA</h2>
+              <div className="mt-4 h-[4px] w-[80px] bg-lima" />
+              <div className="mt-8 space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="usoPrevisto">Uso previsto</Label>
+                  <Input
+                    id="usoPrevisto"
+                    {...register('usoPrevisto')}
+                    placeholder="Ej: placa de cimentación, columnas, viga"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="direccionObra">Dirección / referencias</Label>
+                  <Input
+                    id="direccionObra"
+                    {...register('direccionObra')}
+                    placeholder="Ciudad, barrio, referencias de la obra"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="condicionesAcceso">Condiciones de acceso</Label>
+                  <Textarea
+                    id="condicionesAcceso"
+                    {...register('condicionesAcceso')}
+                    placeholder="Describe cómo puede ingresar la mezcladora a tu obra"
+                    rows={4}
+                  />
+                  <p className="text-xs text-grisCon">
+                    Indique el ancho de vía, la pendiente y el espacio de maniobra
+                    disponibles para el ingreso de la mezcladora.
                   </p>
                 </div>
               </div>
             </div>
           </section>
         </Aparece>
+
+        <section className="bg-blanco">
+          <div className="mx-auto max-w-[1200px] px-4 py-16">
+            <div className="pt-0">
+              <BotonCotizar
+                type="submit"
+                variant="primaria"
+                className="w-full h-[56px]"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Enviando solicitud...' : 'Solicitar cotización'}
+              </BotonCotizar>
+
+              <p className="text-xs text-grisCon text-center mt-4">
+                Los campos marcados con * son obligatorios.
+              </p>
+            </div>
+          </div>
+        </section>
       </form>
+
+      <Dialog
+        open={submitSuccess}
+        onOpenChange={(open) => {
+          if (!open) setSubmitSuccess(false)
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="font-titulo text-grisCon">
+              ¡Solicitud enviada!
+            </DialogTitle>
+            <DialogDescription className="font-texto text-grisCon">
+              Tu solicitud de cotización fue enviada correctamente. Te
+              contactaremos a la brevedad.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <BotonCotizar
+              type="button"
+              variant="primaria"
+              onClick={() => setSubmitSuccess(false)}
+            >
+              Entendido
+            </BotonCotizar>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

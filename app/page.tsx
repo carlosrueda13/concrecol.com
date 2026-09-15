@@ -11,9 +11,9 @@ export const dynamic = 'force-dynamic'
 
 // Lineas de negocio estaticas (marcador, sin base de datos)
 const lineasNegocio = [
-  { nombre: 'Concreto', href: '/lineas/concreto', imagen: '/lineas/concreto.jpg' },
+  { nombre: 'Concreto', href: '/lineas/concreto', imagen: '/lineas/concreto.avif' },
   { nombre: 'Agregados', href: '/lineas/agregados', imagen: '/lineas/agregados.jpg' },
-  { nombre: 'Constructora', href: '/lineas/constructora', imagen: '/lineas/constructora.jpg' },
+  { nombre: 'Constructora', href: '/lineas/constructora', imagen: '/lineas/constructora.webp' },
   { nombre: 'Prefabricados', href: '/lineas/prefabricados', imagen: '/lineas/prefabricados.jpg' },
 ]
 
@@ -91,7 +91,7 @@ export default function HomePage() {
               >
                 <Link
                   href={linea.href}
-                  className="group flex h-[220px] sm:h-[520px] w-full flex-col"
+                  className="group flex h-[220px] sm:h-[520px] w-full flex-col border-[6px] border-blanco shadow-[10px_10px_0_0_rgba(0,0,0,0.95)]"
                 >
                   <div className="relative h-[325px] w-full overflow-hidden">
                     <Image
@@ -106,9 +106,9 @@ export default function HomePage() {
                     <h3 className="px-5 pb-5 font-titulo text-[28px] text-grisCon">
                       {linea.nombre}
                     </h3>
-                    <div className="mt-1 flex items-center gap-1 px-5 font-texto text-[16px] uppercase tracking-[0.05em] text-grisCon/70">
+                    <div className="mt-1 flex items-center gap-1 px-5 font-texto text-[18px] font-semibold uppercase tracking-[0.05em] text-grisCon/70">
                       <span>Ver más</span>
-                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+                      <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" aria-hidden="true" />
                     </div>
                   </div>
                 </Link>

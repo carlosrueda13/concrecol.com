@@ -20,6 +20,9 @@ export function ScrollNav({
 }) {
   const [isCompactVisible, setIsCompactVisible] = useState(false)
 
+  // Enlaces externos (WhatsApp u otros dominios http) abren en pestana nueva.
+  const esEnlaceExterno = hrefBoton.startsWith('http')
+
   useEffect(() => {
     // Optimizamos para evitar demasiadas recalculaciones al hacer scroll
     let scrollTimeout: NodeJS.Timeout
@@ -77,7 +80,13 @@ export function ScrollNav({
                   />
                 </Link>
                 <BotonCotizar asChild className="shrink-0">
-                  <Link href={hrefBoton}>{textoBoton}</Link>
+                  <Link
+                    href={hrefBoton}
+                    target={esEnlaceExterno ? '_blank' : undefined}
+                    rel={esEnlaceExterno ? 'noopener noreferrer' : undefined}
+                  >
+                    {textoBoton}
+                  </Link>
                 </BotonCotizar>
               </div>
             </div>

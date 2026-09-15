@@ -2,6 +2,20 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { LineaNegocio } from '@prisma/client'
+import {
+  ArrowRight,
+  Building2,
+  CheckCircle,
+  Factory,
+  Layers,
+  LayoutGrid,
+  Mountain,
+  Package,
+  Palette,
+  SlidersHorizontal,
+  Truck,
+  type LucideIcon,
+} from 'lucide-react'
 import { prisma } from '@/lib/prisma'
 import { Aparece } from '@/components/animations/aparece'
 import { BotonCotizar } from '@/components/boton-cotizar'
@@ -14,6 +28,7 @@ interface ConfigLinea {
   titulo: string
   boton: { texto: string; href: string }
   imagenHero: string
+  puntosDestacados: Array<{ icono: LucideIcon; titulo: string; texto: string }>
 }
 
 // Configuracion por linea de negocio: parametro de ruta -> enum de Prisma.
@@ -23,7 +38,12 @@ const LINEAS: Record<string, ConfigLinea> = {
     nombre: 'Concreto',
     titulo: 'Concreto premezclado listo para tu obra',
     boton: { texto: 'Cotizar', href: '/cotizacion?linea=CONCRETO' },
-    imagenHero: '/lineas/concreto.jpg',
+    imagenHero: '/lineas/concreto.avif',
+    puntosDestacados: [
+      { icono: Factory, titulo: 'Planta propia en San Gil', texto: 'Control de calidad de principio a fin.' },
+      { icono: Truck, titulo: 'Flota propia', texto: 'Entrega directa a tu obra.' },
+      { icono: CheckCircle, titulo: 'Resistencia certificada', texto: 'Cada mezcla cumple lo especificado.' },
+    ],
   },
   agregados: {
     linea: LineaNegocio.AGREGADOS,
@@ -31,13 +51,26 @@ const LINEAS: Record<string, ConfigLinea> = {
     titulo: 'Agregados de cantera para cada etapa de la obra',
     boton: { texto: 'Cotizar', href: '/cotizacion?linea=AGREGADOS' },
     imagenHero: '/lineas/agregados.jpg',
+    puntosDestacados: [
+      { icono: Mountain, titulo: 'Cantera propia', texto: 'Trazabilidad garantizada.' },
+      { icono: SlidersHorizontal, titulo: 'Granulometría controlada', texto: 'Mezclas más consistentes.' },
+      { icono: Package, titulo: 'Grandes volúmenes', texto: 'Disponibilidad para cualquier proyecto.' },
+    ],
   },
   constructora: {
     linea: LineaNegocio.CONSTRUCTORA,
     nombre: 'Constructora',
     titulo: 'Proyectos propios, la misma calidad que ofrecemos',
-    boton: { texto: 'Contactar', href: '/contacto' },
-    imagenHero: '/lineas/constructora.jpg',
+    boton: {
+      texto: 'Contactar',
+      href: 'https://wa.me/573214525798?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20sus%20proyectos%20de%20construcci%C3%B3n',
+    },
+    imagenHero: '/lineas/constructora.webp',
+    puntosDestacados: [
+      { icono: Building2, titulo: 'Experiencia comprobada', texto: 'Proyectos públicos y privados.' },
+      { icono: Layers, titulo: 'Materiales propios', texto: 'Mismo estándar en cada obra.' },
+      { icono: CheckCircle, titulo: 'Cumplimiento', texto: 'Entregas en el tiempo pactado.' },
+    ],
   },
   prefabricados: {
     linea: LineaNegocio.PREFABRICADOS,
@@ -45,12 +78,18 @@ const LINEAS: Record<string, ConfigLinea> = {
     titulo: 'Prefabricados de concreto para obra y acabados',
     boton: { texto: 'Cotizar', href: '/cotizacion?linea=PREFABRICADOS' },
     imagenHero: '/lineas/prefabricados.jpg',
+    puntosDestacados: [
+      { icono: LayoutGrid, titulo: 'Ocho familias de producto', texto: 'Soluciones para cada necesidad.' },
+      { icono: Palette, titulo: 'Fabricación bajo pedido', texto: 'Color y acabado a solicitud.' },
+      { icono: CheckCircle, titulo: 'Calidad certificada', texto: 'Mismo estándar que nuestro concreto.' },
+    ],
   },
 }
 
 // Imagen por categoria de Prefabricados: slug -> ruta de la imagen.
 const CATEGORIA_IMAGEN_PREFABRICADOS: Record<string, string> = {
   adoquines: '/categorias-prefabricados/adoquines.jpg',
+  bloques: '/categorias-prefabricados/bloques.jpg',
   'bloques-divisorios': '/categorias-prefabricados/bloques-divisorios.jpg',
   'bloques-estructurales': '/categorias-prefabricados/bloques-estructurales.jpg',
   calados: '/categorias-prefabricados/calados.jpg',
@@ -171,7 +210,21 @@ export default async function LineaPage({ params }: LineaPageProps) {
                 variant="primaria"
                 className="h-[56px] w-[220px]"
               >
-                <Link href={config.boton.href}>{config.boton.texto}</Link>
+                <Link
+                  href={config.boton.href}
+                  target={
+                    config.boton.href.startsWith('https://wa.me')
+                      ? '_blank'
+                      : undefined
+                  }
+                  rel={
+                    config.boton.href.startsWith('https://wa.me')
+                      ? 'noopener noreferrer'
+                      : undefined
+                  }
+                >
+                  {config.boton.texto}
+                </Link>
               </BotonCotizar>
             </div>
           </Aparece>
@@ -180,6 +233,31 @@ export default async function LineaPage({ params }: LineaPageProps) {
 
       {/* Ubicacion */}
       <Ubicacion />
+
+      <section className="w-full bg-grisClaro py-16 sm:py-20">
+        <div className="mx-auto w-full max-w-[1800px] px-8 sm:px-6 xl:px-8">
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
+            {config.puntosDestacados.map((punto, index) => {
+              const Icono = punto.icono
+              const esOscuro = index % 2 === 0
+              return (
+                <div
+                  key={punto.titulo}
+                  className={`flex flex-col items-center gap-4 border-[6px] px-6 py-12 text-center shadow-[10px_10px_0_0_rgba(0,0,0,0.95)] ${
+                    esOscuro
+                      ? 'border-blanco bg-grisCon text-blanco'
+                      : 'border-grisCon bg-lima text-grisCon'
+                  }`}
+                >
+                  <Icono className="h-14 w-14" aria-hidden="true" />
+                  <h3 className="font-titulo text-[24px]">{punto.titulo}</h3>
+                  <p className="font-texto text-[16px]">{punto.texto}</p>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      </section>
 
       {/* Productos de la linea */}
       <section
@@ -198,7 +276,7 @@ export default async function LineaPage({ params }: LineaPageProps) {
               {PROYECTOS_CONSTRUCTORA.map((proyecto) => (
                 <div
                   key={proyecto.nombre}
-                  className="flex flex-col border-2 border-grisCon bg-blanco"
+                  className="flex flex-col border-[6px] border-lima bg-blanco"
                 >
                   <Carousel images={proyecto.images} productName={proyecto.nombre} />
                   <div className="flex flex-col gap-1 p-4">
@@ -222,7 +300,7 @@ export default async function LineaPage({ params }: LineaPageProps) {
                   >
                     <Link
                       href={`/lineas/prefabricados/${category.slug}`}
-                      className="flex flex-col border-2 border-grisCon bg-blanco"
+                      className="group flex flex-col border-[6px] border-lima bg-blanco"
                     >
                       <div className="relative h-[300px] w-full">
                         <Image
@@ -240,6 +318,10 @@ export default async function LineaPage({ params }: LineaPageProps) {
                         <h3 className="font-titulo text-[20px] leading-[1.3] text-grisCon">
                           {category.name}
                         </h3>
+                        <div className="mt-1 flex items-center gap-1 font-texto text-[18px] font-semibold uppercase tracking-[0.05em] text-grisCon">
+                          <span>Ver más</span>
+                          <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+                        </div>
                       </div>
                     </Link>
                   </Aparece>
@@ -260,7 +342,7 @@ export default async function LineaPage({ params }: LineaPageProps) {
                   duracion={0.6}
                   retraso={index * 0.1}
                 >
-                  <div className="group relative flex flex-col border-2 border-grisCon bg-blanco">
+                  <div className="group relative flex flex-col border-[6px] border-lima bg-blanco shadow-[10px_10px_0_0_rgba(0,0,0,0.95)]">
                     <div className="relative h-[180px] sm:h-[380px] w-full overflow-hidden">
                       <Image
                         src={product.images[0] || '/placeholder-producto.jpg'}

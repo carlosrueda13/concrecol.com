@@ -165,7 +165,7 @@ export function Ubicacion() {
                         type="text"
                         value={texto}
                         onChange={(e) => setTexto(e.target.value)}
-                        placeholder="Nombre de tu pueblo o municipio"
+                        placeholder="Nombre de tu ciudad o municipio"
                         className="h-[48px]"
                       />
                       {error && (
@@ -205,7 +205,7 @@ export function Ubicacion() {
                 ) : (
                   <div className="mt-4 border-2 border-grisCon bg-grisClaro p-4">
                     <p className="font-texto text-[18px] text-grisCon">
-                      Lo sentimos, este lugar está fuera de nuestra zona de cobertura.
+                      El concreto premezclado no llega a esta zona por los tiempos de fraguado, pero sí trabajamos agregados, prefabricados y proyectos de construcción a cualquier distancia. Contáctanos para cotizar.
                     </p>
                   </div>
                 ))}

@@ -14,7 +14,7 @@ export function ConditionalNav() {
 
   // En la pagina de constructora, usamos el ScrollNav con el boton de contacto
   if (pathname === '/lineas/constructora') {
-    return <ScrollNav textoBoton="Contactar" hrefBoton="/contacto" />
+    return <ScrollNav textoBoton="Contactar" hrefBoton="https://wa.me/573214525798?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20sus%20proyectos%20de%20construcci%C3%B3n" />
   }
 
   // En la pagina de la linea de concreto, usamos el ScrollNav con el boton de cotizar
