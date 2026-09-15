@@ -56,6 +56,10 @@ export default function ContactoPage() {
       
       if (result.success) {
         alert('¡Mensaje enviado correctamente! Te contactaremos pronto.')
+        const mensajeWhatsapp = encodeURIComponent(
+          `Hola, acabo de enviar un mensaje desde la página web. Mi nombre es ${data.nombre}.`
+        )
+        window.open(`https://wa.me/573214525798?text=${mensajeWhatsapp}`, '_blank')
         reset() // Limpiar formulario después del éxito
       } else {
         throw new Error(result.message || 'Error al enviar el mensaje')

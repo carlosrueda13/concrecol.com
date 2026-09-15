@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { LineaNegocio } from '@prisma/client'
 import {
+  ArrowRight,
   Building2,
   CheckCircle,
   Factory,
@@ -37,7 +38,7 @@ const LINEAS: Record<string, ConfigLinea> = {
     nombre: 'Concreto',
     titulo: 'Concreto premezclado listo para tu obra',
     boton: { texto: 'Cotizar', href: '/cotizacion?linea=CONCRETO' },
-    imagenHero: '/lineas/concreto.jpg',
+    imagenHero: '/lineas/concreto.avif',
     puntosDestacados: [
       { icono: Factory, titulo: 'Planta propia en San Gil', texto: 'Control de calidad de principio a fin.' },
       { icono: Truck, titulo: 'Flota propia', texto: 'Entrega directa a tu obra.' },
@@ -60,8 +61,11 @@ const LINEAS: Record<string, ConfigLinea> = {
     linea: LineaNegocio.CONSTRUCTORA,
     nombre: 'Constructora',
     titulo: 'Proyectos propios, la misma calidad que ofrecemos',
-    boton: { texto: 'Contactar', href: '/contacto' },
-    imagenHero: '/lineas/constructora.jpg',
+    boton: {
+      texto: 'Contactar',
+      href: 'https://wa.me/573214525798?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20sus%20proyectos%20de%20construcci%C3%B3n',
+    },
+    imagenHero: '/lineas/constructora.webp',
     puntosDestacados: [
       { icono: Building2, titulo: 'Experiencia comprobada', texto: 'Proyectos públicos y privados.' },
       { icono: Layers, titulo: 'Materiales propios', texto: 'Mismo estándar en cada obra.' },
@@ -206,7 +210,21 @@ export default async function LineaPage({ params }: LineaPageProps) {
                 variant="primaria"
                 className="h-[56px] w-[220px]"
               >
-                <Link href={config.boton.href}>{config.boton.texto}</Link>
+                <Link
+                  href={config.boton.href}
+                  target={
+                    config.boton.href.startsWith('https://wa.me')
+                      ? '_blank'
+                      : undefined
+                  }
+                  rel={
+                    config.boton.href.startsWith('https://wa.me')
+                      ? 'noopener noreferrer'
+                      : undefined
+                  }
+                >
+                  {config.boton.texto}
+                </Link>
               </BotonCotizar>
             </div>
           </Aparece>
@@ -282,7 +300,7 @@ export default async function LineaPage({ params }: LineaPageProps) {
                   >
                     <Link
                       href={`/lineas/prefabricados/${category.slug}`}
-                      className="flex flex-col border-[6px] border-lima bg-blanco"
+                      className="group flex flex-col border-[6px] border-lima bg-blanco"
                     >
                       <div className="relative h-[300px] w-full">
                         <Image
@@ -300,6 +318,10 @@ export default async function LineaPage({ params }: LineaPageProps) {
                         <h3 className="font-titulo text-[20px] leading-[1.3] text-grisCon">
                           {category.name}
                         </h3>
+                        <div className="mt-1 flex items-center gap-1 font-texto text-[18px] font-semibold uppercase tracking-[0.05em] text-grisCon">
+                          <span>Ver más</span>
+                          <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+                        </div>
                       </div>
                     </Link>
                   </Aparece>
