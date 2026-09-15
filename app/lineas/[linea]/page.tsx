@@ -51,6 +51,7 @@ const LINEAS: Record<string, ConfigLinea> = {
 // Imagen por categoria de Prefabricados: slug -> ruta de la imagen.
 const CATEGORIA_IMAGEN_PREFABRICADOS: Record<string, string> = {
   adoquines: '/categorias-prefabricados/adoquines.jpg',
+  bloques: '/categorias-prefabricados/bloques.jpg',
   'bloques-divisorios': '/categorias-prefabricados/bloques-divisorios.jpg',
   'bloques-estructurales': '/categorias-prefabricados/bloques-estructurales.jpg',
   calados: '/categorias-prefabricados/calados.jpg',
