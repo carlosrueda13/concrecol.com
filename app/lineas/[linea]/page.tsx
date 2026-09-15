@@ -198,7 +198,7 @@ export default async function LineaPage({ params }: LineaPageProps) {
               {PROYECTOS_CONSTRUCTORA.map((proyecto) => (
                 <div
                   key={proyecto.nombre}
-                  className="flex flex-col border-2 border-grisCon bg-blanco"
+                  className="flex flex-col border-[6px] border-lima bg-blanco"
                 >
                   <Carousel images={proyecto.images} productName={proyecto.nombre} />
                   <div className="flex flex-col gap-1 p-4">
@@ -222,7 +222,7 @@ export default async function LineaPage({ params }: LineaPageProps) {
                   >
                     <Link
                       href={`/lineas/prefabricados/${category.slug}`}
-                      className="flex flex-col border-2 border-grisCon bg-blanco"
+                      className="flex flex-col border-[6px] border-lima bg-blanco"
                     >
                       <div className="relative h-[300px] w-full">
                         <Image
@@ -260,7 +260,7 @@ export default async function LineaPage({ params }: LineaPageProps) {
                   duracion={0.6}
                   retraso={index * 0.1}
                 >
-                  <div className="group relative flex flex-col border-2 border-grisCon bg-blanco shadow-[10px_10px_0_0_rgba(0,0,0,0.95)]">
+                  <div className="group relative flex flex-col border-[6px] border-lima bg-blanco shadow-[10px_10px_0_0_rgba(0,0,0,0.95)]">
                     <div className="relative h-[180px] sm:h-[380px] w-full overflow-hidden">
                       <Image
                         src={product.images[0] || '/placeholder-producto.jpg'}
