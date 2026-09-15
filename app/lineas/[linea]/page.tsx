@@ -2,6 +2,19 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { LineaNegocio } from '@prisma/client'
+import {
+  Building2,
+  CheckCircle,
+  Factory,
+  Layers,
+  LayoutGrid,
+  Mountain,
+  Package,
+  Palette,
+  SlidersHorizontal,
+  Truck,
+  type LucideIcon,
+} from 'lucide-react'
 import { prisma } from '@/lib/prisma'
 import { Aparece } from '@/components/animations/aparece'
 import { BotonCotizar } from '@/components/boton-cotizar'
@@ -14,6 +27,7 @@ interface ConfigLinea {
   titulo: string
   boton: { texto: string; href: string }
   imagenHero: string
+  puntosDestacados: Array<{ icono: LucideIcon; titulo: string; texto: string }>
 }
 
 // Configuracion por linea de negocio: parametro de ruta -> enum de Prisma.
@@ -24,6 +38,11 @@ const LINEAS: Record<string, ConfigLinea> = {
     titulo: 'Concreto premezclado listo para tu obra',
     boton: { texto: 'Cotizar', href: '/cotizacion?linea=CONCRETO' },
     imagenHero: '/lineas/concreto.jpg',
+    puntosDestacados: [
+      { icono: Factory, titulo: 'Planta propia en San Gil', texto: 'Control de calidad de principio a fin.' },
+      { icono: Truck, titulo: 'Flota propia', texto: 'Entrega directa a tu obra.' },
+      { icono: CheckCircle, titulo: 'Resistencia certificada', texto: 'Cada mezcla cumple lo especificado.' },
+    ],
   },
   agregados: {
     linea: LineaNegocio.AGREGADOS,
@@ -31,6 +50,11 @@ const LINEAS: Record<string, ConfigLinea> = {
     titulo: 'Agregados de cantera para cada etapa de la obra',
     boton: { texto: 'Cotizar', href: '/cotizacion?linea=AGREGADOS' },
     imagenHero: '/lineas/agregados.jpg',
+    puntosDestacados: [
+      { icono: Mountain, titulo: 'Cantera propia', texto: 'Trazabilidad garantizada.' },
+      { icono: SlidersHorizontal, titulo: 'Granulometría controlada', texto: 'Mezclas más consistentes.' },
+      { icono: Package, titulo: 'Grandes volúmenes', texto: 'Disponibilidad para cualquier proyecto.' },
+    ],
   },
   constructora: {
     linea: LineaNegocio.CONSTRUCTORA,
@@ -38,6 +62,11 @@ const LINEAS: Record<string, ConfigLinea> = {
     titulo: 'Proyectos propios, la misma calidad que ofrecemos',
     boton: { texto: 'Contactar', href: '/contacto' },
     imagenHero: '/lineas/constructora.jpg',
+    puntosDestacados: [
+      { icono: Building2, titulo: 'Experiencia comprobada', texto: 'Proyectos públicos y privados.' },
+      { icono: Layers, titulo: 'Materiales propios', texto: 'Mismo estándar en cada obra.' },
+      { icono: CheckCircle, titulo: 'Cumplimiento', texto: 'Entregas en el tiempo pactado.' },
+    ],
   },
   prefabricados: {
     linea: LineaNegocio.PREFABRICADOS,
@@ -45,6 +74,11 @@ const LINEAS: Record<string, ConfigLinea> = {
     titulo: 'Prefabricados de concreto para obra y acabados',
     boton: { texto: 'Cotizar', href: '/cotizacion?linea=PREFABRICADOS' },
     imagenHero: '/lineas/prefabricados.jpg',
+    puntosDestacados: [
+      { icono: LayoutGrid, titulo: 'Ocho familias de producto', texto: 'Soluciones para cada necesidad.' },
+      { icono: Palette, titulo: 'Fabricación bajo pedido', texto: 'Color y acabado a solicitud.' },
+      { icono: CheckCircle, titulo: 'Calidad certificada', texto: 'Mismo estándar que nuestro concreto.' },
+    ],
   },
 }
 
@@ -181,6 +215,31 @@ export default async function LineaPage({ params }: LineaPageProps) {
 
       {/* Ubicacion */}
       <Ubicacion />
+
+      <section className="w-full bg-grisClaro py-16 sm:py-20">
+        <div className="mx-auto w-full max-w-[1800px] px-8 sm:px-6 xl:px-8">
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
+            {config.puntosDestacados.map((punto, index) => {
+              const Icono = punto.icono
+              const esOscuro = index % 2 === 0
+              return (
+                <div
+                  key={punto.titulo}
+                  className={`flex flex-col items-center gap-4 border-[6px] px-6 py-12 text-center shadow-[10px_10px_0_0_rgba(0,0,0,0.95)] ${
+                    esOscuro
+                      ? 'border-blanco bg-grisCon text-blanco'
+                      : 'border-grisCon bg-lima text-grisCon'
+                  }`}
+                >
+                  <Icono className="h-14 w-14" aria-hidden="true" />
+                  <h3 className="font-titulo text-[24px]">{punto.titulo}</h3>
+                  <p className="font-texto text-[16px]">{punto.texto}</p>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      </section>
 
       {/* Productos de la linea */}
       <section
