@@ -70,8 +70,8 @@ export default async function FamiliaPage({ params }: FamiliaPageProps) {
                   duracion={0.6}
                   retraso={index * 0.1}
                 >
-                  <div className="group relative flex flex-col border-[6px] border-lima bg-blanco shadow-[10px_10px_0_0_rgba(0,0,0,0.95)]">
-                    <div className="relative h-[180px] sm:h-[380px] w-full">
+                  <div className="group relative flex w-[85%] mx-auto sm:w-full flex-col border-[4px] sm:border-[6px] border-lima bg-blanco shadow-[6px_6px_0_0_rgba(0,0,0,0.95)] sm:shadow-[10px_10px_0_0_rgba(0,0,0,0.95)]">
+                    <div className="relative h-[110px] sm:h-[380px] w-full">
                       <Image
                         src={product.images[0] || '/placeholder-producto.jpg'}
                         fill
@@ -85,8 +85,8 @@ export default async function FamiliaPage({ params }: FamiliaPageProps) {
                         </p>
                       </div>
                     </div>
-                    <div className="flex min-h-[88px] flex-col gap-1 p-4 justify-center bg-grisCon">
-                      <h3 className="font-titulo text-[20px] leading-[1.3] text-blanco">
+                    <div className="flex min-h-[70px] sm:min-h-[88px] flex-col gap-1 p-3 sm:p-4 justify-center bg-grisCon">
+                      <h3 className="font-titulo text-[16px] sm:text-[20px] leading-[1.3] text-blanco">
                         {product.name}
                       </h3>
                     </div>

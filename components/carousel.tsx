@@ -15,7 +15,7 @@ export function Carousel({ images, productName }: CarouselProps) {
   // Handle empty images array
   if (images.length === 0) {
     return (
-      <div className="relative w-full h-80">
+      <div className="relative w-full h-40 sm:h-80">
         <ProductImage src="/placeholder.jpg" alt={productName} />
       </div>
     )
@@ -30,7 +30,7 @@ export function Carousel({ images, productName }: CarouselProps) {
   }
 
   return (
-    <div className="relative w-full h-80">
+    <div className="relative w-full h-40 sm:h-80">
       <div className="relative h-full">
         <ProductImage 
           src={images[currentImageIndex]} 

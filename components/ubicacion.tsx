@@ -159,7 +159,7 @@ export function Ubicacion() {
               </Aparece>
               <Aparece direccion="derecha" distancia={40} duracion={0.6} retraso={0.2}>
                 <div className="flex w-full flex-col gap-6">
-                  <div className="flex items-start gap-2">
+                  <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:items-start sm:gap-2">
                     <div className="flex w-full flex-col gap-1">
                       <Input
                         type="text"
@@ -177,7 +177,7 @@ export function Ubicacion() {
                     <BotonCotizar
                       type="button"
                       variant="contorno"
-                      className="h-[48px] w-fit px-6"
+                      className="h-[48px] w-full sm:w-fit px-6"
                       onClick={buscar}
                       disabled={buscando}
                     >

@@ -40,10 +40,10 @@ export default function HomePage() {
             </h1>
             <div className="flex flex-col items-start">
             <div className="flex flex-wrap items-center gap-6">
-              <BotonCotizar asChild variant="primaria" className="h-[48px] w-full sm:h-[56px] sm:w-[220px]">
+              <BotonCotizar asChild variant="primaria" className="h-[40px] w-full sm:h-[56px] sm:w-[220px]">
                 <Link href="/cotizacion">Cotizar</Link>
               </BotonCotizar>
-              <BotonCotizar asChild variant="secundaria" className="h-[48px] w-full sm:h-[56px] sm:w-[220px]">
+              <BotonCotizar asChild variant="secundaria" className="h-[40px] w-full sm:h-[56px] sm:w-[220px]">
                 <Link href="#lineas-de-negocio">Ver Líneas</Link>
               </BotonCotizar>
             </div>
@@ -89,26 +89,26 @@ export default function HomePage() {
                 duracion={0.6}
                 retraso={index * 0.15}
               >
-                <Link
+                                <Link
                   href={linea.href}
-                  className="group flex h-[220px] sm:h-[520px] w-full flex-col border-[6px] border-blanco shadow-[10px_10px_0_0_rgba(0,0,0,0.95)]"
+                  className="group flex h-[210px] sm:h-[520px] w-[85%] mx-auto sm:w-full flex-col border-[6px] border-blanco shadow-[10px_10px_0_0_rgba(0,0,0,0.95)]"
                 >
-                  <div className="relative h-[325px] w-full overflow-hidden">
+                  <div className="relative h-[160px] sm:h-[325px] w-full overflow-hidden">
                     <Image
                       src={linea.imagen}
                       alt={linea.nombre}
                       width={300}
                       height={325}
-                      className="h-[140px] sm:h-[325px] w-full object-cover transition-transform duration-300 group-hover:scale-110"
+                      className="h-[160px] sm:h-[325px] w-full object-cover transition-transform duration-300 group-hover:scale-110"
                     />
                   </div>
                   <div className="flex flex-1 flex-col justify-center bg-lima">
-                    <h3 className="px-5 pb-5 font-titulo text-[28px] text-grisCon">
+                    <h3 className="px-5 pb-1 font-titulo text-[18px] text-grisCon">
                       {linea.nombre}
                     </h3>
-                    <div className="mt-1 flex items-center gap-1 px-5 font-texto text-[18px] font-semibold uppercase tracking-[0.05em] text-grisCon/70">
+                    <div className="mt-0.5 flex items-center gap-1 px-5 pb-1 font-texto text-[12px] font-semibold uppercase tracking-[0.05em] text-grisCon/70">
                       <span>Ver más</span>
-                      <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+                      <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" aria-hidden="true" />
                     </div>
                   </div>
                 </Link>
