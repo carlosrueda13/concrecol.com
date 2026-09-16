@@ -79,7 +79,7 @@ const LINEAS: Record<string, ConfigLinea> = {
     boton: { texto: 'Cotizar', href: '/cotizacion?linea=PREFABRICADOS' },
     imagenHero: '/lineas/prefabricados.jpg',
     puntosDestacados: [
-      { icono: LayoutGrid, titulo: 'Ocho familias de producto', texto: 'Soluciones para cada necesidad.' },
+      { icono: LayoutGrid, titulo: 'Tres familias de producto', texto: 'Soluciones para cada necesidad.' },
       { icono: Palette, titulo: 'Fabricación bajo pedido', texto: 'Color y acabado a solicitud.' },
       { icono: CheckCircle, titulo: 'Calidad certificada', texto: 'Mismo estándar que nuestro concreto.' },
     ],
@@ -267,7 +267,11 @@ export default async function LineaPage({ params }: LineaPageProps) {
         <div className="mx-auto w-full max-w-[1800px] px-10 sm:px-6 xl:px-8">
           <Aparece direccion="arriba" distancia={40} duracion={0.6}>
             <h2 className="font-titulo text-[40px] leading-[1.1] text-blanco">
-              {isConstructora ? 'Nuestros proyectos' : `Nuestros productos en ${config.nombre}`}
+              {isConstructora
+                ? 'Nuestros proyectos'
+                : isPrefabricados
+                  ? 'Nuestras 3 familias de prefabricados'
+                  : `Nuestros productos en ${config.nombre}`}
             </h2>
             <div aria-hidden="true" className="mt-4 h-1 w-20 bg-lima" />
           </Aparece>
