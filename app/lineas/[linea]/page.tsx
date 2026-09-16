@@ -208,7 +208,7 @@ export default async function LineaPage({ params }: LineaPageProps) {
               <BotonCotizar
                 asChild
                 variant="primaria"
-                className="h-[56px] w-[220px]"
+                className="h-[44px] w-full sm:h-[56px] sm:w-[220px]"
               >
                 <Link
                   href={config.boton.href}
@@ -236,22 +236,22 @@ export default async function LineaPage({ params }: LineaPageProps) {
 
       <section className="w-full bg-grisClaro py-16 sm:py-20">
         <div className="mx-auto w-full max-w-[1800px] px-8 sm:px-6 xl:px-8">
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 sm:gap-8 sm:grid-cols-3">
             {config.puntosDestacados.map((punto, index) => {
               const Icono = punto.icono
               const esOscuro = index % 2 === 0
               return (
                 <div
                   key={punto.titulo}
-                  className={`flex flex-col items-center gap-4 border-[6px] px-6 py-12 text-center shadow-[10px_10px_0_0_rgba(0,0,0,0.95)] ${
+                  className={`flex flex-col items-center gap-2 sm:gap-4 border-[4px] sm:border-[6px] px-4 py-6 sm:px-6 sm:py-12 text-center shadow-[6px_6px_0_0_rgba(0,0,0,0.95)] sm:shadow-[10px_10px_0_0_rgba(0,0,0,0.95)] ${
                     esOscuro
                       ? 'border-blanco bg-grisCon text-blanco'
                       : 'border-grisCon bg-lima text-grisCon'
                   }`}
                 >
-                  <Icono className="h-14 w-14" aria-hidden="true" />
-                  <h3 className="font-titulo text-[24px]">{punto.titulo}</h3>
-                  <p className="font-texto text-[16px]">{punto.texto}</p>
+                  <Icono className="h-8 w-8 sm:h-14 sm:w-14" aria-hidden="true" />
+                  <h3 className="font-titulo text-[18px] sm:text-[24px]">{punto.titulo}</h3>
+                  <p className="font-texto text-[13px] sm:text-[16px]">{punto.texto}</p>
                 </div>
               )
             })}
@@ -276,7 +276,7 @@ export default async function LineaPage({ params }: LineaPageProps) {
               {PROYECTOS_CONSTRUCTORA.map((proyecto) => (
                 <div
                   key={proyecto.nombre}
-                  className="flex flex-col border-[6px] border-lima bg-blanco"
+                  className="flex w-[85%] mx-auto sm:w-full flex-col border-[4px] sm:border-[6px] border-lima bg-blanco"
                 >
                   <Carousel images={proyecto.images} productName={proyecto.nombre} />
                   <div className="flex flex-col gap-1 p-4">
@@ -300,9 +300,9 @@ export default async function LineaPage({ params }: LineaPageProps) {
                   >
                     <Link
                       href={`/lineas/prefabricados/${category.slug}`}
-                      className="group flex flex-col border-[6px] border-lima bg-blanco"
+                      className="group flex w-[85%] mx-auto sm:w-full flex-col border-[4px] sm:border-[6px] border-lima bg-blanco"
                     >
-                      <div className="relative h-[300px] w-full">
+                      <div className="relative h-[150px] sm:h-[300px] w-full">
                         <Image
                           src={
                             CATEGORIA_IMAGEN_PREFABRICADOS[category.slug] ||
@@ -314,13 +314,13 @@ export default async function LineaPage({ params }: LineaPageProps) {
                           alt={category.name}
                         />
                       </div>
-                      <div className="flex min-h-[140px] flex-col gap-1 p-4 justify-center">
-                        <h3 className="font-titulo text-[20px] leading-[1.3] text-grisCon">
+                      <div className="flex min-h-[90px] sm:min-h-[140px] flex-col gap-1 p-3 sm:p-4 justify-center">
+                        <h3 className="font-titulo text-[16px] sm:text-[20px] leading-[1.3] text-grisCon">
                           {category.name}
                         </h3>
-                        <div className="mt-1 flex items-center gap-1 font-texto text-[18px] font-semibold uppercase tracking-[0.05em] text-grisCon">
+                        <div className="mt-1 flex items-center gap-1 font-texto text-[13px] sm:text-[18px] font-semibold uppercase tracking-[0.05em] text-grisCon">
                           <span>Ver más</span>
-                          <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+                          <ArrowRight className="h-3.5 w-3.5 sm:h-5 sm:w-5 transition-transform group-hover:translate-x-1" aria-hidden="true" />
                         </div>
                       </div>
                     </Link>
@@ -342,8 +342,8 @@ export default async function LineaPage({ params }: LineaPageProps) {
                   duracion={0.6}
                   retraso={index * 0.1}
                 >
-                  <div className="group relative flex flex-col border-[6px] border-lima bg-blanco shadow-[10px_10px_0_0_rgba(0,0,0,0.95)]">
-                    <div className="relative h-[180px] sm:h-[380px] w-full overflow-hidden">
+                  <div className="group relative flex w-[85%] mx-auto sm:w-full flex-col border-[4px] sm:border-[6px] border-lima bg-blanco shadow-[6px_6px_0_0_rgba(0,0,0,0.95)] sm:shadow-[10px_10px_0_0_rgba(0,0,0,0.95)]">
+                    <div className="relative h-[110px] sm:h-[380px] w-full overflow-hidden">
                       <Image
                         src={product.images[0] || '/placeholder-producto.jpg'}
                         fill
@@ -359,8 +359,8 @@ export default async function LineaPage({ params }: LineaPageProps) {
                         </div>
                       ) : null}
                     </div>
-                    <div className="flex min-h-[88px] flex-col gap-1 p-4 justify-center">
-                      <h3 className="font-titulo text-[20px] leading-[1.3] text-grisCon">
+                    <div className="flex min-h-[70px] sm:min-h-[88px] flex-col gap-1 p-3 sm:p-4 justify-center">
+                      <h3 className="font-titulo text-[16px] sm:text-[20px] leading-[1.3] text-grisCon">
                         {product.name}
                       </h3>
                     </div>
