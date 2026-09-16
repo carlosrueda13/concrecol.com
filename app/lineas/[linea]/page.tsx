@@ -102,28 +102,16 @@ const CATEGORIA_IMAGEN_PREFABRICADOS: Record<string, string> = {
 // Proyectos propios de la Constructora: nombre y galeria de imagenes.
 const PROYECTOS_CONSTRUCTORA = [
   {
-    nombre: 'Parque Barichara',
-    images: [
-      '/projects/parque-barichara-1.jpeg',
-      '/projects/parque-barichara-2.jpeg',
-      '/projects/parque-barichara-3.jpeg',
-    ],
+    nombre: 'Placa Huella Vehicular',
+    images: ['/projects/placa-huella-vehicular1.jpeg'],
   },
   {
     nombre: 'Mantenimiento Casa de la Cultura Galán',
-    images: [
-      '/projects/casa-cultura-galan-1.jpeg',
-      '/projects/casa-cultura-galan-2.jpeg',
-      '/projects/casa-cultura-galan-3.jpeg',
-    ],
+    images: ['/projects/casa-cultura-galan-2.jpeg'],
   },
   {
-    nombre: 'Mobiliario Alcaldía de Galán',
-    images: [
-      '/projects/mobiliario-alcaldia-galan-1.jpeg',
-      '/projects/mobiliario-alcaldia-galan-2.jpeg',
-      '/projects/mobiliario-alcaldia-galan-3.jpeg',
-    ],
+    nombre: 'Pavimento en Concreto Rígido',
+    images: ['/projects/pavimento-concreto-rigido1.jpeg'],
   },
   {
     nombre: 'Mantenimiento vial',
@@ -134,12 +122,8 @@ const PROYECTOS_CONSTRUCTORA = [
     ],
   },
   {
-    nombre: 'Zona de juegos infantil',
-    images: [
-      '/projects/zona-juegos-infantil-1.jpeg',
-      '/projects/zona-juegos-infantil-2.jpeg',
-      '/projects/zona-juegos-infantil-3.jpeg',
-    ],
+    nombre: 'Coliseo Cubierto',
+    images: ['/projects/coliseo-cubierto1.jpeg'],
   },
 ]
 
