@@ -39,11 +39,6 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/contacto" className="text-gray-300 hover:text-[#C4D600]">
-                  Contacto
-                </Link>
-              </li>
-              <li>
                 <Link href="/cotizacion" className="text-gray-300 hover:text-[#C4D600]">
                   Solicitar Cotización
                 </Link>
