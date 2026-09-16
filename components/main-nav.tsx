@@ -66,7 +66,7 @@ export function MainNav({ sticky = true }: { sticky?: boolean }) {
           </Link>
 
           {/* Navegación de escritorio */}
-          <nav className="hidden md:flex items-center space-x-8" aria-label="Navegación principal">
+          <nav className="hidden lg:flex items-center space-x-8" aria-label="Navegación principal">
             {NAV_ITEMS.map((item) => (
               <Link key={item.label} href={item.href} className="text-gray-700 hover:text-lima">
                 {item.label}
@@ -78,14 +78,14 @@ export function MainNav({ sticky = true }: { sticky?: boolean }) {
           <div className="flex items-center gap-3">
             <BotonCotizar
               asChild
-              className="hidden md:inline-flex w-[180px] h-[52px]"
+              className="hidden lg:inline-flex w-[180px] h-[52px]"
             >
               <Link href="/cotizacion">Cotizar</Link>
             </BotonCotizar>
             <Button
               variant="ghost"
               size="icon"
-              className="md:hidden"
+              className="lg:hidden"
               onClick={toggleMenu}
               aria-label="Abrir menú"
             >
@@ -97,7 +97,7 @@ export function MainNav({ sticky = true }: { sticky?: boolean }) {
 
       {/* Menú móvil */}
       {isMenuOpen && (
-        <div className="fixed inset-0 bg-white z-50 md:hidden">
+        <div className="fixed inset-0 bg-white z-50 lg:hidden">
           <div className="flex flex-col h-full">
             <div className="flex justify-between items-center p-4">
               <Link
