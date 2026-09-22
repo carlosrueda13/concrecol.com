@@ -13,7 +13,11 @@ import {
 import { Input } from '@/components/ui/input'
 import { MapPin } from 'lucide-react'
 
-export function Ubicacion() {
+interface UbicacionProps {
+  compacto?: boolean
+}
+
+export function Ubicacion({ compacto = false }: UbicacionProps) {
   const [texto, setTexto] = useState('')
   const [resultado, setResultado] = useState<LugarBuscado | null>(null)
   const [buscando, setBuscando] = useState(false)
@@ -131,19 +135,34 @@ export function Ubicacion() {
   return (
     <>
       {/* Ubicacion */}
-      <section id="ubicacion" className="relative w-full scroll-mt-14 bg-blanco py-24 sm:py-32">
+      <section
+        id="ubicacion"
+        className={`relative w-full scroll-mt-14 bg-blanco ${
+          compacto ? 'py-12 sm:py-16' : 'py-24 sm:py-32'
+        }`}
+      >
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 xl:px-0">
           <Aparece direccion="izquierda" distancia={40} duracion={0.6}>
-            <h2 className="font-titulo text-[40px] text-grisCon">Ubicación</h2>
+            <h2 className="font-titulo text-[22px] sm:text-[26px] lg:text-[30px] text-grisCon">Ubicación</h2>
             <div aria-hidden="true" className="w-20 h-1 bg-lima mt-4" />
           </Aparece>
           <div className="mt-8 flex flex-col gap-6 xl:flex-row">
             {/* Mapa de cobertura interactivo (Leaflet + OpenStreetMap) */}
-            <div className="relative z-0 mx-auto h-[280px] w-[85%] overflow-hidden sm:h-[520px] sm:mx-0 sm:w-full xl:w-[750px]">
+            <div
+              className={`relative z-0 mx-auto overflow-hidden border-[4px] sm:border-[6px] border-lima shadow-[6px_6px_0_0_rgba(0,0,0,0.95)] sm:shadow-[10px_10px_0_0_rgba(0,0,0,0.95)] ${
+                compacto
+                  ? 'h-[200px] w-[85%] sm:h-[320px] sm:mx-0 sm:w-full xl:w-[480px]'
+                  : 'h-[240px] w-[85%] sm:h-[420px] sm:mx-0 sm:w-full xl:w-[650px]'
+              }`}
+            >
               <MapaCobertura lugarBuscado={resultado} />
             </div>
             {/* Panel de ubicacion */}
-            <div className="flex w-full flex-col justify-center gap-6 xl:h-[520px] xl:w-[426px]">
+            <div
+              className={`flex w-full flex-col justify-center gap-6 xl:w-[426px] ${
+                compacto ? 'xl:h-[320px]' : 'xl:h-[420px]'
+              }`}
+            >
               <Aparece direccion="derecha" distancia={40} duracion={0.6} retraso={0}>
                 <address className="font-texto text-[20px] not-italic text-grisCon">
                   KM 8 Via San gil - Socorro, Santander, Colombia
@@ -198,8 +217,8 @@ export function Ubicacion() {
               {resultado &&
                 (dentroDeCobertura ? (
                   <div className="mt-4 border-2 border-lima bg-lima/10 p-4">
-                    <p className="font-titulo text-[28px] uppercase text-lima">
-                      ¡Llegamos a donde estes!
+                    <p className="font-titulo text-[20px] sm:text-[28px] uppercase text-lima">
+                      ¡Estás más cerca de construir lo que sueñas de lo que crees!
                     </p>
                   </div>
                 ) : (

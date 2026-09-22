@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
 import { Aparece } from '@/components/animations/aparece'
-import { Ubicacion } from '@/components/ubicacion'
 
 interface FamiliaPageProps {
   params: {
@@ -50,9 +49,6 @@ export default async function FamiliaPage({ params }: FamiliaPageProps) {
           </Link>
         </div>
       </section>
-
-      {/* Ubicacion */}
-      <Ubicacion />
 
       {/* Productos de la familia */}
       <section

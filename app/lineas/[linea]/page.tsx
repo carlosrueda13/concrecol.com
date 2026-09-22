@@ -215,8 +215,8 @@ export default async function LineaPage({ params }: LineaPageProps) {
         </div>
       </section>
 
-      {/* Ubicacion */}
-      <Ubicacion />
+      {/* Ubicacion: solo en la linea de Concreto, version compacta */}
+      {params.linea === 'concreto' && <Ubicacion compacto />}
 
       <section className="w-full bg-grisClaro py-16 sm:py-20">
         <div className="mx-auto w-full max-w-[1800px] px-8 sm:px-6 xl:px-8">
