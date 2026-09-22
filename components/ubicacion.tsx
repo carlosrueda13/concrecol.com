@@ -10,6 +10,7 @@ import {
   calcularDistanciaKm,
   type LugarBuscado,
 } from '@/components/mapa-cobertura'
+import { MUNICIPIOS_COBERTURA, normalizarTexto } from '@/lib/municipios-cobertura'
 import { Input } from '@/components/ui/input'
 import { MapPin } from 'lucide-react'
 import Link from 'next/link'
@@ -32,6 +33,21 @@ export function Ubicacion({ compacto = false }: UbicacionProps) {
     setError(null)
     setResultado(null)
     setDentroDeCobertura(false)
+
+    const coincidencia = MUNICIPIOS_COBERTURA.find(
+      (municipio) => municipio.normalizado === normalizarTexto(texto),
+    )
+
+    if (coincidencia) {
+      setDentroDeCobertura(true)
+      setResultado({
+        lat: coincidencia.lat,
+        lon: coincidencia.lng,
+        label: coincidencia.nombre,
+      })
+      setBuscando(false)
+      return
+    }
 
     try {
       const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(texto + ', Santander, Colombia')}&format=json&limit=1`

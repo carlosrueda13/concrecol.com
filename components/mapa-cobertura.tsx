@@ -10,7 +10,7 @@ import { Circle, MapContainer, Marker, Popup, TileLayer, useMap } from 'react-le
 export const COORDENADAS_PLANTA = { lat: 6.524959942352748, lng: -73.19613522714694 }
 
 // Radio de cobertura de entregas en kilometros
-export const RADIO_COBERTURA_KM = 40
+export const RADIO_COBERTURA_KM = 75
 
 // Radio terrestre medio en kilometros
 const RADIO_TERRESTRE_KM = 6371
