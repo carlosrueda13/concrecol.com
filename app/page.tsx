@@ -14,7 +14,7 @@ const lineasNegocio = [
   { nombre: 'Concreto', href: '/lineas/concreto', imagen: '/lineas/concreto.avif' },
   { nombre: 'Agregados', href: '/lineas/agregados', imagen: '/lineas/agregados.jpg' },
   { nombre: 'Constructora', href: '/lineas/constructora', imagen: '/lineas/constructora.webp' },
-  { nombre: 'Prefabricados', href: '/lineas/prefabricados', imagen: '/lineas/prefabricados.jpg' },
+  { nombre: 'Prefabricados', href: '/lineas/prefabricados', imagen: '/lineas/prefabricados.png' },  
 ]
 
 export default function HomePage() {

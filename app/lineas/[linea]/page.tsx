@@ -77,7 +77,7 @@ const LINEAS: Record<string, ConfigLinea> = {
     nombre: 'Prefabricados',
     titulo: 'Prefabricados de concreto para obra y acabados',
     boton: { texto: 'Cotizar', href: '/cotizacion?linea=PREFABRICADOS' },
-    imagenHero: '/lineas/prefabricados.jpg',
+    imagenHero: '/lineas/prefabricados.png',
     puntosDestacados: [
       { icono: LayoutGrid, titulo: 'Tres familias de producto', texto: 'Soluciones para cada necesidad.' },
       { icono: Palette, titulo: 'Fabricación bajo pedido', texto: 'Color y acabado a solicitud.' },
