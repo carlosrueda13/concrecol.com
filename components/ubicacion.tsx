@@ -12,6 +12,7 @@ import {
 } from '@/components/mapa-cobertura'
 import { Input } from '@/components/ui/input'
 import { MapPin } from 'lucide-react'
+import Link from 'next/link'
 
 interface UbicacionProps {
   compacto?: boolean
@@ -220,6 +221,12 @@ export function Ubicacion({ compacto = false }: UbicacionProps) {
                     <p className="font-titulo text-[20px] sm:text-[28px] uppercase text-lima">
                       ¡Estás más cerca de construir lo que sueñas de lo que crees!
                     </p>
+                    <Link
+        href="/cotizacion"
+        className="shrink-0 font-texto text-[14px] font-semibold uppercase tracking-[0.05em] text-grisCon underline underline-offset-2 hover:text-lima"
+      >
+        Cotizar ahora
+      </Link>
                   </div>
                 ) : (
                   <div className="mt-4 border-2 border-grisCon bg-grisClaro p-4">

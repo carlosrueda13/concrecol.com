@@ -72,6 +72,7 @@ const cotizacionFormSchema = z.object({
     .refine((val) => !val || val >= hoy, {
       message: 'La fecha no puede ser anterior a hoy',
     }),
+  detalleObra: z.string().optional(),
   usoPrevisto: z.string().optional(),
   direccionObra: z.string().optional(),
   condicionesAcceso: z.string().optional(),
@@ -428,6 +429,16 @@ function CotizacionForm() {
               <h2 className="font-titulo text-2xl text-grisCon">OBRA</h2>
               <div className="mt-4 h-[4px] w-[80px] bg-lima" />
               <div className="mt-8 space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="detalleObra">Cuéntanos más sobre tu obra</Label>
+                  <Textarea
+                    id="detalleObra"
+                    {...register('detalleObra')}
+                    placeholder="Cuéntanos detalles adicionales de tu proyecto u obra"
+                    rows={4}
+                  />
+                </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="usoPrevisto">Uso previsto</Label>
                   <Input

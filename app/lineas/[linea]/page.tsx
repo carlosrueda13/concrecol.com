@@ -40,15 +40,15 @@ const LINEAS: Record<string, ConfigLinea> = {
     boton: { texto: 'Cotizar', href: '/cotizacion?linea=CONCRETO' },
     imagenHero: '/lineas/concreto.avif',
     puntosDestacados: [
-      { icono: Factory, titulo: 'Planta propia en San Gil', texto: 'Control de calidad de principio a fin.' },
-      { icono: Truck, titulo: 'Flota propia', texto: 'Entrega directa a tu obra.' },
+      { icono: Factory, titulo: 'Planta en San Gil', texto: 'Control de calidad de principio a fin.' },
+      { icono: Truck, titulo: 'Nuestra flota', texto: 'Entrega directa a tu obra.' },
       { icono: CheckCircle, titulo: 'Resistencia certificada', texto: 'Cada mezcla cumple lo especificado.' },
     ],
   },
   agregados: {
     linea: LineaNegocio.AGREGADOS,
     nombre: 'Agregados',
-    titulo: 'Agregados de cantera para cada etapa de la obra',
+    titulo: 'Agregados para cada etapa de tu obra',
     boton: { texto: 'Cotizar', href: '/cotizacion?linea=AGREGADOS' },
     imagenHero: '/lineas/agregados.jpg',
     puntosDestacados: [

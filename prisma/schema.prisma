@@ -124,6 +124,7 @@ model ContactMessage {
   usoPrevisto String?
   direccionObra String?
   condicionesAcceso String?
+  detalleObra String?
   rutUrl    String?
   autorizacionDatos Boolean @default(false)
   isRead    Boolean  @default(false)

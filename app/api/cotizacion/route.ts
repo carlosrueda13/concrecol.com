@@ -19,6 +19,7 @@ const cotizacionSchema = z.object({
   fechaRequerida: z.string().max(50).optional().or(z.literal('')),
   usoPrevisto: z.string().max(500).optional().or(z.literal('')),
   direccionObra: z.string().max(500).optional().or(z.literal('')),
+  detalleObra: z.string().max(1000).optional().or(z.literal('')),
   condicionesAcceso: z.string().max(1000).optional().or(z.literal('')),
   autorizacionDatos: z.boolean().refine((val) => val === true, {
     message: 'Debe autorizar el uso de sus datos',
@@ -70,6 +71,7 @@ export async function POST(request: NextRequest) {
         fechaRequerida: toNullable(validatedData.fechaRequerida),
         usoPrevisto: toNullable(validatedData.usoPrevisto),
         direccionObra: toNullable(validatedData.direccionObra),
+        detalleObra: toNullable(validatedData.detalleObra),
         condicionesAcceso: toNullable(validatedData.condicionesAcceso),
         autorizacionDatos: validatedData.autorizacionDatos,
       },
@@ -77,6 +79,26 @@ export async function POST(request: NextRequest) {
 
     // Enviar notificacion por EmailJS (best-effort: un fallo no debe romper la solicitud)
     try {
+      const detalleObraValue = toNullable(validatedData.detalleObra)
+
+      const templateParams: Record<string, string> = {
+        nombre: validatedData.nombre.trim(),
+        telefono: validatedData.telefono.trim(),
+        email: emailValue || 'No proporcionado',
+        producto: productoNombre || 'No especificado',
+        tipoResistencia: validatedData.tipoResistencia || 'No especificado',
+        cantidad: validatedData.cantidad || 'No especificado',
+        fechaRequerida: validatedData.fechaRequerida || 'No especificado',
+        usoPrevisto: validatedData.usoPrevisto || 'No especificado',
+        direccionObra: validatedData.direccionObra || 'No especificado',
+        condicionesAcceso: validatedData.condicionesAcceso || 'No especificado',
+      }
+
+      // Solo incluir detalleObra en la notificacion cuando tenga valor
+      if (detalleObraValue) {
+        templateParams.detalleObra = detalleObraValue
+      }
+
       const emailjsResponse = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
         method: 'POST',
         headers: {
@@ -87,18 +109,7 @@ export async function POST(request: NextRequest) {
           template_id: process.env.EMAILJS_TEMPLATE_ID,
           user_id: process.env.EMAILJS_PUBLIC_KEY,
           accessToken: process.env.EMAILJS_PRIVATE_KEY,
-          template_params: {
-            nombre: validatedData.nombre.trim(),
-            telefono: validatedData.telefono.trim(),
-            email: emailValue || 'No proporcionado',
-            producto: productoNombre || 'No especificado',
-            tipoResistencia: validatedData.tipoResistencia || 'No especificado',
-            cantidad: validatedData.cantidad || 'No especificado',
-            fechaRequerida: validatedData.fechaRequerida || 'No especificado',
-            usoPrevisto: validatedData.usoPrevisto || 'No especificado',
-            direccionObra: validatedData.direccionObra || 'No especificado',
-            condicionesAcceso: validatedData.condicionesAcceso || 'No especificado',
-          },
+          template_params: templateParams,
         }),
       })
 
