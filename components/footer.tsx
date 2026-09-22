@@ -87,7 +87,12 @@ export function Footer() {
         
         <div className="border-t border-gray-600 mt-10 pt-6">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-300">© {currentYear} Concrecol. Todos los derechos reservados.</p>
+                        <p className="text-gray-300">
+              <Link href="/admin" className="text-gray-300 hover:text-gray-300">
+                San Gil
+              </Link>{' '}
+              {currentYear} Concrecol. Todos los derechos reservados.
+            </p>
             <div className="mt-4 md:mt-0 flex space-x-6">
               <Link href="/terminos" className="text-gray-300 hover:text-[#C4D600]">
                 Términos y Condiciones

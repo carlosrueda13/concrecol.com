@@ -4,6 +4,7 @@ import { ArrowDown, ArrowRight } from 'lucide-react'
 import { Aparece } from '@/components/animations/aparece'
 import { BotonCotizar } from '@/components/boton-cotizar'
 import { Ubicacion } from '@/components/ubicacion'
+import { AnuncioCharala } from '@/components/anuncio-charala'
 // Removed withBasePath import - using direct paths for Vercel
 
 // Forzar renderizado dinamico
@@ -76,10 +77,13 @@ export default function HomePage() {
         className="relative w-full bg-grisCon py-24 sm:py-32 mt-0 sm:-mt-[64px] sm:[clip-path:polygon(0_64px,100%_0,100%_100%,0_100%)]"
       >
         <div className="mx-auto w-full max-w-[1840px] px-8 sm:px-6 xl:px-8">
+          <AnuncioCharala />
+          <div className="mt-12">
           <Aparece direccion="izquierda" distancia={40} duracion={0.6}>
             <h2 className="font-titulo text-[46px] text-blanco">Líneas de negocio</h2>
             <div aria-hidden="true" className="w-20 h-1 bg-lima mt-4" />
           </Aparece>
+        </div>
           <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 xl:mx-auto xl:max-w-[1840px] xl:grid-cols-4">
             {lineasNegocio.map((linea, index) => (
               <Aparece
