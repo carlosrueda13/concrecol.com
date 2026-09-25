@@ -24,7 +24,7 @@
 
 #### A) Connection string (Conexión directa)
 ```
-postgresql://postgres:[PASSWORD]@db.ceaznbojkumfggrsckap.supabase.co:5432/postgres
+postgresql://postgres:PASSWORD@db.ceaznbojkumfggrsckap.supabase.co:5432/postgres
 ```
 ❌ **NO USAR** - No funciona con IPv4 desde Vercel
 
@@ -33,12 +33,12 @@ Busca URLs que contengan **"pooler.supabase.com"**:
 
 **Session Mode (Puerto 5432):**
 ```
-postgresql://postgres.[PROJECT_REF]:[PASSWORD]@[REGION].pooler.supabase.com:5432/postgres
+postgresql://postgres.[PROJECT_REF]:PASSWORD@[REGION].pooler.supabase.com:5432/postgres
 ```
 
 **Transaction Mode (Puerto 6543):**
 ```
-postgresql://postgres.[PROJECT_REF]:[PASSWORD]@[REGION].pooler.supabase.com:6543/postgres
+postgresql://postgres.[PROJECT_REF]:PASSWORD@[REGION].pooler.supabase.com:6543/postgres
 ```
 
 ### Paso 4: Copiar la URL Correcta
@@ -49,7 +49,7 @@ postgresql://postgres.[PROJECT_REF]:[PASSWORD]@[REGION].pooler.supabase.com:6543
 ### Paso 5: Ejemplo de URL Correcta
 La URL debería verse así:
 ```
-postgresql://postgres.ceaznbojkumfggrsckap:UjJeGAl6tMqIsK6H@aws-0-[REGION].pooler.supabase.com:6543/postgres
+postgresql://postgres.ceaznbojkumfggrsckap:PASSWORD@aws-0-[REGION].pooler.supabase.com:6543/postgres
 ```
 
 Donde `[REGION]` podría ser:

@@ -7,7 +7,13 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -28,7 +34,7 @@ export default function LoginPage() {
         email,
         password,
         redirect: false,
-        callbackUrl: '/admin'
+        callbackUrl: '/admin',
       })
 
       if (result?.error) {
@@ -39,9 +45,23 @@ export default function LoginPage() {
       if (result?.ok) {
         router.replace('/admin')
       }
-    } catch (error) {
+    } catch {
       setError('Ocurrió un error al iniciar sesión')
     } finally {
+      setLoading(false)
+    }
+  }
+
+  async function signInWithCognito() {
+    setError(null)
+    setLoading(true)
+
+    try {
+      await signIn('cognito', {
+        callbackUrl: '/admin',
+      })
+    } catch {
+      setError('Ocurrió un error al iniciar sesión con Cognito')
       setLoading(false)
     }
   }
@@ -55,6 +75,7 @@ export default function LoginPage() {
             Accede al panel de administración
           </CardDescription>
         </CardHeader>
+
         <CardContent>
           <form onSubmit={onSubmit} className="space-y-4">
             <div className="space-y-2">
@@ -63,10 +84,11 @@ export default function LoginPage() {
                 id="email"
                 name="email"
                 type="email"
-                placeholder="admin@concrecol.com"
+                placeholder="admin@concrecol.co"
                 required
               />
             </div>
+
             <div className="space-y-2">
               <Label htmlFor="password">Contraseña</Label>
               <Input
@@ -76,15 +98,37 @@ export default function LoginPage() {
                 required
               />
             </div>
+
             {error && (
               <Alert variant="destructive">
                 <AlertDescription>{error}</AlertDescription>
               </Alert>
             )}
-            <Button type="submit" className="w-full" disabled={loading}>
+
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={loading}
+            >
               {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
             </Button>
           </form>
+
+          <div className="my-4 flex items-center gap-3">
+            <div className="h-px flex-1 bg-gray-200" />
+            <span className="text-sm text-gray-500">o</span>
+            <div className="h-px flex-1 bg-gray-200" />
+          </div>
+
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full"
+            onClick={signInWithCognito}
+            disabled={loading}
+          >
+            Iniciar sesión con Cognito
+          </Button>
         </CardContent>
       </Card>
     </div>

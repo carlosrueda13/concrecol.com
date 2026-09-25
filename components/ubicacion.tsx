@@ -1,19 +1,30 @@
 'use client'
-
 import { useState } from 'react'
+import dynamic from 'next/dynamic'
+import Link from 'next/link'
+import { MapPin } from 'lucide-react'
+
 import { Aparece } from '@/components/animations/aparece'
 import { BotonCotizar } from '@/components/boton-cotizar'
+import { Input } from '@/components/ui/input'
+import { MUNICIPIOS_COBERTURA, normalizarTexto } from '@/lib/municipios-cobertura'
+
 import {
   COORDENADAS_PLANTA,
-  MapaCobertura,
   RADIO_COBERTURA_KM,
   calcularDistanciaKm,
   type LugarBuscado,
-} from '@/components/mapa-cobertura'
-import { MUNICIPIOS_COBERTURA, normalizarTexto } from '@/lib/municipios-cobertura'
-import { Input } from '@/components/ui/input'
-import { MapPin } from 'lucide-react'
-import Link from 'next/link'
+} from '@/lib/mapa-cobertura-utils'
+
+const MapaCobertura = dynamic(
+  () =>
+    import('@/components/mapa-cobertura').then(
+      (modulo) => modulo.MapaCobertura,
+    ),
+  {
+    ssr: false,
+  },
+)
 
 interface UbicacionProps {
   compacto?: boolean

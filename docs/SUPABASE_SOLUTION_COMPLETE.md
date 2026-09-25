@@ -51,7 +51,7 @@ export async function safeQuery<T>(operation: (client: PrismaClient) => Promise<
 5. **Copia la URL de "Connection pooling"** (puerto 6543):
 
 ```
-postgresql://postgres.ceaznbojkumfggrsckap:UjJeGAl6tMqIsK6H@[REGION].pooler.supabase.com:6543/postgres
+postgresql://postgres.ceaznbojkumfggrsckap:PASSWORD@[REGION].pooler.supabase.com:6543/postgres
 ```
 
 ### Posibles regiones del pooler:
@@ -64,7 +64,7 @@ postgresql://postgres.ceaznbojkumfggrsckap:UjJeGAl6tMqIsK6H@[REGION].pooler.supa
 Una vez tengas la URL correcta, ejecuta:
 
 ```bash
-node test-custom-pooler.js "postgresql://postgres.ceaznbojkumfggrsckap:UjJeGAl6tMqIsK6H@REGION.pooler.supabase.com:6543/postgres"
+node test-custom-pooler.js "postgresql://postgres.ceaznbojkumfggrsckap:PASSWORD@REGION.pooler.supabase.com:6543/postgres"
 ```
 
 Si funciona, verás:
@@ -78,7 +78,7 @@ Si funciona, verás:
 ### 1. Actualizar Variables de Entorno en Vercel
 ```bash
 # En tu dashboard de Vercel, configura:
-DATABASE_URL="postgresql://postgres.PROJECT_REF:YOUR_PASSWORD@REGION.pooler.supabase.com:6543/postgres"
+DATABASE_URL="postgresql://postgres.PROJECT_REF:PASSWORD@REGION.pooler.supabase.com:6543/postgres"
 NEXTAUTH_SECRET="tu-clave-secreta-de-32-caracteres-minimo"
 NEXTAUTH_URL="https://tu-app.vercel.app"
 ```

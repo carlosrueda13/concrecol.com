@@ -17,11 +17,11 @@ Ve a tu dashboard de Supabase:
 
 **Session Mode** (Puerto 5432):
 - Para aplicaciones con pocas conexiones de larga duración
-- URL: `postgresql://postgres.PROJECT_REF:[PASSWORD]@REGION.pooler.supabase.com:5432/postgres`
+- URL: `postgresql://postgres.PROJECT_REF:PASSWORD@REGION.pooler.supabase.com:5432/postgres`
 
 **Transaction Mode** (Puerto 6543):
 - Para aplicaciones como Next.js con muchas conexiones cortas
-- URL: `postgresql://postgres.PROJECT_REF:[PASSWORD]@REGION.pooler.supabase.com:6543/postgres`
+- URL: `postgresql://postgres.PROJECT_REF:PASSWORD@REGION.pooler.supabase.com:6543/postgres`
 
 ### 3. Configuración Recomendada para Next.js
 
@@ -40,12 +40,12 @@ Basado en tu proyecto `ceaznbojkumfggrsckap`, las URLs serían:
 
 **Session Mode:**
 ```
-postgresql://postgres.ceaznbojkumfggrsckap:UjJeGAl6tMqIsK6H@aws-0-us-east-1.pooler.supabase.com:5432/postgres
+postgresql://postgres.ceaznbojkumfggrsckap:PASSWORD@aws-0-us-east-1.pooler.supabase.com:5432/postgres
 ```
 
 **Transaction Mode:**
 ```
-postgresql://postgres.ceaznbojkumfggrsckap:UjJeGAl6tMqIsK6H@aws-0-us-east-1.pooler.supabase.com:6543/postgres
+postgresql://postgres.ceaznbojkumfggrsckap:PASSWORD@aws-0-us-east-1.pooler.supabase.com:6543/postgres
 ```
 
 ## Pasos para Verificar

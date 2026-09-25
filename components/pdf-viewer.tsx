@@ -13,7 +13,10 @@ interface PDFViewerProps {
 
 export function PDFViewer({ pdfUrl, open, onClose }: PDFViewerProps) {
   const [loading, setLoading] = useState(true)
-  const fullUrl = pdfUrl ? `${window.location.origin}${pdfUrl}` : ''
+  const fullUrl =
+  pdfUrl && typeof window !== 'undefined'
+    ? `${window.location.origin}${pdfUrl}`
+    : pdfUrl || ''
   
   return (
     <Dialog open={open} onOpenChange={onClose}>

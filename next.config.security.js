@@ -64,7 +64,7 @@ const nextConfig = {
 
   // Configuración de imágenes segura
   images: {
-    domains: ['concrecol-co.vercel.app'],
+    domains: ['concrecol.co'],
     formats: ['image/webp', 'image/avif'],
   },
 

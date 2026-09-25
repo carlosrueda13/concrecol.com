@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // ✅ Configuración para Vercel (no GitHub Pages)
+  // ✅ Configuración principal de Next.js
   // basePath: process.env.NODE_ENV === 'production' ? '/concrecol.com' : '',
   // assetPrefix: process.env.NODE_ENV === 'production' ? '/concrecol.com' : '',
   
