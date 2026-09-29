@@ -8,6 +8,7 @@ import { ConsentBanner } from '@/components/consent-banner'
 import PantallaCarga from '@/components/pantalla-carga'
 import { sukhumvitSet } from './fonts'
 import { validateDevEnv } from '@/lib/env-validation'
+import { MunicipioProvider } from '@/components/municipio-context'
 
 // Referencia inerte: conserva el import de Sukhumvit sin aplicarlo al DOM
 // (evita el warning de variable sin uso sin generar clases ni estilos).
@@ -50,7 +51,9 @@ export default function RootLayout({
         <Providers>
           <ConditionalNav />
           <main className="min-h-screen">
-            {children}
+            <MunicipioProvider>
+              {children}
+            </MunicipioProvider>
           </main>
           <Footer />
           <ConsentBanner />

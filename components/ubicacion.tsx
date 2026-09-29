@@ -8,6 +8,7 @@ import { Aparece } from '@/components/animations/aparece'
 import { BotonCotizar } from '@/components/boton-cotizar'
 import { Input } from '@/components/ui/input'
 import { MUNICIPIOS_COBERTURA, normalizarTexto } from '@/lib/municipios-cobertura'
+import { useMunicipio } from '@/components/municipio-context'
 
 import {
   COORDENADAS_PLANTA,
@@ -31,6 +32,10 @@ interface UbicacionProps {
 }
 
 export function Ubicacion({ compacto = false }: UbicacionProps) {
+  const {
+  setMunicipioSeleccionado,
+  setMostrarAnuncio,
+} = useMunicipio()
   const [texto, setTexto] = useState('')
   const [resultado, setResultado] = useState<LugarBuscado | null>(null)
   const [buscando, setBuscando] = useState(false)
@@ -50,15 +55,22 @@ export function Ubicacion({ compacto = false }: UbicacionProps) {
     )
 
     if (coincidencia) {
-      setDentroDeCobertura(true)
-      setResultado({
-        lat: coincidencia.lat,
-        lon: coincidencia.lng,
-        label: coincidencia.nombre,
-      })
-      setBuscando(false)
-      return
-    }
+  setDentroDeCobertura(true)
+
+  setResultado({
+    lat: coincidencia.lat,
+    lon: coincidencia.lng,
+    label: coincidencia.nombre,
+  })
+
+  setMunicipioSeleccionado(coincidencia.nombre)
+  setMostrarAnuncio(true)
+
+  setBuscando(false)
+  return
+}
+
+setMostrarAnuncio(false)
 
     try {
       const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(texto + ', Santander, Colombia')}&format=json&limit=1`
@@ -188,7 +200,7 @@ export function Ubicacion({ compacto = false }: UbicacionProps) {
             {/* Panel de ubicacion */}
             <div
               className={`flex w-full flex-col justify-center gap-6 xl:w-[426px] ${
-                compacto ? 'xl:h-[320px]' : 'xl:h-[420px]'
+                compacto ? 'xl:min-h-[320px]' : 'xl:min-h-[420px]'
               }`}
             >
               <Aparece direccion="derecha" distancia={40} duracion={0.6} retraso={0}>

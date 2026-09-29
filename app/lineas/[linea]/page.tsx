@@ -52,7 +52,7 @@ const LINEAS: Record<string, ConfigLinea> = {
     boton: { texto: 'Cotizar', href: '/cotizacion?linea=AGREGADOS' },
     imagenHero: '/lineas/agregados.jpg',
     puntosDestacados: [
-      { icono: Mountain, titulo: 'Cantera propia', texto: 'Trazabilidad garantizada.' },
+      { icono: Mountain, titulo: 'Producción de agregados', texto: 'Trazabilidad garantizada.' },
       { icono: SlidersHorizontal, titulo: 'Granulometría controlada', texto: 'Mezclas más consistentes.' },
       { icono: Package, titulo: 'Grandes volúmenes', texto: 'Disponibilidad para cualquier proyecto.' },
     ],
@@ -60,7 +60,7 @@ const LINEAS: Record<string, ConfigLinea> = {
   constructora: {
     linea: LineaNegocio.CONSTRUCTORA,
     nombre: 'Constructora',
-    titulo: 'Proyectos propios, la misma calidad que ofrecemos',
+    titulo: 'Construimos con la calidad que ofrecemos',
     boton: {
       texto: 'Contactar',
       href: 'https://wa.me/573214525798?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20sus%20proyectos%20de%20construcci%C3%B3n',
@@ -68,7 +68,7 @@ const LINEAS: Record<string, ConfigLinea> = {
     imagenHero: '/lineas/constructora.webp',
     puntosDestacados: [
       { icono: Building2, titulo: 'Experiencia comprobada', texto: 'Proyectos públicos y privados.' },
-      { icono: Layers, titulo: 'Materiales propios', texto: 'Mismo estándar en cada obra.' },
+      { icono: Layers, titulo: 'Materiales seleccionados', texto: 'Mismo estándar en cada obra.' },
       { icono: CheckCircle, titulo: 'Cumplimiento', texto: 'Entregas en el tiempo pactado.' },
     ],
   },
