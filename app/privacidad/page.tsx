@@ -134,7 +134,7 @@ export default function PrivacyPage() {
         <section>
           <h2>Vigencia y actualizaciones</h2>
           <p>
-            Versión 1.0. Esta política rige desde su primera publicación en concrecol.com.
+            Versión 1.0. Esta política rige desde su primera publicación en concrecol.co.
             Los cambios sustanciales se comunicarán a los titulares antes de su aplicación.
           </p>
         </section>
