@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Archivo_Black, Inter } from 'next/font/google'
+import localFont from 'next/font/local'
 import './globals.css'
 import { Providers } from '@/app/providers'
 import { ConditionalNav } from '@/components/conditional-nav'
@@ -14,16 +14,16 @@ import { MunicipioProvider } from '@/components/municipio-context'
 // (evita el warning de variable sin uso sin generar clases ni estilos).
 void sukhumvitSet
 
-const archivoBlack = Archivo_Black({
+const archivoBlack = localFont({
+  src: '../public/fonts/ArchivoBlack-Latin.woff2',
   weight: '400',
-  subsets: ['latin'],
   variable: '--font-titulo',
   display: 'swap',
 })
 
-const inter = Inter({
-  weight: ['400', '600'],
-  subsets: ['latin'],
+const inter = localFont({
+  src: '../public/fonts/Inter-Latin.woff2',
+  weight: '100 900',
   variable: '--font-texto',
   display: 'swap',
 })
